@@ -8,22 +8,58 @@ public class TestDots : MonoBehaviour
     [SerializeField] new ParticleSystem particleSystem;
     
     void Start()
-    {        
+    {
+        DisableAllRenderers();
+        
         Assert.IsNotNull(particleSystem);
         particleSystem.Pause();
+
+        var cam = Camera.main;
+        Assert.IsNotNull(cam);
+
+        const int numRaysPerAxis = 20;
+
+        for (int i = 0; i < numRaysPerAxis; ++i)
+        {
+            for (int j = 0; j < numRaysPerAxis; ++j)
+            {
+                var viewportPos = new Vector3(i / (float)numRaysPerAxis, j / (float)numRaysPerAxis);  
+                Ray ray = cam.ViewportPointToRay(viewportPos);
+                
+                Debug.DrawRay(ray.origin, ray.direction, Color.white, 10.0f, true);
+                Probe(ray);
+            }
+        }
         
+        //Probe(new Ray(transform.position, transform.forward));
+    }
+
+    private static void DisableAllRenderers()
+    {
+        foreach (var foundRenderer in FindObjectsOfType<Renderer>())
+            if (!foundRenderer.GetComponent<ParticleSystem>())
+                foundRenderer.enabled = false;
+    }
+
+    private void Probe(Ray ray)
+    {
         RaycastHit hit;
-        bool didHit = Physics.Raycast(new Ray(transform.position, transform.forward), out hit);
+        bool didHit = Physics.Raycast(ray, out hit);
         if (!didHit)
             return;
         
         //Vector3 direction = -hit.normal;
-        Vector3 direction = transform.forward;
+        Vector3 direction = ray.direction;
         Vector3 center = hit.point - direction * 1.0f;
+        Reveal(center, direction);
+    }
+
+    private void Reveal(Vector3 position, Vector3 direction)
+    {
         Quaternion rotation = Quaternion.LookRotation(direction);
         for (int i = 0; i < 100; ++i)
         {
-            Vector3 origin = center + rotation * Random.insideUnitCircle * 0.5f;
+            Vector3 origin = position + rotation * Random.insideUnitCircle * 0.5f;
             RaycastHit dotHit;
             bool didHitDot = Physics.Raycast(new Ray(origin, direction), out dotHit);
             if (!didHitDot)
