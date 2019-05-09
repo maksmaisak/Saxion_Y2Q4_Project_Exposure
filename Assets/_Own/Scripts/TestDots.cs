@@ -12,13 +12,11 @@ public class TestDots : MonoBehaviour
         DisableAllRenderers();
         
         Assert.IsNotNull(particleSystem);
-        particleSystem.Pause();
 
         var cam = Camera.main;
         Assert.IsNotNull(cam);
 
         const int numRaysPerAxis = 20;
-
         for (int i = 0; i < numRaysPerAxis; ++i)
         {
             for (int j = 0; j < numRaysPerAxis; ++j)
@@ -73,5 +71,8 @@ public class TestDots : MonoBehaviour
     {
         var emitParams = new ParticleSystem.EmitParams {position = position};
         particleSystem.Emit(emitParams, 1);
+        
+        // To make it recalculate the bounds used for culling
+        particleSystem.Simulate(0.01f, false, false, false);
     }
 }
