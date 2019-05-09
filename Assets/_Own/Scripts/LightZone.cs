@@ -84,7 +84,7 @@ public class LightZone : MonoBehaviour
         int numAliveParticles = particleSystem.GetParticles(particles);
 
         for (int i = 0; i < numAliveParticles; ++i)
-            particles[i].remainingLifetime = particles[i].startLifetime = Random.Range(1.0f, 2.0f);
+            particles[i].remainingLifetime = particles[i].startLifetime = Random.Range(0.0f, 2.0f);
 
         particleSystem.SetParticles(particles, numAliveParticles);
         
@@ -100,5 +100,12 @@ public class LightZone : MonoBehaviour
             light.enabled = true;
             light.DOIntensity(0.0f, 2.0f).From().SetEase(Ease.InQuad);
         }
+
+        DOTween.To(
+            () => RenderSettings.ambientLight,
+            color => RenderSettings.ambientLight = color,
+            Color.black,
+            2.0f
+        ).From();
     }
 }
