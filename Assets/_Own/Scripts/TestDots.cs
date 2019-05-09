@@ -6,6 +6,7 @@ using UnityEngine.Assertions;
 public class TestDots : MonoBehaviour
 {
     [SerializeField] new ParticleSystem particleSystem;
+    [SerializeField] float sphereCastRadius = 0.2f;
     
     void Start()
     {
@@ -28,8 +29,17 @@ public class TestDots : MonoBehaviour
                 Probe(ray);
             }
         }
-        
-        //Probe(new Ray(transform.position, transform.forward));
+
+        //StartCoroutine(ProbeCoroutine());
+    }
+
+    private IEnumerator ProbeCoroutine()
+    {
+        while (true)
+        {
+            Probe(new Ray(transform.position, transform.forward), 2);
+            yield return null;
+        }
     }
 
     private static void DisableAllRenderers()
@@ -39,30 +49,34 @@ public class TestDots : MonoBehaviour
                 foundRenderer.enabled = false;
     }
 
-    private void Probe(Ray ray)
+    private void Probe(Ray ray, int maxNumDots = 100)
     {
         RaycastHit hit;
-        bool didHit = Physics.Raycast(ray, out hit);
+        //bool didHit = Physics.Raycast(ray, out hit);
+        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit);
         if (!didHit)
             return;
         
         //Vector3 direction = -hit.normal;
         Vector3 direction = ray.direction;
         Vector3 center = hit.point - direction * 1.0f;
-        Reveal(center, direction);
+        Reveal(ray.origin, center, direction, maxNumDots);
     }
 
-    private void Reveal(Vector3 position, Vector3 direction)
+    private void Reveal(Vector3 rayOrigin, Vector3 position, Vector3 direction, int maxNumDots = 100)
     {
         Quaternion rotation = Quaternion.LookRotation(direction);
-        for (int i = 0; i < 100; ++i)
+        for (int i = 0; i < maxNumDots; ++i)
         {
-            Vector3 origin = position + rotation * Random.insideUnitCircle * 0.5f;
+            Vector3 origin = position + rotation * Random.insideUnitCircle * 0.5f;            
             RaycastHit dotHit;
             bool didHitDot = Physics.Raycast(new Ray(origin, direction), out dotHit);
             if (!didHitDot)
                 continue;
 
+            /*if (Vector3.SqrMagnitude(dotHit.point - rayOrigin) > 5.0f * 5.0f)
+                continue;*/
+            
             AddDot(dotHit.point);
         }
     }
