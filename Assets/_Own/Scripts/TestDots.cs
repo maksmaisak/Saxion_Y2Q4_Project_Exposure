@@ -9,15 +9,35 @@ public class TestDots : MonoBehaviour
     [SerializeField] new ParticleSystem particleSystem;
     [SerializeField] float sphereCastRadius = 0.2f;
 
+    [SerializeField] RadarHighlightLocation.DotEmissionShape dotEmissionShape = new RadarHighlightLocation.DotEmissionShape {
+        coneAngle = 20.0f,
+        maxDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f,
+        distanceFromSurface = 2.0f
+    };
+
     void Start()
     {
         DisableAllRenderers();
 
         Assert.IsNotNull(particleSystem);
 
-        var cam = Camera.main;
-        Assert.IsNotNull(cam);
+        ProbeFrom(Camera.main);
 
+        //Probe(new Ray(transform.position, transform.forward));
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    private void ProbeFrom(Camera cam)
+    {
+        Assert.IsNotNull(cam);
+        
         const int numRaysPerAxis = 20;
         for (int i = 0; i < numRaysPerAxis; ++i)
         {
@@ -30,25 +50,6 @@ public class TestDots : MonoBehaviour
                 Probe(ray);
             }
         }
-
-        //StartCoroutine(ProbeCoroutine());
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-    }
-
-    private IEnumerator ProbeCoroutine()
-    {
-        while (true)
-        {
-            Probe(new Ray(transform.position, transform.forward), 2);
-            yield return null;
-        }
     }
 
     private static void DisableAllRenderers()
@@ -58,20 +59,19 @@ public class TestDots : MonoBehaviour
                 foundRenderer.enabled = false;
     }
 
-    private void Probe(Ray ray, int maxNumDots = 100)
+    private void Probe(Ray ray)
     {
         RaycastHit hit;
         bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit);
         if (!didHit)
             return;
 
-        //Vector3 direction = -hit.normal;
-        Vector3 direction = ray.direction;
         DotsManager.instance.Highlight(new RadarHighlightLocation
         {
             originalRay = ray,
             pointOnSurface = hit.point,
-            distributionDirection = ray.direction //-hit.normal
+            dotEmissionDirection = ray.direction, //-hit.normal,
+            dotEmissionShape = dotEmissionShape
         });
     }
 }

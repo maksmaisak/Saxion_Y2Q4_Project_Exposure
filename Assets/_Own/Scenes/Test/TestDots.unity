@@ -5848,6 +5848,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystem: {fileID: 200010096}
   sphereCastRadius: 0.2
+  dotEmissionShape:
+    distanceFromSurface: 2
+    coneAngle: 40
+    maxDistanceFromSurfacePointAlongOriginalRayDirection: 1
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0
