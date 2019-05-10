@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class TestDots : MonoBehaviour
 {
@@ -31,6 +32,14 @@ public class TestDots : MonoBehaviour
         }
 
         //StartCoroutine(ProbeCoroutine());
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     private IEnumerator ProbeCoroutine()
