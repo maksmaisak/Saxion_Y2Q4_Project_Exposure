@@ -79,7 +79,7 @@ public class LightZone : MonoBehaviour
 
     void FadeOutParticles(ParticleSystem particleSystem)
     {
-        // TODO: preallocate this and keep it bundled with its particle system.
+        // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
         var particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
         int numAliveParticles = particleSystem.GetParticles(particles);
 
