@@ -9,10 +9,8 @@ public class TestDots : MonoBehaviour
     [SerializeField] new ParticleSystem particleSystem;
     [SerializeField] float sphereCastRadius = 0.2f;
 
-    [SerializeField] RadarHighlightLocation.DotEmissionShape dotEmissionShape = new RadarHighlightLocation.DotEmissionShape {
-        coneAngle = 20.0f,
-        maxDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f
-    };
+    [SerializeField] float dotEmissionConeAngle = 40.0f;
+    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
 
     void Start()
     {
@@ -72,8 +70,8 @@ public class TestDots : MonoBehaviour
         {
             originalRay = ray,
             pointOnSurface = hit.point,
-            dotEmissionDirection = ray.direction, //-hit.normal,
-            dotEmissionShape = dotEmissionShape
+            dotEmissionConeAngle = dotEmissionConeAngle,
+            maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
         });
     }
 }

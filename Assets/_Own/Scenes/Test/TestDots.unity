@@ -5748,7 +5748,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
   m_LocalRotation: {x: -0.022957042, y: 0.97606146, z: -0.17338957, w: -0.12927918}
-  m_LocalPosition: {x: 0.81999993, y: 1.203, z: 2.878}
+  m_LocalPosition: {x: 0.942, y: 1.375, z: 3.331}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1949460656}
@@ -5848,9 +5848,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystem: {fileID: 200010096}
   sphereCastRadius: 0.2
-  dotEmissionShape:
-    coneAngle: 40
-    maxDistanceFromSurfacePointAlongOriginalRayDirection: 1
+  dotEmissionConeAngle: 10
+  maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0
