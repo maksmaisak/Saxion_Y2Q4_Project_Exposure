@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 /// Whatever data is necessary to highlight an area with a wavesphere.
@@ -15,9 +14,8 @@ public struct RadarHighlightLocation
    [Serializable]
    public struct DotEmissionShape
    {
-      public float distanceFromSurface;
       public float coneAngle;
-      [FormerlySerializedAs("radius")] public float maxDistanceFromSurfacePointAlongOriginalRayDirection;
+      public float maxDistanceFromSurfacePointAlongOriginalRayDirection;
    }
 
    public DotEmissionShape dotEmissionShape;
@@ -35,36 +33,18 @@ public class DotsManager : Singleton<DotsManager>
    
    public void Highlight(RadarHighlightLocation location)
    {
-      Debug.DrawRay(location.pointOnSurface, location.dotEmissionDirection, Color.green, 10.0f);
+      Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
       const int maxNumDots = 100;
-
+      
+      Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.dotEmissionDirection);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
-      float distanceFromSurface = Mathf.Min(
-         location.dotEmissionShape.distanceFromSurface, 
-         distanceFromCamera
-      );
-      Vector3 origin = location.pointOnSurface - location.dotEmissionDirection * distanceFromSurface;
-            
-      Quaternion rotation = Quaternion.LookRotation(location.dotEmissionDirection);
-      //Quaternion rotation = Quaternion.FromToRotation(Vector3.right, location.dotEmissionDirection);
-
-      //float cosAngle = Mathf.Cos(location.dotEmissionShape.coneAngle);
       float displacementRadius = distanceFromCamera * 0.25f * Mathf.Tan(location.dotEmissionShape.coneAngle);
 
       for (int i = 0; i < maxNumDots; ++i)
       {
-         Vector3 origin2 = origin + rotation * (Random.insideUnitCircle * displacementRadius);       
-         Ray ray = new Ray(origin2, location.dotEmissionDirection);
-
-         /*
-         float x = Random.Range(cosAngle, 1.0f);
-         float multiplier = Mathf.Sqrt(1.0f - x * x);
-         const float PI2 = Mathf.PI * 2.0f;
-         float phi = Random.Range(0.0f, PI2);
-         var direction = rotation * new Vector3(x, multiplier * Mathf.Cos(phi), multiplier * Mathf.Sin(phi));
-         Ray ray = new Ray(origin, direction);
-         */
+         Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
+         Ray ray = new Ray(location.originalRay.origin, target - location.originalRay.origin);
          
          RaycastHit dotHit;
          bool didHitDot = Physics.Raycast(ray, out dotHit);
@@ -73,7 +53,9 @@ public class DotsManager : Singleton<DotsManager>
 
          if (Vector3.Dot(dotHit.point - location.pointOnSurface, location.originalRay.direction) > location.dotEmissionShape.maxDistanceFromSurfacePointAlongOriginalRayDirection)
             continue;
-            
+
+         Debug.DrawLine(ray.origin, dotHit.point, Color.cyan * 0.5f, 20.0f);
+
          AddDot(dotHit.point);
       }
    }

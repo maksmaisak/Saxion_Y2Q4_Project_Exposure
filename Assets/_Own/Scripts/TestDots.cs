@@ -11,8 +11,7 @@ public class TestDots : MonoBehaviour
 
     [SerializeField] RadarHighlightLocation.DotEmissionShape dotEmissionShape = new RadarHighlightLocation.DotEmissionShape {
         coneAngle = 20.0f,
-        maxDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f,
-        distanceFromSurface = 2.0f
+        maxDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f
     };
 
     void Start()
@@ -32,6 +31,9 @@ public class TestDots : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+            Probe(new Ray(transform.position, transform.forward));
     }
 
     private void ProbeFrom(Camera cam)
