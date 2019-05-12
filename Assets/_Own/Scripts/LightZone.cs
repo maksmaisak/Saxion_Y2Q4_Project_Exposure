@@ -89,8 +89,6 @@ public class LightZone : MonoBehaviour
         particleSystem.SetParticles(particles, numAliveParticles);
         
         particleSystem.Play();
-        Debug.Log(particleSystem.gameObject.name);
-        Debug.Log(particleSystem.isPlaying);
     }
     
     private void FadeInLights()
