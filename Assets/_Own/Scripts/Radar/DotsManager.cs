@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,13 +19,13 @@ public class DotsManager : Singleton<DotsManager>
    {
       Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
-      const int maxNumDots = 100;
-      
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
-
-      for (int i = 0; i < maxNumDots; ++i)
+      
+      const int MaxNumDots = 100;
+      var positions = new List<Vector3>(MaxNumDots);
+      for (int i = 0; i < MaxNumDots; ++i)
       {
          Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
          Ray ray = new Ray(location.originalRay.origin, target - location.originalRay.origin);
@@ -40,7 +42,30 @@ public class DotsManager : Singleton<DotsManager>
 
          Debug.DrawLine(ray.origin, dotHit.point, Color.cyan * 0.25f, 20.0f);
 
-         AddDot(dotHit.point);
+         // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fadein.
+         // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
+         positions.Add(dotHit.point);
+         //AddDot(dotHit.point);
+      }
+
+      StartCoroutine(AddDotsOverTime(positions));
+   }
+   
+   private IEnumerator AddDotsOverTime(IList<Vector3> positions, float totalTime = 0.5f)
+   {
+      float numDotsPerFrame = positions.Count * Time.deltaTime / totalTime;
+      float timeBetweenDots = Time.deltaTime / numDotsPerFrame;
+
+      float numDotsLeftThisFrame = numDotsPerFrame;
+      for (int i = positions.Count - 1; i >= 0; --i)
+      {
+         AddDot(positions[i]);
+         numDotsLeftThisFrame -= 1.0f;
+         if (numDotsLeftThisFrame >= 1.0f)
+            continue;
+
+         yield return numDotsPerFrame < 1.0f ? new WaitForSeconds(timeBetweenDots) : null;
+         numDotsLeftThisFrame += numDotsPerFrame;
       }
    }
     
@@ -48,9 +73,13 @@ public class DotsManager : Singleton<DotsManager>
    {
       dotsParticleSystem = dotsParticleSystem ? dotsParticleSystem : GetComponent<ParticleSystem>();
       
-      var emitParams = new ParticleSystem.EmitParams {position = position};
+      var emitParams = new ParticleSystem.EmitParams
+      {
+         position = position,
+      };
+      emitParams.ResetStartColor();
       dotsParticleSystem.Emit(emitParams, 1);
-        
+
       // To make it recalculate the bounds used for culling
       dotsParticleSystem.Simulate(0.01f, false, false, false);
    }

@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class TestDots : MonoBehaviour
 {
-    [SerializeField] new ParticleSystem particleSystem;
     [SerializeField] float sphereCastRadius = 0.2f;
 
     [SerializeField] float dotEmissionConeAngle = 40.0f;
@@ -15,9 +14,7 @@ public class TestDots : MonoBehaviour
     void Start()
     {
         DisableAllRenderers();
-
-        Assert.IsNotNull(particleSystem);
-
+        
         ProbeFrom(Camera.main);
 
         //Probe(new Ray(transform.position, transform.forward));
