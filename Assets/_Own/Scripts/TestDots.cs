@@ -6,11 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class TestDots : MonoBehaviour
 {
+    [SerializeField] float sphereCastDistance = 200.0f;
     [SerializeField] float sphereCastRadius = 0.2f;
 
     [SerializeField] float dotEmissionConeAngle = 40.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     [SerializeField] GameObject flyingSpherePrefab;
+    [SerializeField] LayerMask collisionLayer = 1 << 9;
+    
     
     IEnumerator Start()
     {
@@ -65,7 +68,7 @@ public class TestDots : MonoBehaviour
     private void Probe(Ray ray, bool spawnFlyingSphere = false)
     {
         RaycastHit hit;
-        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit);
+        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, collisionLayer);
         if (!didHit)
             return;
 

@@ -4994,6 +4994,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 665423900}
     m_Modifications:
+    - target: {fileID: 1059178161569566, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
+      propertyPath: m_Name
+      value: Workshop Set
+      objectReference: {fileID: 0}
     - target: {fileID: 4527368504392492, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5026,6 +5030,18 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4527368504392492, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4527368504392492, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4527368504392492, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a87f0180d46fd334b9025d0314a0dc70, type: 3}
 --- !u!4 &296138509 stripped
@@ -5034,46 +5050,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 296138508}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &487422828 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1586147481598998, guid: a87f0180d46fd334b9025d0314a0dc70,
-    type: 3}
-  m_PrefabInstance: {fileID: 296138508}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &487422829
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487422828}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 47616bd0cda748d4cbedcfc908506b9d, type: 3}
---- !u!1 &625711241 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1235180761666570, guid: a87f0180d46fd334b9025d0314a0dc70,
-    type: 3}
-  m_PrefabInstance: {fileID: 296138508}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &625711242
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625711241}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300004, guid: 47616bd0cda748d4cbedcfc908506b9d, type: 3}
 --- !u!1 &635588106
 GameObject:
   m_ObjectHideFlags: 0
@@ -5361,26 +5337,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1439671803 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1293149991175426, guid: a87f0180d46fd334b9025d0314a0dc70,
-    type: 3}
-  m_PrefabInstance: {fileID: 296138508}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &1439671804
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439671803}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300008, guid: 47616bd0cda748d4cbedcfc908506b9d, type: 3}
 --- !u!1 &1458322688
 GameObject:
   m_ObjectHideFlags: 0
@@ -5608,6 +5564,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: flyingSpeed
+      value: 1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: scaleDuration
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6718b7e95c304134a9ce291972c7fb79, type: 3}
 --- !u!1 &1687258581
@@ -5829,11 +5795,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sphereCastDistance: 200
   sphereCastRadius: 0.2
   dotEmissionConeAngle: 10
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
   flyingSpherePrefab: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0
@@ -5958,7 +5928,7 @@ GameObject:
   - component: {fileID: 33367184338962800}
   - component: {fileID: 23987358165453488}
   - component: {fileID: 1212596423539685}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Paint 1G Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5991,7 +5961,7 @@ GameObject:
   - component: {fileID: 33809664489759636}
   - component: {fileID: 23009736946318486}
   - component: {fileID: 1218026470195377}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6024,7 +5994,7 @@ GameObject:
   - component: {fileID: 33263640447606282}
   - component: {fileID: 23667841268463830}
   - component: {fileID: 1276976431564019}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Safety Goggles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6057,7 +6027,7 @@ GameObject:
   - component: {fileID: 33614511504369716}
   - component: {fileID: 23368821344352130}
   - component: {fileID: 1346729979704715}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6090,7 +6060,7 @@ GameObject:
   - component: {fileID: 33482302768704232}
   - component: {fileID: 23463846714058914}
   - component: {fileID: 1447662173815673}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Brush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6123,7 +6093,7 @@ GameObject:
   - component: {fileID: 33644865886041626}
   - component: {fileID: 23051422920405670}
   - component: {fileID: 1467781690138417}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Paint 1G Bucket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6153,7 +6123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4354466690496596}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Props
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6172,7 +6142,7 @@ GameObject:
   - component: {fileID: 33308361792956516}
   - component: {fileID: 23721674059405764}
   - component: {fileID: 1477200860648751}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Stud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6202,7 +6172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4230364203212916}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Stud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6221,7 +6191,7 @@ GameObject:
   - component: {fileID: 33049208514556848}
   - component: {fileID: 23059121385162976}
   - component: {fileID: 1528298547413045}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Upper Covers Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6251,7 +6221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4900365662511990}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Workbench Low(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6270,7 +6240,7 @@ GameObject:
   - component: {fileID: 33476401823664632}
   - component: {fileID: 23514317459957188}
   - component: {fileID: 1638715120521601}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Magnetic Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6303,7 +6273,7 @@ GameObject:
   - component: {fileID: 33240425908473558}
   - component: {fileID: 23659598394842056}
   - component: {fileID: 1640735160294433}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6334,7 +6304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4384818697258550}
   - component: {fileID: 205049786648973316}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Workbench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6350,7 +6320,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4276756324483034}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Paint Supplies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6369,7 +6339,7 @@ GameObject:
   - component: {fileID: 33690246250308726}
   - component: {fileID: 23331887310475910}
   - component: {fileID: 1714222371101311}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Supports Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6402,7 +6372,7 @@ GameObject:
   - component: {fileID: 33001639489814774}
   - component: {fileID: 23970668766047764}
   - component: {fileID: 1729955777761619}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Supports
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6435,7 +6405,7 @@ GameObject:
   - component: {fileID: 33519636688465276}
   - component: {fileID: 23816152981196054}
   - component: {fileID: 1731401553056647}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Legs Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6468,7 +6438,7 @@ GameObject:
   - component: {fileID: 33355032748803404}
   - component: {fileID: 23550571141939698}
   - component: {fileID: 1762712844696319}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6501,7 +6471,7 @@ GameObject:
   - component: {fileID: 33009518960564148}
   - component: {fileID: 23910509487175628}
   - component: {fileID: 1776058156694293}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Paint 5G Bucket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6534,7 +6504,7 @@ GameObject:
   - component: {fileID: 33845379444530680}
   - component: {fileID: 23627570127475876}
   - component: {fileID: 1808137150833077}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Upper Covers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6567,7 +6537,7 @@ GameObject:
   - component: {fileID: 33528241894911564}
   - component: {fileID: 23953442569843956}
   - component: {fileID: 1851651294065227}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Top Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6600,7 +6570,7 @@ GameObject:
   - component: {fileID: 33441670916552372}
   - component: {fileID: 23294594110436632}
   - component: {fileID: 1880031126089325}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bench Bottom Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6633,7 +6603,7 @@ GameObject:
   - component: {fileID: 33215433873282314}
   - component: {fileID: 23480387460364724}
   - component: {fileID: 1973016424351835}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Safety Hat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6666,7 +6636,7 @@ GameObject:
   - component: {fileID: 33261904114324022}
   - component: {fileID: 23618812566636564}
   - component: {fileID: 1980700057648167}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Jigsaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6696,7 +6666,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4401335934961086}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Workbench(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
