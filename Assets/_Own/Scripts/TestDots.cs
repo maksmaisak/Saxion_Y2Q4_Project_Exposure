@@ -13,14 +13,12 @@ public class TestDots : MonoBehaviour
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
 
     [SerializeField] GameObject wavePulsePrefab;
-
-    [SerializeField] RenderTexture renderTexture;
-
+    
     void Start()
     {
         //DisableAllRenderers();
 
-        //ProbeFrom(Camera.main);
+        ProbeFrom(Camera.main);
         CreateWavePulse();
 
         //Probe(new Ray(transform.position, transform.forward));

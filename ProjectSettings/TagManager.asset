@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - ScannableInvisible
+  - ScannableVisible
   - 
   - 
   - 
