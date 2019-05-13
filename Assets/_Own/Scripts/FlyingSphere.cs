@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 public class FlyingSphere : MonoBehaviour
 {
@@ -18,6 +20,7 @@ public class FlyingSphere : MonoBehaviour
     [SerializeField] float delayToDespawn = 5.0f;
     [SerializeField] float delayToRevealDots = 2.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
+    [SerializeField] LayerMask handsCollisionLayer;
 
     private SphereCollider sphereCollider;
     public RadarHighlightLocation highlightLocation { get; set; }
@@ -52,4 +55,20 @@ public class FlyingSphere : MonoBehaviour
     }
 
     private void Update() => transform.position += flyingSpeed * Time.deltaTime * transform.forward;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (IsInLayerMask(other.gameObject.layer, handsCollisionLayer))
+        {
+            Debug.Log("Hand is hit");
+            Destroy(gameObject);
+            DotsManager.instance.Highlight(highlightLocation);
+        }
+    }
+    
+    public static bool IsInLayerMask(int layer, LayerMask layerMask)
+    {
+        return layerMask == (layerMask | (1 << layer));
+    }
+
 }
