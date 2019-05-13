@@ -11,10 +11,14 @@ public class TestDots : MonoBehaviour
     [SerializeField] float dotEmissionConeAngle = 40.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
 
-    void Start()
+    IEnumerator Start()
     {
         DisableAllRenderers();
-        
+
+        yield return new WaitUntil(() => Camera.main);
+
+        Debug.Log(Camera.main.gameObject.name);
+
         ProbeFrom(Camera.main);
 
         //Probe(new Ray(transform.position, transform.forward));
