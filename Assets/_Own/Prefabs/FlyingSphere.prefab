@@ -111,3 +111,6 @@ MonoBehaviour:
   delayToDespawn: 10
   delayToRevealDots: 1.5
   targetSphereRadius: 0.59
+  handsCollisionLayer:
+    serializedVersion: 2
+    m_Bits: 1024
