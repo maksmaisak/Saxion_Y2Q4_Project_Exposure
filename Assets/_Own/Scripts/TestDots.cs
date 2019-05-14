@@ -13,9 +13,7 @@ public class TestDots : MonoBehaviour
     [SerializeField] float dotEmissionConeAngle = 40.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     
-    [SerializeField] GameObject flyingSpherePrefab;
-    [SerializeField] LayerMask collisionLayer = 1 << 9;
-    
+    [SerializeField] FlyingSphere flyingSpherePrefab;
     [SerializeField] GameObject wavePulsePrefab;
 
     IEnumerator Start()
@@ -31,9 +29,7 @@ public class TestDots : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
             Probe(new Ray(transform.position, transform.forward), true);
@@ -73,22 +69,15 @@ public class TestDots : MonoBehaviour
         
         tf.localScale = Vector3.zero;
         tf.DOScale(20, duration).SetEase(Ease.Linear);
-        //Material material = pulse.GetComponentInChildren<Renderer>().material;
         
         Destroy(pulse, duration);
     }
-
-    private static void DisableAllRenderers()
-    {
-        foreach (var foundRenderer in FindObjectsOfType<Renderer>())
-            if (!foundRenderer.GetComponent<ParticleSystem>())
-                foundRenderer.enabled = false;
-    }
-
+    
     private void Probe(Ray ray, bool spawnFlyingSphere = false)
     {
+        LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
         RaycastHit hit;
-        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, collisionLayer);
+        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, layerMask, QueryTriggerInteraction.Ignore);
         if (!didHit)
             return;
 
@@ -105,15 +94,17 @@ public class TestDots : MonoBehaviour
         {
             Assert.IsNotNull(flyingSpherePrefab);
 
-            GameObject flyingSphere = Instantiate(
+            FlyingSphere flyingSphere = Instantiate(
                 flyingSpherePrefab,
                 hit.point,
-                Quaternion.identity);
+                Quaternion.identity
+            );
 
-            FlyingSphere flyingSphereComp = flyingSphere.GetComponent<FlyingSphere>();
-            flyingSphereComp.highlightLocation = highlightLocation;
+            flyingSphere.SetTarget(ray.origin);
+            flyingSphere.highlightLocation = highlightLocation;
         }
-        else {
+        else 
+        {
             // TODO: For testing purposes move this out of this block to paint the dots when space is hit.
             DotsManager.instance.Highlight(highlightLocation);
         }

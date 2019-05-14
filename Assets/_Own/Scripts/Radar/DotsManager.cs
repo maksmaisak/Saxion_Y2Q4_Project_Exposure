@@ -8,12 +8,18 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(ParticleSystem))]
 public class DotsManager : Singleton<DotsManager>
 {
+   [Tooltip("Dots can only appear on surfaces with these layers.")] 
+   [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
+   [SerializeField] float maxDotSpawnDistance = 200.0f;
+   
    private ParticleSystem dotsParticleSystem;
 
    void Start()
    {
       dotsParticleSystem = GetComponent<ParticleSystem>();
    }
+
+   public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
 
    public void FadeOutDots(float duration = 2.0f)
    {
@@ -28,8 +34,10 @@ public class DotsManager : Singleton<DotsManager>
         
       dotsParticleSystem.Play();
    }
-   
-   public void Highlight(RadarHighlightLocation location)
+
+   public void Highlight(RadarHighlightLocation location) => Highlight(location, dotsSurfaceLayerMask);
+
+   public void Highlight(RadarHighlightLocation location, LayerMask layerMask)
    {
       Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
@@ -47,7 +55,7 @@ public class DotsManager : Singleton<DotsManager>
          //Debug.DrawRay(ray.origin, ray.direction, Color.white * 0.5f, 20.0f);
 
          RaycastHit dotHit;
-         bool didHitDot = Physics.Raycast(ray, out dotHit);
+         bool didHitDot = Physics.Raycast(ray, out dotHit, maxDotSpawnDistance, layerMask, QueryTriggerInteraction.Ignore);
          if (!didHitDot)
             continue;
 
