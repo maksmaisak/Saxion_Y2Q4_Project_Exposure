@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -11,19 +12,18 @@ public class TestDots : MonoBehaviour
 
     [SerializeField] float dotEmissionConeAngle = 40.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
+    
     [SerializeField] GameObject flyingSpherePrefab;
     [SerializeField] LayerMask collisionLayer = 1 << 9;
     
-    
+    [SerializeField] GameObject wavePulsePrefab;
+
     IEnumerator Start()
     {
-        DisableAllRenderers();
-
         yield return new WaitUntil(() => Camera.main);
-
-        Debug.Log(Camera.main.gameObject.name);
-
+        
         ProbeFrom(Camera.main);
+        CreateWavePulse();
 
         //Probe(new Ray(transform.position, transform.forward));
     }
@@ -35,9 +35,11 @@ public class TestDots : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
             Probe(new Ray(transform.position, transform.forward), true);
-        }
+        
+        if (Input.GetKeyDown(KeyCode.P))
+            CreateWavePulse();
     }
 
     private void ProbeFrom(Camera cam)
@@ -56,6 +58,24 @@ public class TestDots : MonoBehaviour
                 Probe(ray);
             }
         }
+
+        CreateWavePulse();
+    }
+
+    private void CreateWavePulse()
+    {
+        Assert.IsNotNull(wavePulsePrefab);
+
+        const float duration = 2.0f;
+
+        GameObject pulse = Instantiate(wavePulsePrefab, transform.position, Quaternion.identity);
+        Transform tf = pulse.transform;
+        
+        tf.localScale = Vector3.zero;
+        tf.DOScale(20, duration).SetEase(Ease.Linear);
+        //Material material = pulse.GetComponentInChildren<Renderer>().material;
+        
+        Destroy(pulse, duration);
     }
 
     private static void DisableAllRenderers()

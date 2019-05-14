@@ -14,6 +14,20 @@ public class DotsManager : Singleton<DotsManager>
    {
       dotsParticleSystem = GetComponent<ParticleSystem>();
    }
+
+   public void FadeOutDots(float duration = 2.0f)
+   {
+      // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
+      var particles = new ParticleSystem.Particle[dotsParticleSystem.main.maxParticles];
+      int numAliveParticles = dotsParticleSystem.GetParticles(particles);
+
+      for (int i = 0; i < numAliveParticles; ++i)
+         particles[i].remainingLifetime = particles[i].startLifetime = Random.Range(0.0f, duration);
+
+      dotsParticleSystem.SetParticles(particles, numAliveParticles);
+        
+      dotsParticleSystem.Play();
+   }
    
    public void Highlight(RadarHighlightLocation location)
    {
