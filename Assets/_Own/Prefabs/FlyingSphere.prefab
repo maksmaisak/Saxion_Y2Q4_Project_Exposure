@@ -114,7 +114,7 @@ MonoBehaviour:
   targetSphereRadius: 0.59
   handsCollisionLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 16384
 --- !u!54 &1555825271
 Rigidbody:
   m_ObjectHideFlags: 0
