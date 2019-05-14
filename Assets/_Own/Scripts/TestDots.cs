@@ -10,7 +10,7 @@ public class TestDots : MonoBehaviour
     [SerializeField] float sphereCastDistance = 200.0f;
     [SerializeField] float sphereCastRadius = 0.2f;
 
-    [SerializeField] float dotEmissionConeAngle = 40.0f;
+    [SerializeField] float dotEmissionConeAngle = 10.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     
     [SerializeField] FlyingSphere flyingSpherePrefab;
