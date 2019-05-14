@@ -18,7 +18,6 @@ public class FlyingSphere : MonoBehaviour
 
     [Header("Other Settings")]
     [SerializeField] float delayToDespawn = 5.0f;
-    [SerializeField] float delayToRevealDots = 2.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
     [SerializeField] LayerMask handsCollisionLayer;
 
@@ -39,19 +38,11 @@ public class FlyingSphere : MonoBehaviour
         
         transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
         
-        // Randomize scale over time, also adjust the collider radius.
+        // Randomize scale over time
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
         transform.DOScale(new Vector3(randomScale, randomScale, randomScale), scaleDuration);
 
-        DOTween.To( 
-            () => sphereCollider.radius, 
-            x => sphereCollider.radius = x, 
-            randomScale, 
-            scaleDuration);
-        
-        // Despawn it after some time and reveal the position spawned from. (TODO: this will be moved to when it hits the actual hands)
-        this.Delay(delayToDespawn, () => { Destroy(gameObject); });
-        this.Delay(delayToRevealDots, () => { DotsManager.instance.Highlight(highlightLocation); });
+        Destroy(gameObject, delayToDespawn);
     }
 
     private void Update() => transform.position += flyingSpeed * Time.deltaTime * transform.forward;
