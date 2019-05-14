@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,11 +17,16 @@ public class TestDots : MonoBehaviour
     [SerializeField] FlyingSphere flyingSpherePrefab;
     [SerializeField] GameObject wavePulsePrefab;
 
+    [SerializeField] float wavePulseSpeed = 10.0f;
+    [SerializeField] float wavePulseMaxRange = 20.0f;
+
+    private new Camera camera;
+
     IEnumerator Start()
     {
-        yield return new WaitUntil(() => Camera.main);
+        yield return new WaitUntil(() => camera = Camera.main);
         
-        ProbeFrom(Camera.main);
+        ProbeFrom(camera);
         CreateWavePulse();
 
         //Probe(new Ray(transform.position, transform.forward));
@@ -31,8 +37,8 @@ public class TestDots : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            Probe(new Ray(transform.position, transform.forward), true);
+        if (Input.GetKeyDown(KeyCode.Space) && camera)
+            ProbeFrom(camera);
         
         if (Input.GetKeyDown(KeyCode.P))
             CreateWavePulse();
@@ -42,7 +48,7 @@ public class TestDots : MonoBehaviour
     {
         Assert.IsNotNull(cam);
         
-        const int numRaysPerAxis = 20;
+        const int numRaysPerAxis = 4;
         for (int i = 0; i < numRaysPerAxis; ++i)
         {
             for (int j = 0; j < numRaysPerAxis; ++j)
@@ -51,7 +57,7 @@ public class TestDots : MonoBehaviour
                 Ray ray = cam.ViewportPointToRay(viewportPos);
 
                 Debug.DrawRay(ray.origin, ray.direction, Color.white, 10.0f, true);
-                Probe(ray);
+                Probe(ray, true);
             }
         }
 
@@ -61,16 +67,14 @@ public class TestDots : MonoBehaviour
     private void CreateWavePulse()
     {
         Assert.IsNotNull(wavePulsePrefab);
-
-        const float duration = 2.0f;
-
+        
         GameObject pulse = Instantiate(wavePulsePrefab, transform.position, Quaternion.identity);
+        
         Transform tf = pulse.transform;
-        
         tf.localScale = Vector3.zero;
-        tf.DOScale(20, duration).SetEase(Ease.Linear);
-        
-        Destroy(pulse, duration);
+        tf.DOScale(wavePulseMaxRange * 2.0f, wavePulseMaxRange / wavePulseSpeed)
+            .SetEase(Ease.Linear)
+            .OnComplete(() => Destroy(pulse));
     }
     
     private void Probe(Ray ray, bool spawnFlyingSphere = false)
@@ -86,22 +90,22 @@ public class TestDots : MonoBehaviour
             originalRay = ray,
             pointOnSurface = hit.point,
             dotEmissionConeAngle = dotEmissionConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRayDirection =
-                maxDotDistanceFromSurfacePointAlongOriginalRayDirection
+            maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
         };
 
         if (spawnFlyingSphere)
         {
             Assert.IsNotNull(flyingSpherePrefab);
 
-            FlyingSphere flyingSphere = Instantiate(
-                flyingSpherePrefab,
-                hit.point,
-                Quaternion.identity
-            );
-
-            flyingSphere.SetTarget(ray.origin);
-            flyingSphere.highlightLocation = highlightLocation;
+            // Use this instead of ray.origin because ray.origin is on not at the camera's position, but on its near plane.
+            Vector3 position = transform.position;
+            
+            this.Delay(Vector3.Distance(hit.point,position) / wavePulseSpeed, () =>
+            {
+                FlyingSphere flyingSphere = Instantiate(flyingSpherePrefab, hit.point, Quaternion.identity);
+                flyingSphere.SetTarget(position);
+                flyingSphere.highlightLocation = highlightLocation;
+            });
         }
         else 
         {

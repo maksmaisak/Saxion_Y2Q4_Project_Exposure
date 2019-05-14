@@ -4923,6 +4923,7 @@ MonoBehaviour:
   dotsSurfaceLayerMask:
     serializedVersion: 2
     m_Bits: 10035
+  maxDotSpawnDistance: 200
 --- !u!1 &202063126
 GameObject:
   m_ObjectHideFlags: 0
@@ -5793,6 +5794,8 @@ MonoBehaviour:
     type: 3}
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
+  wavePulseSpeed: 4
+  wavePulseMaxRange: 20
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0

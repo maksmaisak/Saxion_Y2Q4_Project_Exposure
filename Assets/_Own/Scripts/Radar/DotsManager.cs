@@ -54,8 +54,7 @@ public class DotsManager : Singleton<DotsManager>
          
          //Debug.DrawRay(ray.origin, ray.direction, Color.white * 0.5f, 20.0f);
 
-         RaycastHit dotHit;
-         bool didHitDot = Physics.Raycast(ray, out dotHit, maxDotSpawnDistance, layerMask, QueryTriggerInteraction.Ignore);
+         bool didHitDot = Physics.Raycast(ray, out RaycastHit dotHit, maxDotSpawnDistance, layerMask, QueryTriggerInteraction.Ignore);
          if (!didHitDot)
             continue;
 
