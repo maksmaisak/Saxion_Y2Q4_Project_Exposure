@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -12,12 +13,23 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class LightZone : MonoBehaviour
 {
+    struct GameObjectSavedData
+    {
+        public Renderer renderer;
+        public Material[] sharedMaterials;
+    }
+    
     [SerializeField] List<Light> lights = new List<Light>();
     [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
     [SerializeField] bool isGlobal = false;
 
+    [Space] 
+    [SerializeField] private Material hiddenMaterial;
+
     [Space]
     [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
+
+    private Dictionary<GameObject, GameObjectSavedData> savedGameObjectData = new Dictionary<GameObject, GameObjectSavedData>();
 
     private int colorPropertyId;
 
@@ -31,8 +43,10 @@ public class LightZone : MonoBehaviour
         if (isGlobal)
         {
             lights = new List<Light>(FindObjectsOfType<Light>());
-            gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>().Select(r => r.gameObject));
+            gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>().Select(r => r.gameObject).Where(go => !go.GetComponent<ParticleSystem>()));
         }
+        
+        HideAllRenderers();
     }
 
     void Update()
@@ -46,51 +60,67 @@ public class LightZone : MonoBehaviour
     [ContextMenu("Fade in")]
     public void FadeIn()
     {
-        foreach (GameObject go in gameObjects)
+        foreach (var kvp in savedGameObjectData)
         {
-            var renderer = go.GetComponent<Renderer>();
-            if (renderer)
-                FadeInRenderer(renderer);
-            
-            var particleSystem = go.GetComponent<ParticleSystem>();
-            if (particleSystem)
-                FadeOutParticles(particleSystem);
+            GameObject go = kvp.Key;
+            if (!go || !kvp.Value.renderer)
+                continue;
+
+            FadeInRenderer(kvp.Value);
         }
+        
+        DotsManager.instance.FadeOutDots();
 
         FadeInLights();
     }
-
-    private void FadeInRenderer(Renderer renderer)
-    {
-        renderer.enabled = true;
-        
-        Material material = renderer.material;
-
-        if (!material.HasProperty(colorPropertyId))
-            return;
-
-        DOTween.ToAlpha(
-            () => material.GetColor(colorPropertyId), 
-            color => material.SetColor(colorPropertyId, color),
-            0.0f,
-            Random.Range(1.0f, 4.0f)
-        ).SetTarget(material).From();
-    }
-
-    void FadeOutParticles(ParticleSystem particleSystem)
-    {
-        // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
-        var particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
-        int numAliveParticles = particleSystem.GetParticles(particles);
-
-        for (int i = 0; i < numAliveParticles; ++i)
-            particles[i].remainingLifetime = particles[i].startLifetime = Random.Range(0.0f, 2.0f);
-
-        particleSystem.SetParticles(particles, numAliveParticles);
-        
-        particleSystem.Play();
-    }
     
+    private void HideAllRenderers()
+    {
+        Assert.IsNotNull(hiddenMaterial);
+        
+        gameObjects.RemoveAll(go => !go);
+        foreach (GameObject go in gameObjects)
+        {
+            var renderer = go.GetComponent<Renderer>();
+            if (!renderer)
+                continue;
+
+            Material[] rendererSharedMaterials = renderer.sharedMaterials;
+            
+            savedGameObjectData.Add(go, new GameObjectSavedData
+            {
+                renderer = renderer,
+                sharedMaterials = (Material[])rendererSharedMaterials.Clone()
+            });
+
+            for (int i = 0; i < renderer.sharedMaterials.Length; ++i)
+            {
+                rendererSharedMaterials[i] = hiddenMaterial;
+            }
+
+            renderer.sharedMaterials = rendererSharedMaterials;
+        }
+    }
+
+    private void FadeInRenderer(GameObjectSavedData data)
+    {
+        data.renderer.sharedMaterials = data.sharedMaterials;
+
+        // TODO use sharedMaterials here
+        foreach (var material in data.renderer.materials)
+        {
+            if (!material.HasProperty(colorPropertyId))
+                return;
+
+            DOTween.ToAlpha(
+                () => material.GetColor(colorPropertyId), 
+                color => material.SetColor(colorPropertyId, color),
+                0.0f,
+                Random.Range(1.0f, 4.0f)
+            ).SetTarget(material).From();
+        }
+    }
+
     private void FadeInLights()
     {
         foreach (Light light in lights)
