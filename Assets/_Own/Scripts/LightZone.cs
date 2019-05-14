@@ -94,9 +94,7 @@ public class LightZone : MonoBehaviour
             });
 
             for (int i = 0; i < renderer.sharedMaterials.Length; ++i)
-            {
                 rendererSharedMaterials[i] = hiddenMaterial;
-            }
 
             renderer.sharedMaterials = rendererSharedMaterials;
         }

@@ -14,8 +14,6 @@ public class TestDots : MonoBehaviour
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     
     [SerializeField] FlyingSphere flyingSpherePrefab;
-    [SerializeField] LayerMask collisionLayer = 1 << 9;
-    
     [SerializeField] GameObject wavePulsePrefab;
 
     IEnumerator Start()
@@ -31,9 +29,7 @@ public class TestDots : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
             Probe(new Ray(transform.position, transform.forward), true);
@@ -73,22 +69,15 @@ public class TestDots : MonoBehaviour
         
         tf.localScale = Vector3.zero;
         tf.DOScale(20, duration).SetEase(Ease.Linear);
-        //Material material = pulse.GetComponentInChildren<Renderer>().material;
         
         Destroy(pulse, duration);
     }
-
-    private static void DisableAllRenderers()
-    {
-        foreach (var foundRenderer in FindObjectsOfType<Renderer>())
-            if (!foundRenderer.GetComponent<ParticleSystem>())
-                foundRenderer.enabled = false;
-    }
-
+    
     private void Probe(Ray ray, bool spawnFlyingSphere = false)
     {
+        LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
         RaycastHit hit;
-        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, collisionLayer);
+        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, layerMask, QueryTriggerInteraction.Ignore);
         if (!didHit)
             return;
 

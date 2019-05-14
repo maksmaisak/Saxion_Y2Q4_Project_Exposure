@@ -5117,6 +5117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095249d9865447dcb456214323c05761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dotsSurfaceLayerMask:
+    serializedVersion: 2
+    m_Bits: 10035
+  maxDotSpawnDistance: 200
 --- !u!1 &202063126
 GameObject:
   m_ObjectHideFlags: 0
@@ -11453,9 +11457,6 @@ MonoBehaviour:
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
   flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 10035
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
 --- !u!1 &1300867622211403042
