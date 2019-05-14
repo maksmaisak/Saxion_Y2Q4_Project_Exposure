@@ -5790,7 +5790,7 @@ MonoBehaviour:
     type: 3}
   collisionLayer:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 10035
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
 --- !u!135 &1687258589
