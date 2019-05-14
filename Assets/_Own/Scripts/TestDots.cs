@@ -13,7 +13,7 @@ public class TestDots : MonoBehaviour
     [SerializeField] float dotEmissionConeAngle = 40.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     
-    [SerializeField] GameObject flyingSpherePrefab;
+    [SerializeField] FlyingSphere flyingSpherePrefab;
     [SerializeField] LayerMask collisionLayer = 1 << 9;
     
     [SerializeField] GameObject wavePulsePrefab;
@@ -105,15 +105,17 @@ public class TestDots : MonoBehaviour
         {
             Assert.IsNotNull(flyingSpherePrefab);
 
-            GameObject flyingSphere = Instantiate(
+            FlyingSphere flyingSphere = Instantiate(
                 flyingSpherePrefab,
                 hit.point,
-                Quaternion.identity);
+                Quaternion.identity
+            );
 
-            FlyingSphere flyingSphereComp = flyingSphere.GetComponent<FlyingSphere>();
-            flyingSphereComp.highlightLocation = highlightLocation;
+            flyingSphere.SetTarget(ray.origin);
+            flyingSphere.highlightLocation = highlightLocation;
         }
-        else {
+        else 
+        {
             // TODO: For testing purposes move this out of this block to paint the dots when space is hit.
             DotsManager.instance.Highlight(highlightLocation);
         }

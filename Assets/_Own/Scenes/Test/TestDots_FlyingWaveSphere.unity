@@ -5786,7 +5786,7 @@ MonoBehaviour:
   sphereCastRadius: 0.2
   dotEmissionConeAngle: 10
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
-  flyingSpherePrefab: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
+  flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
   collisionLayer:
     serializedVersion: 2
