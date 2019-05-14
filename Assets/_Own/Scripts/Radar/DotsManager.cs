@@ -45,7 +45,7 @@ public class DotsManager : Singleton<DotsManager>
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
       
-      const int MaxNumDots = 100;
+      const int MaxNumDots = 400;
       var positions = new List<Vector3>(MaxNumDots);
       for (int i = 0; i < MaxNumDots; ++i)
       {
