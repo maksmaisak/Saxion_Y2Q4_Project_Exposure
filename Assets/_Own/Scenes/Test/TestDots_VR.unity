@@ -11523,6 +11523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1298823778808090630}
   - component: {fileID: 1413032499677167628}
+  - component: {fileID: 1300922649516745029}
   m_Layer: 14
   m_Name: controller_left
   m_TagString: Untagged
@@ -11530,6 +11531,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!135 &1300922649516745029
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300922649516745028}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.07
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1300922726272874892
 GameObject:
   m_ObjectHideFlags: 0
@@ -11954,6 +11968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1304057977350801302}
   - component: {fileID: 1413575594331980920}
+  - component: {fileID: 1301416357034049947}
   m_Layer: 14
   m_Name: controller_right
   m_TagString: Untagged
@@ -11961,6 +11976,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!135 &1301416357034049947
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301416357034049946}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.07
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1301416624297326442
 GameObject:
   m_ObjectHideFlags: 0
