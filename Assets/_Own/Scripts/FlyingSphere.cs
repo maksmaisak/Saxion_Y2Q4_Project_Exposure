@@ -58,17 +58,11 @@ public class FlyingSphere : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsInLayerMask(other.gameObject.layer, handsCollisionLayer))
+        if (handsCollisionLayer.ContainsLayer(other.gameObject.layer))
         {
             Debug.Log("Hand is hit");
             Destroy(gameObject);
             DotsManager.instance.Highlight(highlightLocation);
         }
     }
-    
-    public static bool IsInLayerMask(int layer, LayerMask layerMask)
-    {
-        return layerMask == (layerMask | (1 << layer));
-    }
-
 }
