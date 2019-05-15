@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8665307809425514208}
   - component: {fileID: 8665307809425514209}
   - component: {fileID: 8665307809425514238}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 8665307809627174577}
   - component: {fileID: 8665307809627174589}
   - component: {fileID: 8665307809627174588}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: RadarGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8665307809627174582}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: -0.00000016292068}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 2.509, y: 0.858, z: 0.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 8665307810179982939}
   - component: {fileID: 8665307810179982936}
   - component: {fileID: 8665307810179982937}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
