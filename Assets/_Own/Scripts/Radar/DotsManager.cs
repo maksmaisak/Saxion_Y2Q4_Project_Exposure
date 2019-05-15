@@ -61,6 +61,7 @@ public class DotsManager : Singleton<DotsManager>
       JobHandle jobHandle = RaycastCommand.ScheduleBatch(commands, results, 1, default(JobHandle));
       jobHandle.Complete();
 
+      var positions = new List<Vector3>(MaxNumDots);
       for (int i = 0; i < MaxNumDots; ++i)
       {
          RaycastHit dotHit = results[i];
@@ -74,12 +75,14 @@ public class DotsManager : Singleton<DotsManager>
 
          // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fadein.
          // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
-         //positions.Add(dotHit.point);
-         AddDot(dotHit.point);
+         positions.Add(dotHit.point);
+         //AddDot(dotHit.point);
       }
       
       results.Dispose();
       commands.Dispose();
+      
+      AddDotsImmediately(positions);
 
       //StartCoroutine(AddDotsOverTime(positions));
    }
@@ -100,6 +103,25 @@ public class DotsManager : Singleton<DotsManager>
          yield return numDotsPerFrame < 1.0f ? new WaitForSeconds(timeBetweenDots) : null;
          numDotsLeftThisFrame += numDotsPerFrame;
       }
+   }
+
+   private void AddDotsImmediately(IList<Vector3> positions)
+   {
+      int numParticlesAdded = positions.Count;
+      int oldNumParticles   = dotsParticleSystem.particleCount;
+      
+      // Emit the particles
+      dotsParticleSystem.Emit(numParticlesAdded);
+
+      // Read out into a buffer, set positions, Write back in
+      var particleBuffer = new ParticleSystem.Particle[positions.Count];
+      dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+      for (int i = 0; i < numParticlesAdded; ++i)
+         particleBuffer[i].position = positions[i];
+      dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+      
+      // To make it recalculate the bounds used for culling
+      dotsParticleSystem.Simulate(0.01f, false, false, false);
    }
     
    private void AddDot(Vector3 position)
