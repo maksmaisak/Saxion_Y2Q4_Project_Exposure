@@ -65,7 +65,7 @@ public class TestDots : MonoBehaviour
             100.0f
         };
 
-        const float NumRaysPerAxisPerUnitDistance = 1.5f;
+        const float NumRaysPerAxisPerUnitDistance = 2.0f;
         const int MaxNumRaysPerAxis = 11;
 
         int numRaysHit = 0;
@@ -86,21 +86,34 @@ public class TestDots : MonoBehaviour
 
     private void ProbeDistanceRange(Camera cam, float minDistance, float maxDistance, int numRaysPerAxis, ref int numRaysHit)
     {
+        var rotation = Quaternion.LookRotation(camera.transform.forward);
+        
         var indices = Enumerable
             .Range(0, numRaysPerAxis)
             .SelectMany(x => Enumerable.Range(0, numRaysPerAxis).Select(y => (x, y)))
             .Shuffle();
 
-        foreach ((int x, int y) in indices)
+        foreach ((int indexX, int indexY) in indices)
         {
-            var viewportPos = numRaysPerAxis > 1 ? 
-                new Vector3(x / (numRaysPerAxis - 1.0f), y / (numRaysPerAxis - 1.0f)) :
+            var normalizedPos = numRaysPerAxis > 1 ? 
+                new Vector3(indexX / (numRaysPerAxis - 1.0f), indexY / (numRaysPerAxis - 1.0f)) :
                 new Vector3(0.5f, 0.5f);
             
-            Ray ray = cam.ViewportPointToRay(viewportPos);
+            Vector3 origin = cam.transform.position;
+            float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
+            float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
+
+            float cos = Mathf.Cos(angleX);
+            Vector3 direction = new Vector3(
+                Mathf.Sin(angleX),
+                Mathf.Sin(angleY) * cos,
+                cos
+            );
+            direction = rotation * direction;
+            Ray ray = new Ray(origin, direction);
 
             Debug.DrawRay(ray.origin + ray.direction * minDistance, ray.direction * maxDistance, Color.white, 10.0f, true);
-            if (Probe(ray, true, minDistance, maxDistance, 2.0f * cam.fieldOfView / numRaysPerAxis))
+            if (Probe(ray, true, minDistance, maxDistance, 2.0f * Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) / numRaysPerAxis))
                 if (++numRaysHit >= maxNumWavespheresPerPulse)
                     return;
         }

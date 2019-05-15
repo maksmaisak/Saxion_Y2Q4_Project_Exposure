@@ -5792,8 +5792,8 @@ MonoBehaviour:
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
-  wavePulseAngleHorizontal: 90
-  wavePulseAngleVertical: 90
+  wavePulseAngleHorizontal: 40
+  wavePulseAngleVertical: 60
   wavePulseSpeed: 4
   wavePulseMaxRange: 20
   maxNumWavespheresPerPulse: 10
@@ -5810,7 +5810,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1904166338
 GameObject:
