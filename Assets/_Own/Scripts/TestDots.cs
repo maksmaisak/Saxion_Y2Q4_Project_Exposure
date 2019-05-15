@@ -36,8 +36,6 @@ public class TestDots : MonoBehaviour
         yield return new WaitUntil(() => camera = Camera.main);
         
         //ProbeFrom(camera);
-
-        //Probe(new Ray(transform.position, transform.forward));
     }
 
     void Update()
@@ -47,7 +45,6 @@ public class TestDots : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && camera)
             ProbeFrom(camera);
-        //Probe(new Ray(transform.position, transform.forward), true);
         
         if (Input.GetKeyDown(KeyCode.P))
             CreateWavePulse();
@@ -136,7 +133,7 @@ public class TestDots : MonoBehaviour
             .OnComplete(() => Destroy(pulse));
     }
 
-    private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f, bool spawnFlyingSphere = true)
+    private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
         Vector3 originPosition = transform.position;
 
@@ -147,24 +144,16 @@ public class TestDots : MonoBehaviour
             dotEmissionConeAngle = dotConeAngle,
             maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
         };
+        
+        Assert.IsNotNull(flyingSpherePrefab);
 
-        if (spawnFlyingSphere)
+        float hitDistance = Vector3.Distance(hit.point, originPosition);
+        this.Delay(hitDistance / wavePulseSpeed, () =>
         {
-            Assert.IsNotNull(flyingSpherePrefab);
-            
-            float hitDistance = Vector3.Distance(hit.point, originPosition);
-            this.Delay(hitDistance / wavePulseSpeed, () =>
-            {
-                FlyingSphere flyingSphere = Instantiate(flyingSpherePrefab, hit.point, Quaternion.identity);
-                flyingSphere.SetTarget(originPosition);
-                flyingSphere.highlightLocation = highlightLocation;
-            });
-        }
-        else 
-        {
-            // TODO: For testing purposes move this out of this block to paint the dots when space is hit.
-            DotsManager.instance.Highlight(highlightLocation);
-        }
+            FlyingSphere flyingSphere = Instantiate(flyingSpherePrefab, hit.point, Quaternion.identity);
+            flyingSphere.SetTarget(originPosition);
+            flyingSphere.highlightLocation = highlightLocation;
+        });
 
         return true;
     }
