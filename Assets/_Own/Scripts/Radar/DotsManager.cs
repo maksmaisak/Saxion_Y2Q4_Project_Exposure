@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -46,30 +48,39 @@ public class DotsManager : Singleton<DotsManager>
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
       
       const int MaxNumDots = 400;
-      var positions = new List<Vector3>(MaxNumDots);
+      var results  = new NativeArray<RaycastHit>    (MaxNumDots, Allocator.TempJob);
+      var commands = new NativeArray<RaycastCommand>(MaxNumDots, Allocator.TempJob);
+
       for (int i = 0; i < MaxNumDots; ++i)
       {
          Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
-         Ray ray = new Ray(location.originalRay.origin, target - location.originalRay.origin);
-         
-         //Debug.DrawRay(ray.origin, ray.direction, Color.white * 0.5f, 20.0f);
+         commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
+      }
 
-         bool didHitDot = Physics.Raycast(ray, out RaycastHit dotHit, maxDotSpawnDistance, layerMask, QueryTriggerInteraction.Ignore);
-         if (!didHitDot)
+      JobHandle jobHandle = RaycastCommand.ScheduleBatch(commands, results, 1, default(JobHandle));
+      jobHandle.Complete();
+
+      for (int i = 0; i < MaxNumDots; ++i)
+      {
+         RaycastHit dotHit = results[i];
+         if (!dotHit.collider) // This only works as long as maxHits is one.
             continue;
-
+         
          if (Vector3.Dot(dotHit.point - location.pointOnSurface, location.originalRay.direction) > location.maxDotDistanceFromSurfacePointAlongOriginalRayDirection)
             continue;
 
-         Debug.DrawLine(ray.origin, dotHit.point, Color.cyan * 0.25f, 20.0f);
+         //Debug.DrawLine(commands[i].from, dotHit.point, Color.cyan * 0.25f, 20.0f);
 
          // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fadein.
          // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
-         positions.Add(dotHit.point);
-         //AddDot(dotHit.point);
+         //positions.Add(dotHit.point);
+         AddDot(dotHit.point);
       }
+      
+      results.Dispose();
+      commands.Dispose();
 
-      StartCoroutine(AddDotsOverTime(positions));
+      //StartCoroutine(AddDotsOverTime(positions));
    }
    
    private IEnumerator AddDotsOverTime(IList<Vector3> positions, float totalTime = 0.5f)

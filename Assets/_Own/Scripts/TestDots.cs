@@ -11,10 +11,7 @@ using Random = UnityEngine.Random;
 
 public class TestDots : MonoBehaviour
 {
-    [SerializeField] float sphereCastDistance = 200.0f;
     [SerializeField] float sphereCastRadius = 0.2f;
-
-    [SerializeField] float dotEmissionConeAngle = 10.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     
     [Header("Wave pulse settings")]
@@ -106,26 +103,15 @@ public class TestDots : MonoBehaviour
             normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-halfStep, halfStep));  
             normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-halfStep, halfStep));  
             
-            Vector3 origin = cam.transform.position;
-            float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
-            float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
-
-            float cos = Mathf.Cos(angleX);
-            Vector3 direction = new Vector3(
-                Mathf.Sin(angleX),
-                Mathf.Sin(angleY) * cos,
-                cos
-            );
-            direction = rotation * direction;
-            Ray ray = new Ray(origin, direction);
-
+            Ray ray = new Ray(cam.transform.position, rotation * GetRayDirection(normalizedPos));
+            
             Debug.DrawRay(ray.origin + ray.direction * minDistance, ray.direction * maxDistance, Color.white, 10.0f, true);
             if (Probe(ray, true, minDistance, maxDistance, 2.0f * Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) / numRaysPerAxis))
                 if (++numRaysHit >= maxNumWavespheresPerPulse)
                     return;
         }
     }
-    
+
     private void CreateWavePulse()
     {
         Assert.IsNotNull(wavePulsePrefab);
@@ -179,5 +165,19 @@ public class TestDots : MonoBehaviour
         }
 
         return true;
+    }
+    
+    private Vector3 GetRayDirection(Vector3 normalizedPos)
+    {
+        float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
+        float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
+
+        float cos = Mathf.Cos(angleX);
+        Vector3 direction = new Vector3(
+            Mathf.Sin(angleX),
+            Mathf.Sin(angleY) * cos,
+            cos
+        );
+        return direction;
     }
 }
