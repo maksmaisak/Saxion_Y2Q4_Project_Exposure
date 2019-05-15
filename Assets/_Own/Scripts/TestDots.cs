@@ -101,13 +101,13 @@ public class TestDots : MonoBehaviour
 
         // Handle the spherecast hits
         int numHits = 0;
-        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f * dotConeAngleMultiplier;
+        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
         foreach (RaycastHit hit in results
             .Where(r => r.collider)
             .Shuffle())
             //.OrderBy(r => r.distance))
         {
-            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance);
+            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
             bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
             if (!didHit) 
                 continue;
