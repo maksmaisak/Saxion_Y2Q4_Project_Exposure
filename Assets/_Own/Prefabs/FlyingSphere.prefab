@@ -110,7 +110,7 @@ MonoBehaviour:
   scaleDuration: 1.5
   scaleRandomMin: 0.15
   delayToDespawn: 10
-  targetSphereRadius: 0
+  targetSphereRadius: 0.5
   handsCollisionLayer:
     serializedVersion: 2
     m_Bits: 16384
