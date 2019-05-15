@@ -29,6 +29,9 @@ public class LightZone : MonoBehaviour
     [Space]
     [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
 
+    [Space] 
+    [SerializeField] LayerMask exceptionLayer;
+
     private Dictionary<GameObject, GameObjectSavedData> savedGameObjectData = new Dictionary<GameObject, GameObjectSavedData>();
 
     private int colorPropertyId;
@@ -43,7 +46,11 @@ public class LightZone : MonoBehaviour
         if (isGlobal)
         {
             lights = new List<Light>(FindObjectsOfType<Light>());
-            gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>().Select(r => r.gameObject).Where(go => !go.GetComponent<ParticleSystem>()));
+            gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>()
+                    .Select(r => r.gameObject)
+                    .Where(go => !go.GetComponent<ParticleSystem>()));
+
+            gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
         }
         
         HideAllRenderers();

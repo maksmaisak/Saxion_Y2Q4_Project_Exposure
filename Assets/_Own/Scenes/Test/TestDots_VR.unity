@@ -6099,6 +6099,9 @@ MonoBehaviour:
   isGlobal: 1
   hiddenMaterial: {fileID: 2100000, guid: 2292bbcf4046c4650a3b982e15840875, type: 2}
   fadeInKeyCode: 49
+  exceptionLayer:
+    serializedVersion: 2
+    m_Bits: 81920
 --- !u!4 &1200052697
 Transform:
   m_ObjectHideFlags: 0

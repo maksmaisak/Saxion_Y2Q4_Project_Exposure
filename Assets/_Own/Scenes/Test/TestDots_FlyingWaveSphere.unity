@@ -4923,6 +4923,7 @@ MonoBehaviour:
   dotsSurfaceLayerMask:
     serializedVersion: 2
     m_Bits: 10035
+  maxDotSpawnDistance: 200
 --- !u!1 &202063126
 GameObject:
   m_ObjectHideFlags: 0
@@ -5142,7 +5143,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 45, y: 130, z: 90}
 --- !u!1 &653260035
 GameObject:
@@ -5327,6 +5328,9 @@ MonoBehaviour:
   isGlobal: 1
   hiddenMaterial: {fileID: 2100000, guid: 2292bbcf4046c4650a3b982e15840875, type: 2}
   fadeInKeyCode: 49
+  exceptionLayer:
+    serializedVersion: 2
+    m_Bits: 65536
 --- !u!4 &1200052697
 Transform:
   m_ObjectHideFlags: 0
@@ -5546,7 +5550,7 @@ PrefabInstance:
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
