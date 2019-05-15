@@ -11455,9 +11455,14 @@ MonoBehaviour:
   sphereCastRadius: 0.2
   dotEmissionConeAngle: 10
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
-  flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-    type: 3}
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+    type: 3}
+  wavePulseAngleHorizontal: 40
+  wavePulseAngleVertical: 60
+  wavePulseSpeed: 4
+  wavePulseMaxRange: 20
+  maxNumWavespheresPerPulse: 6
+  flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
 --- !u!1 &1300867622211403042
 GameObject:

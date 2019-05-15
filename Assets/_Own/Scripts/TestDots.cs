@@ -7,6 +7,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class TestDots : MonoBehaviour
 {
@@ -93,11 +94,17 @@ public class TestDots : MonoBehaviour
             .SelectMany(x => Enumerable.Range(0, numRaysPerAxis).Select(y => (x, y)))
             .Shuffle();
 
+        float step = numRaysPerAxis <= 1 ? 1.0f : 1.0f / (numRaysPerAxis - 1.0f);
+        float halfStep = step * 0.5f;
         foreach ((int indexX, int indexY) in indices)
         {
             var normalizedPos = numRaysPerAxis > 1 ? 
-                new Vector3(indexX / (numRaysPerAxis - 1.0f), indexY / (numRaysPerAxis - 1.0f)) :
+                new Vector3(indexX * step, indexY * step) :
                 new Vector3(0.5f, 0.5f);
+
+            // Randomize the ray direction a bit
+            normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-halfStep, halfStep));  
+            normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-halfStep, halfStep));  
             
             Vector3 origin = cam.transform.position;
             float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
