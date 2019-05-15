@@ -42,7 +42,7 @@ public class DotsManager : Singleton<DotsManager>
 
    public void Highlight(RadarHighlightLocation location, LayerMask layerMask)
    {
-      Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
+      //Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);

@@ -5786,15 +5786,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCastDistance: 200
   sphereCastRadius: 0.2
-  dotEmissionConeAngle: 10
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
+  dotConeAngleMultiplier: 2
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
   wavePulseAngleHorizontal: 40
-  wavePulseAngleVertical: 60
-  wavePulseSpeed: 4
+  wavePulseAngleVertical: 40
+  wavePulseSpeed: 10
   wavePulseMaxRange: 20
   maxNumWavespheresPerPulse: 6
   flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
