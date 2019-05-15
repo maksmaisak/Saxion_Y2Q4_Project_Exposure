@@ -18,6 +18,7 @@ public class DotsManager : Singleton<DotsManager>
 
    void Start()
    {
+      Physics.queriesHitTriggers = false;
       dotsParticleSystem = GetComponent<ParticleSystem>();
    }
 
