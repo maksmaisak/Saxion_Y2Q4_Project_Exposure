@@ -48,7 +48,7 @@ public class FlyingSphere : MonoBehaviour
 
         // Randomize scale over time
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
-        transform.DOScale(randomScale, scaleDuration);
+        transform.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
 
         Destroy(gameObject, delayToDespawn);
     }
