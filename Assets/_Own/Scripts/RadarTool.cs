@@ -65,7 +65,7 @@ public class RadarTool : MonoBehaviour
                     layerMask
                 );
                 
-                //Debug.DrawRay(ray.origin, ray.direction * sphereCastRange, Color.white, 10.0f, true);
+                Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
             }
         }
 
@@ -111,8 +111,8 @@ public class RadarTool : MonoBehaviour
 
     private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
-        Transform targetTransform = flyingSphereTarget ? flyingSphereTarget : Camera.main.transform;
-        Vector3 originPosition = targetTransform.position;
+        flyingSphereTarget = flyingSphereTarget ? flyingSphereTarget : Camera.main.transform;
+        Vector3 originPosition = flyingSphereTarget.position;
 
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {

@@ -5364,18 +5364,6 @@ MonoBehaviour:
   gripSenseAxisChanged: 0
   gripSensePressed: 0
   controllerVisible: 1
---- !u!114 &594804474 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8224539706240099016, guid: fbbf6863e4ff6fc4397586df02d24473,
-    type: 3}
-  m_PrefabInstance: {fileID: 8224539706240099013}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &625711241 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1235180761666570, guid: a87f0180d46fd334b9025d0314a0dc70,
@@ -11269,7 +11257,6 @@ GameObject:
   - component: {fileID: 1304171178565740810}
   - component: {fileID: 1381410861665418070}
   - component: {fileID: 1319262213480379506}
-  - component: {fileID: 1300833471626434465}
   m_Layer: 0
   m_Name: CenterEyeAnchor
   m_TagString: MainCamera
@@ -11277,30 +11264,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1300833471626434465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1300833471626434464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sphereCastRadius: 0.2
-  maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
-  dotConeAngleMultiplier: 2
-  wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
-    type: 3}
-  wavePulseAngleHorizontal: 40
-  wavePulseAngleVertical: 40
-  wavePulseSpeed: 10
-  wavePulseMaxRange: 20
-  maxNumWavespheresPerPulse: 6
-  flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-    type: 3}
 --- !u!1 &1300867622211403042
 GameObject:
   m_ObjectHideFlags: 0
@@ -15432,7 +15395,7 @@ PrefabInstance:
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.858
+      value: 0.7958
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
@@ -15442,22 +15405,22 @@ PrefabInstance:
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.70710677
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
@@ -15477,17 +15440,12 @@ PrefabInstance:
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 90.00001
       objectReference: {fileID: 0}
-    - target: {fileID: 8665307809627174577, guid: fbbf6863e4ff6fc4397586df02d24473,
+    - target: {fileID: 8224539706240099016, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
-      propertyPath: radarTool
-      value: 
-      objectReference: {fileID: 594804474}
-    - target: {fileID: 8665307809627174577, guid: fbbf6863e4ff6fc4397586df02d24473,
-        type: 3}
-      propertyPath: useOverrideButton
-      value: 0
+      propertyPath: sphereCastRadius
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbbf6863e4ff6fc4397586df02d24473, type: 3}
