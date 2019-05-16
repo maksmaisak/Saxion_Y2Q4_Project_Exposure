@@ -115,7 +115,6 @@ public class FlyingSphere : MonoBehaviour
             .SetEase(Ease.OutQuart);
 
         Debug.Log("Hand is hit");
-        Destroy(gameObject);
         DotsManager.instance.Highlight(highlightLocation);
     }
 }
