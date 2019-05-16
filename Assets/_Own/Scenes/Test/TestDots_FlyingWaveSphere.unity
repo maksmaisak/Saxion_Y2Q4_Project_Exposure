@@ -5512,11 +5512,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingSphere
       objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: scaleRandomMin
-      value: 0.32
-      objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalPosition.x
