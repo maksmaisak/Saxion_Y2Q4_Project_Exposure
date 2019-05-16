@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1850085830539742750}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.70710677}
   m_LocalPosition: {x: 2.5, y: 1, z: -0.468}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -105,10 +105,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyingSpeed: 1.36
+  baseSpeed: 1.35
+  randomMinSpeed: 0.8
+  randomMaxSpeed: 2.16
   scaleTarget: 0.27
-  scaleDuration: 1.5
+  scaleDuration: 2
   scaleRandomMin: 0.15
+  albedoColorId: _AlbedoColor_549AC39B
+  emissionColorId: _EmissionColor_40E9251C
+  albedoColors: []
+  emissionColors:
+  - {r: 0.3507228, g: 0, b: 1, a: 0}
+  - {r: 1, g: 0.5458296, b: 0, a: 0}
+  - {r: 0.53446317, g: 1, b: 0.25943398, a: 0}
+  - {r: 0, g: 0.8679245, b: 0.67080444, a: 0}
+  - {r: 0.9716981, g: 0.8089325, b: 0.68293875, a: 0}
   delayToDespawn: 10
   targetSphereRadius: 0.5
   handsCollisionLayer:

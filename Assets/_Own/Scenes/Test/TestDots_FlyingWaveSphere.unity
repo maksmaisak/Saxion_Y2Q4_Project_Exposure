@@ -5512,6 +5512,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingSphere
       objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5801,6 +5806,7 @@ MonoBehaviour:
   maxNumWavespheresPerPulse: 6
   flyingSpherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
+  flyingSphereTarget: {fileID: 0}
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0
