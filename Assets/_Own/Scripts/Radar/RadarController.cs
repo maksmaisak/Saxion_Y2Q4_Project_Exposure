@@ -17,6 +17,18 @@ public class RadarController : VRTK_InteractableObject
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
+    private void OnEnable()
+    {
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+            col.enabled = false;
+    }
+
+    private void OnDisable()
+    {
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+            col.enabled = true;
+    }
+
     protected override void Update()
     {
         base.Update();
