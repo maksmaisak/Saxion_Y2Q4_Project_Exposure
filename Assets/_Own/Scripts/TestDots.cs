@@ -1,29 +1,41 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using DG.Tweening;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class TestDots : MonoBehaviour
 {
-    [SerializeField] float sphereCastDistance = 200.0f;
-    [SerializeField] float sphereCastRadius = 0.2f;
-
-    [SerializeField] float dotEmissionConeAngle = 10.0f;
-    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
+    private const int MaxNumRaysPerAxis = 21;
     
-    [SerializeField] FlyingSphere flyingSpherePrefab;
+    [SerializeField] float sphereCastRadius = 0.2f;
+    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
+    [SerializeField] [Range(0.05f, 5.0f)] float dotConeAngleMultiplier = 1.0f;
+    
+    [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
+    [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleHorizontal = 90.0f;
+    [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
+    [SerializeField] float wavePulseSpeed = 10.0f;
+    [SerializeField] float wavePulseMaxRange = 20.0f;
+    [SerializeField] int maxNumWavespheresPerPulse = 10;
+    [Space]
+    [SerializeField] FlyingSphere flyingSpherePrefab;
+    
+    private new Camera camera;
 
     IEnumerator Start()
     {
-        yield return new WaitUntil(() => Camera.main);
+        yield return new WaitUntil(() => camera = Camera.main);
         
-        ProbeFrom(Camera.main);
-        CreateWavePulse();
-
-        //Probe(new Ray(transform.position, transform.forward));
+        //ProbeFrom(camera);
     }
 
     void Update()
@@ -31,8 +43,8 @@ public class TestDots : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            Probe(new Ray(transform.position, transform.forward), true);
+        if (Input.GetKeyDown(KeyCode.Space) && camera)
+            ProbeFrom(camera);
         
         if (Input.GetKeyDown(KeyCode.P))
             CreateWavePulse();
@@ -42,18 +54,68 @@ public class TestDots : MonoBehaviour
     {
         Assert.IsNotNull(cam);
         
-        const int numRaysPerAxis = 20;
-        for (int i = 0; i < numRaysPerAxis; ++i)
-        {
-            for (int j = 0; j < numRaysPerAxis; ++j)
-            {
-                var viewportPos = new Vector3(i / (float)numRaysPerAxis, j / (float)numRaysPerAxis);
-                Ray ray = cam.ViewportPointToRay(viewportPos);
+        LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
 
-                Debug.DrawRay(ray.origin, ray.direction, Color.white, 10.0f, true);
-                Probe(ray);
+        var rotation = Quaternion.LookRotation(camera.transform.forward); // camera.transform.rotation;
+        Vector3 origin = camera.transform.position;
+
+        const int NumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
+        var results  = new NativeArray<RaycastHit>       (NumSpherecasts, Allocator.TempJob);
+        var commands = new NativeArray<SpherecastCommand>(NumSpherecasts, Allocator.TempJob);
+
+        // Populated the commands
+        int commandIndex = 0;
+        
+        float step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
+        float halfStep = step * 0.5f;
+        for (int indexX = 0; indexX < MaxNumRaysPerAxis; ++indexX)
+        {
+            for (int indexY = 0; indexY < MaxNumRaysPerAxis; ++indexY)
+            { 
+                var normalizedPos = MaxNumRaysPerAxis > 1 ? 
+                    new Vector3(indexX * step, indexY * step) :
+                    new Vector3(0.5f, 0.5f);
+
+                // Randomize the ray direction a bit
+                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-halfStep, halfStep));  
+                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-halfStep, halfStep));  
+        
+                Ray ray = new Ray(cam.transform.position, rotation * GetRayDirection(normalizedPos));
+                commands[commandIndex++] = new SpherecastCommand(
+                    ray.origin, 
+                    sphereCastRadius, 
+                    ray.direction,
+                    wavePulseMaxRange,
+                    layerMask
+                );
+                
+                //Debug.DrawRay(ray.origin, ray.direction * sphereCastRange, Color.white, 10.0f, true);
             }
         }
+
+        JobHandle jobHandle = SpherecastCommand.ScheduleBatch(commands, results, 1);
+        jobHandle.Complete();
+
+        // Handle the spherecast hits
+        int numHits = 0;
+        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
+        foreach (RaycastHit hit in results
+            .Where(r => r.collider)
+            .Shuffle())
+            //.OrderBy(r => r.distance))
+        {
+            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
+            bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
+            if (!didHit) 
+                continue;
+            
+            numHits += 1;
+            if (numHits >= maxNumWavespheresPerPulse)
+                break;
+        }
+
+        results.Dispose();
+        commands.Dispose();
 
         CreateWavePulse();
     }
@@ -61,52 +123,52 @@ public class TestDots : MonoBehaviour
     private void CreateWavePulse()
     {
         Assert.IsNotNull(wavePulsePrefab);
-
-        const float duration = 2.0f;
-
+        
         GameObject pulse = Instantiate(wavePulsePrefab, transform.position, Quaternion.identity);
+        
         Transform tf = pulse.transform;
-        
         tf.localScale = Vector3.zero;
-        tf.DOScale(20, duration).SetEase(Ease.Linear);
-        
-        Destroy(pulse, duration);
+        tf.DOScale(wavePulseMaxRange * 2.0f, wavePulseMaxRange / wavePulseSpeed)
+            .SetEase(Ease.Linear)
+            .OnComplete(() => Destroy(pulse));
     }
-    
-    private void Probe(Ray ray, bool spawnFlyingSphere = false)
+
+    private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
-        LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
-        RaycastHit hit;
-        bool didHit = Physics.SphereCast(ray, sphereCastRadius, out hit, sphereCastDistance, layerMask, QueryTriggerInteraction.Ignore);
-        if (!didHit)
-            return;
+        Vector3 originPosition = transform.position;
 
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
-            originalRay = ray,
+            originalRay = originalRay,
             pointOnSurface = hit.point,
-            dotEmissionConeAngle = dotEmissionConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRayDirection =
-                maxDotDistanceFromSurfacePointAlongOriginalRayDirection
+            dotEmissionConeAngle = dotConeAngle,
+            maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
         };
+        
+        Assert.IsNotNull(flyingSpherePrefab);
 
-        if (spawnFlyingSphere)
+        float hitDistance = Vector3.Distance(hit.point, originPosition);
+        this.Delay(hitDistance / wavePulseSpeed, () =>
         {
-            Assert.IsNotNull(flyingSpherePrefab);
-
-            FlyingSphere flyingSphere = Instantiate(
-                flyingSpherePrefab,
-                hit.point,
-                Quaternion.identity
-            );
-
-            flyingSphere.SetTarget(ray.origin);
+            FlyingSphere flyingSphere = Instantiate(flyingSpherePrefab, hit.point, Quaternion.identity);
+            flyingSphere.SetTarget(originPosition);
             flyingSphere.highlightLocation = highlightLocation;
-        }
-        else 
-        {
-            // TODO: For testing purposes move this out of this block to paint the dots when space is hit.
-            DotsManager.instance.Highlight(highlightLocation);
-        }
+        });
+
+        return true;
+    }
+    
+    private Vector3 GetRayDirection(Vector3 normalizedPos)
+    {
+        float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
+        float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
+
+        float cos = Mathf.Cos(angleX);
+        Vector3 direction = new Vector3(
+            Mathf.Sin(angleX),
+            Mathf.Sin(angleY) * cos,
+            cos
+        );
+        return direction;
     }
 }

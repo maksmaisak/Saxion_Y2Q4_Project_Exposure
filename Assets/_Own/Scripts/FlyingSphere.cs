@@ -40,13 +40,16 @@ public class FlyingSphere : MonoBehaviour
         // Set the rotation to face the camera position + some kind of sphere offset.
         Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
         targetPosition += Random.insideUnitSphere * targetSphereRadius;
+
+        Transform tf = transform;
         
         // Rotate the along movement direction
-        transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
+        tf.rotation = Quaternion.LookRotation(targetPosition - tf.position);
         
         // Randomize scale over time
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
-        transform.DOScale(randomScale, scaleDuration);
+        tf.localScale = Vector3.zero;
+        tf.DOScale(randomScale, scaleDuration);
 
         Destroy(gameObject, delayToDespawn);
     }

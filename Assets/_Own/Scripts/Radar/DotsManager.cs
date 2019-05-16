@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,6 +18,7 @@ public class DotsManager : Singleton<DotsManager>
 
    void Start()
    {
+      Physics.queriesHitTriggers = false;
       dotsParticleSystem = GetComponent<ParticleSystem>();
    }
 
@@ -39,38 +42,49 @@ public class DotsManager : Singleton<DotsManager>
 
    public void Highlight(RadarHighlightLocation location, LayerMask layerMask)
    {
-      Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
+      //Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
       
-      const int MaxNumDots = 100;
-      var positions = new List<Vector3>(MaxNumDots);
+      const int MaxNumDots = 400;
+      var results  = new NativeArray<RaycastHit>    (MaxNumDots, Allocator.TempJob);
+      var commands = new NativeArray<RaycastCommand>(MaxNumDots, Allocator.TempJob);
+
       for (int i = 0; i < MaxNumDots; ++i)
       {
          Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
-         Ray ray = new Ray(location.originalRay.origin, target - location.originalRay.origin);
-         
-         //Debug.DrawRay(ray.origin, ray.direction, Color.white * 0.5f, 20.0f);
+         commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
+      }
 
-         RaycastHit dotHit;
-         bool didHitDot = Physics.Raycast(ray, out dotHit, maxDotSpawnDistance, layerMask, QueryTriggerInteraction.Ignore);
-         if (!didHitDot)
+      JobHandle jobHandle = RaycastCommand.ScheduleBatch(commands, results, 1, default(JobHandle));
+      jobHandle.Complete();
+
+      var positions = new List<Vector3>(MaxNumDots);
+      for (int i = 0; i < MaxNumDots; ++i)
+      {
+         RaycastHit dotHit = results[i];
+         if (!dotHit.collider) // This only works as long as maxHits is one.
             continue;
-
+         
          if (Vector3.Dot(dotHit.point - location.pointOnSurface, location.originalRay.direction) > location.maxDotDistanceFromSurfacePointAlongOriginalRayDirection)
             continue;
 
-         Debug.DrawLine(ray.origin, dotHit.point, Color.cyan * 0.25f, 20.0f);
+         //Debug.DrawLine(commands[i].from, dotHit.point, Color.cyan * 0.25f, 20.0f);
 
          // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fadein.
          // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
          positions.Add(dotHit.point);
          //AddDot(dotHit.point);
       }
+      
+      results.Dispose();
+      commands.Dispose();
+      
+      AddDotsImmediately(positions);
 
-      StartCoroutine(AddDotsOverTime(positions));
+      //StartCoroutine(AddDotsOverTime(positions));
    }
    
    private IEnumerator AddDotsOverTime(IList<Vector3> positions, float totalTime = 0.5f)
@@ -89,6 +103,25 @@ public class DotsManager : Singleton<DotsManager>
          yield return numDotsPerFrame < 1.0f ? new WaitForSeconds(timeBetweenDots) : null;
          numDotsLeftThisFrame += numDotsPerFrame;
       }
+   }
+
+   private void AddDotsImmediately(IList<Vector3> positions)
+   {
+      int numParticlesAdded = positions.Count;
+      int oldNumParticles   = dotsParticleSystem.particleCount;
+      
+      // Emit the particles
+      dotsParticleSystem.Emit(numParticlesAdded);
+
+      // Read out into a buffer, set positions, Write back in
+      var particleBuffer = new ParticleSystem.Particle[positions.Count];
+      dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+      for (int i = 0; i < numParticlesAdded; ++i)
+         particleBuffer[i].position = positions[i];
+      dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+      
+      // To make it recalculate the bounds used for culling
+      dotsParticleSystem.Simulate(0.01f, false, false, false);
    }
     
    private void AddDot(Vector3 position)
