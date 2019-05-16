@@ -27,6 +27,7 @@ public class FlyingSphere : MonoBehaviour
     [Header("Other Settings")]
     [SerializeField] float delayToDespawn = 5.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
+    [SerializeField] float slowdownRadius = 4.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
     private bool didStart;
@@ -50,28 +51,49 @@ public class FlyingSphere : MonoBehaviour
         didStart = true;
         canMove = true;
 
-        // Set the rotation to face the camera position + some kind of sphere offset.
-        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
-        targetPosition += Random.insideUnitSphere * targetSphereRadius;
-
-        Transform tf = transform;
-        
-        // Rotate the along movement direction
-        tf.rotation = Quaternion.LookRotation(targetPosition - tf.position);
-        
-        // Randomize scale over time
-        float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
-        
-        tf.localScale = Vector3.zero;
-        tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
-
-        speed = Mathf.Clamp(baseSpeed * (Random.value * randomMaxSpeed), randomMinSpeed, randomMaxSpeed); 
-        
         RandomizeColor();
-        
+        RandomizeScale();
+        RandomizeSpeedAndDirection();
+
         Destroy(gameObject, delayToDespawn);
     }
 
+    void RandomizeSpeedAndDirection()
+    {
+        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
+
+        float distance = Vector3.Distance(targetPosition, transform.position);
+        
+        float randomSpeed = baseSpeed * (Random.value * randomMaxSpeed);
+        randomSpeed = Mathf.Clamp(randomSpeed, randomMinSpeed, randomMaxSpeed);
+
+        if (distance < slowdownRadius)
+            randomSpeed *= Mathf.Max(distance / slowdownRadius, 0.01f); 
+        
+        speed = randomSpeed;
+
+        float targetRadius = targetSphereRadius;
+
+        if (distance < targetSphereRadius)
+            targetRadius *= Mathf.Max(distance / targetSphereRadius, 0.01f);
+        
+        // Set the rotation to face the camera position + some kind of sphere offset
+        targetPosition += Random.insideUnitSphere * (targetRadius);
+
+        // Rotate the along movement direction
+        transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
+    }
+
+    void RandomizeScale()
+    {
+        // Randomize scale over time
+        float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
+        
+        Transform tf = transform;
+        tf.localScale = Vector3.zero;
+        tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
+    }
+    
     void RandomizeColor()
     {
         Renderer renderer = GetComponent<Renderer>();

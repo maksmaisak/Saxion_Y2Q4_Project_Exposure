@@ -110,7 +110,7 @@ MonoBehaviour:
   randomMaxSpeed: 2.16
   scaleTarget: 0.27
   scaleDuration: 2
-  scaleRandomMin: 0.15
+  scaleRandomMin: 0.32
   albedoColorId: _AlbedoColor_549AC39B
   emissionColorId: _EmissionColor_40E9251C
   albedoColors: []
