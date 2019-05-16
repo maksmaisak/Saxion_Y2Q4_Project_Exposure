@@ -9,7 +9,6 @@ using Random = UnityEngine.Random;
 public class FlyingSphere : MonoBehaviour
 {
     [Header("Movement Settings")] 
-    [SerializeField] float baseSpeed = 1.5f;
     [SerializeField] float randomMinSpeed = 0.8f;
     [SerializeField] float randomMaxSpeed = 2.5f;
     
@@ -25,16 +24,18 @@ public class FlyingSphere : MonoBehaviour
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
     [Header("Other Settings")]
-    [SerializeField] float delayToDespawn = 5.0f;
+    [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
+    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
     [SerializeField] float slowdownRadius = 4.0f;
     [SerializeField] LayerMask handsCollisionLayer;
+
+    private new Transform transform;
+    private float speed;
 
     private bool didStart;
     private bool canMove;
 
-    private float speed;
-    
     private Vector3? targetCenter;
 
     public RadarHighlightLocation highlightLocation { get; set; }
@@ -45,8 +46,13 @@ public class FlyingSphere : MonoBehaviour
         
         targetCenter = position;
     }
+
+    void Awake()
+    {
+        transform = GetComponent<Transform>();
+    }
     
-    private void Start()
+    void Start()
     {
         didStart = true;
         canMove = true;
@@ -57,57 +63,8 @@ public class FlyingSphere : MonoBehaviour
 
         Destroy(gameObject, delayToDespawn);
     }
-
-    void RandomizeSpeedAndDirection()
-    {
-        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
-
-        float distance = Vector3.Distance(targetPosition, transform.position);
-        
-        float randomSpeed = baseSpeed * (Random.value * randomMaxSpeed);
-        randomSpeed = Mathf.Clamp(randomSpeed, randomMinSpeed, randomMaxSpeed);
-
-        if (distance < slowdownRadius)
-            randomSpeed *= Mathf.Max(distance / slowdownRadius, 0.01f); 
-        
-        speed = randomSpeed;
-
-        float targetRadius = targetSphereRadius;
-
-        if (distance < targetSphereRadius)
-            targetRadius *= Mathf.Max(distance / targetSphereRadius, 0.01f);
-        
-        // Set the rotation to face the camera position + some kind of sphere offset
-        targetPosition += Random.insideUnitSphere * (targetRadius);
-
-        // Rotate the along movement direction
-        transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
-    }
-
-    void RandomizeScale()
-    {
-        // Randomize scale over time
-        float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
-        
-        Transform tf = transform;
-        tf.localScale = Vector3.zero;
-        tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
-    }
     
-    void RandomizeColor()
-    {
-        Renderer renderer = GetComponent<Renderer>();
-        if (!renderer)
-            return;
-
-        if(albedoColors.Count > 0)
-            renderer.material.SetColor(albedoColorId, albedoColors[Random.Range(0, albedoColors.Count)]);
-
-        if (emissionColors.Count > 0)
-            renderer.material.SetColor(emissionColorId, emissionColors[Random.Range(0, emissionColors.Count)]);
-    }
-    
-    private void Update()
+    void Update()
     {
         if (!canMove)
             return;
@@ -115,7 +72,7 @@ public class FlyingSphere : MonoBehaviour
         transform.position += speed * Time.deltaTime * transform.forward;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (!handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
             return;
@@ -138,5 +95,50 @@ public class FlyingSphere : MonoBehaviour
 
         Debug.Log("Hand is hit");
         DotsManager.instance.Highlight(highlightLocation);
+    }
+
+    void RandomizeSpeedAndDirection()
+    {
+        speed = Random.Range(randomMinSpeed, randomMaxSpeed);
+        float targetPositionRandomizationRadius = targetSphereRadius;
+
+        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
+        float distance = Vector3.Distance(targetPosition, transform.position);
+        if (distance < slowdownRadius)
+        {
+            float multiplier = Mathf.Max(distance / slowdownRadius, 0.01f);
+            
+            speed *= multiplier;
+            targetPositionRandomizationRadius *= multiplier;
+        }
+
+        // Set the rotation to face a position within a sphere around the camera position
+        targetPosition += Random.insideUnitSphere * targetPositionRandomizationRadius;
+
+        // Rotate the along movement direction
+        transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
+    }
+
+    void RandomizeScale()
+    {
+        // Randomize scale over time
+        float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
+        
+        Transform tf = transform;
+        tf.localScale = Vector3.zero;
+        tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
+    }
+
+    void RandomizeColor()
+    {
+        Renderer renderer = GetComponent<Renderer>();
+        if (!renderer)
+            return;
+
+        if (albedoColors.Count > 0)
+            renderer.material.SetColor(albedoColorId, albedoColors[Random.Range(0, albedoColors.Count)]);
+
+        if (emissionColors.Count > 0)
+            renderer.material.SetColor(emissionColorId, emissionColors[Random.Range(0, emissionColors.Count)]);
     }
 }
