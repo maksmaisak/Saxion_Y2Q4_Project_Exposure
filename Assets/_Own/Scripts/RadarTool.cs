@@ -11,7 +11,7 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class TestDots : MonoBehaviour
+public class RadarTool : MonoBehaviour
 {
     private const int MaxNumRaysPerAxis = 21;
     
@@ -31,11 +31,9 @@ public class TestDots : MonoBehaviour
     
     private new Camera camera;
 
-    IEnumerator Start()
+    void Start()
     {
-        yield return new WaitUntil(() => camera = Camera.main);
-        
-        //ProbeFrom(camera);
+        //Probe();
     }
 
     void Update()
@@ -43,21 +41,19 @@ public class TestDots : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        if (Input.GetKeyDown(KeyCode.Space) && camera)
-            ProbeFrom(camera);
+        if (Input.GetKeyDown(KeyCode.Space))
+            Probe();
         
         if (Input.GetKeyDown(KeyCode.P))
             CreateWavePulse();
     }
 
-    private void ProbeFrom(Camera cam)
+    public void Probe()
     {
-        Assert.IsNotNull(cam);
-        
         LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
 
-        var rotation = Quaternion.LookRotation(camera.transform.forward); // camera.transform.rotation;
-        Vector3 origin = camera.transform.position;
+        var rotation = Quaternion.LookRotation(transform.forward); // transform.rotation;
+        Vector3 origin = transform.position;
 
         const int NumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
         var results  = new NativeArray<RaycastHit>       (NumSpherecasts, Allocator.TempJob);
@@ -66,21 +62,21 @@ public class TestDots : MonoBehaviour
         // Populated the commands
         int commandIndex = 0;
         
-        float step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
-        float halfStep = step * 0.5f;
+        const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
+        const float HalfStep = Step * 0.5f;
         for (int indexX = 0; indexX < MaxNumRaysPerAxis; ++indexX)
         {
             for (int indexY = 0; indexY < MaxNumRaysPerAxis; ++indexY)
             { 
                 var normalizedPos = MaxNumRaysPerAxis > 1 ? 
-                    new Vector3(indexX * step, indexY * step) :
+                    new Vector3(indexX * Step, indexY * Step) :
                     new Vector3(0.5f, 0.5f);
 
                 // Randomize the ray direction a bit
-                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-halfStep, halfStep));  
-                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-halfStep, halfStep));  
+                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));  
+                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));  
         
-                Ray ray = new Ray(cam.transform.position, rotation * GetRayDirection(normalizedPos));
+                Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
                 commands[commandIndex++] = new SpherecastCommand(
                     ray.origin, 
                     sphereCastRadius, 
