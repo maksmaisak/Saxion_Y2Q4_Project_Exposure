@@ -208,6 +208,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
   radarTool: {fileID: 8224539706240099016}
+  fireCooldown: 0.5
 --- !u!114 &8665307809627174589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCastRadius: 0.02
+  sphereCastRadius: 0.05
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
   dotConeAngleMultiplier: 1
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
