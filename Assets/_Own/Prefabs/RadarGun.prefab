@@ -208,6 +208,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
   radarTool: {fileID: 8224539706240099016}
+  fireCooldown: 0.5
 --- !u!114 &8665307809627174589
 MonoBehaviour:
   m_ObjectHideFlags: 0
