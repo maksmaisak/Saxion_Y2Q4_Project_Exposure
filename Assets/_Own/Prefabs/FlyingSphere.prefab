@@ -109,6 +109,15 @@ MonoBehaviour:
   scaleTarget: 0.27
   scaleDuration: 2
   scaleRandomMin: 0.15
+  albedoColorId: _AlbedoColor_549AC39B
+  emissionColorId: _EmissionColor_40E9251C
+  albedoColors: []
+  emissionColors:
+  - {r: 0.3507228, g: 0, b: 1, a: 0}
+  - {r: 1, g: 0.5458296, b: 0, a: 0}
+  - {r: 0.53446317, g: 1, b: 0.25943398, a: 0}
+  - {r: 0, g: 0.8679245, b: 0.67080444, a: 0}
+  - {r: 0.9716981, g: 0.8089325, b: 0.68293875, a: 0}
   delayToDespawn: 10
   targetSphereRadius: 0.59
   handsCollisionLayer:

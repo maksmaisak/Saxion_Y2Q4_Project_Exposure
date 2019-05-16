@@ -39,3 +39,5 @@ Material:
     m_Colors:
     - Color_40E9251C: {r: 0.07062123, g: 0.6509434, b: 0.08599132, a: 0}
     - Vector3_63D8E239: {r: 0, g: 0, b: 1, a: 0}
+    - _AlbedoColor_549AC39B: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 0}
+    - _EmissionColor_40E9251C: {r: 0, g: 1, b: 0.08852029, a: 0}
