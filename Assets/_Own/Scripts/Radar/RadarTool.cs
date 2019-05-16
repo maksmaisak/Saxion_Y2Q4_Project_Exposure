@@ -27,6 +27,12 @@ public class RadarTool : MonoBehaviour
     [Space]
     [SerializeField] FlyingSphere flyingSpherePrefab;
     [SerializeField] Transform flyingSphereTarget;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) 
+            Probe();
+    }
     
     public void Probe()
     {

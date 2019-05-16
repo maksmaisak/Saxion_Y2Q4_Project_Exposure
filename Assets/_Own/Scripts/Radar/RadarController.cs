@@ -17,7 +17,7 @@ public class RadarController : VRTK_InteractableObject
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         base.OnEnable();
 
@@ -27,7 +27,7 @@ public class RadarController : VRTK_InteractableObject
             col.enabled = false;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         base.OnDisable();
 
@@ -43,9 +43,6 @@ public class RadarController : VRTK_InteractableObject
 
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            radarTool.Probe();
     }
 
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
