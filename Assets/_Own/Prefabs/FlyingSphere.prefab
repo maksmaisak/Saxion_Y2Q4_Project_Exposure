@@ -105,7 +105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyingSpeed: 1.36
+  baseSpeed: 1.35
+  randomMinSpeed: 0.8
+  randomMaxSpeed: 2.16
   scaleTarget: 0.27
   scaleDuration: 2
   scaleRandomMin: 0.15

@@ -9,8 +9,10 @@ using Random = UnityEngine.Random;
 public class FlyingSphere : MonoBehaviour
 {
     [Header("Movement Settings")] 
-    [SerializeField] float flyingSpeed = 1.5f;
-
+    [SerializeField] float baseSpeed = 1.5f;
+    [SerializeField] float randomMinSpeed = 0.8f;
+    [SerializeField] float randomMaxSpeed = 2.5f;
+    
     [Header("Scaling Settings")]
     [SerializeField] float scaleTarget = 0.8f;
     [SerializeField] float scaleDuration = 0.7f;
@@ -29,6 +31,9 @@ public class FlyingSphere : MonoBehaviour
 
     private bool didStart;
     private bool canMove;
+
+    private float speed;
+    
     private Vector3? targetCenter;
 
     public RadarHighlightLocation highlightLocation { get; set; }
@@ -56,6 +61,8 @@ public class FlyingSphere : MonoBehaviour
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
         transform.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
 
+        speed = Mathf.Clamp(baseSpeed * (Random.value * randomMaxSpeed), randomMinSpeed, randomMaxSpeed); 
+        
         RandomizeColor();
         
         Destroy(gameObject, delayToDespawn);
@@ -79,7 +86,7 @@ public class FlyingSphere : MonoBehaviour
         if (!canMove)
             return;
 
-        transform.position += flyingSpeed * Time.deltaTime * transform.forward;
+        transform.position += speed * Time.deltaTime * transform.forward;
     }
 
     private void OnTriggerEnter(Collider other)
