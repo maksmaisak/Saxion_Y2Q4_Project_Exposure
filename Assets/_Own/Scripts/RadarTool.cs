@@ -2,13 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using DG.Tweening;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class RadarTool : MonoBehaviour
@@ -28,26 +26,8 @@ public class RadarTool : MonoBehaviour
     [SerializeField] int maxNumWavespheresPerPulse = 10;
     [Space]
     [SerializeField] FlyingSphere flyingSpherePrefab;
+    [SerializeField] Transform flyingSphereTarget;
     
-    private new Camera camera;
-
-    void Start()
-    {
-        //Probe();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            Probe();
-        
-        if (Input.GetKeyDown(KeyCode.P))
-            CreateWavePulse();
-    }
-
     public void Probe()
     {
         LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
@@ -131,7 +111,8 @@ public class RadarTool : MonoBehaviour
 
     private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
-        Vector3 originPosition = transform.position;
+        Transform targetTransform = flyingSphereTarget ? flyingSphereTarget : Camera.main.transform;
+        Vector3 originPosition = targetTransform.position;
 
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
