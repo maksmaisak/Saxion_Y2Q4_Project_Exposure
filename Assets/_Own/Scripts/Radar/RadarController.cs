@@ -19,12 +19,20 @@ public class RadarController : VRTK_InteractableObject
 
     private void OnEnable()
     {
+        base.OnEnable();
+
+        return;
+
         foreach (Collider col in GetComponentsInChildren<Collider>())
             col.enabled = false;
     }
 
     private void OnDisable()
     {
+        base.OnDisable();
+
+        return;
+
         foreach (Collider col in GetComponentsInChildren<Collider>())
             col.enabled = true;
     }
