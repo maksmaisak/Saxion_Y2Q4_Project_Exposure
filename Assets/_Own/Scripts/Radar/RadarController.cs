@@ -1,33 +1,34 @@
-﻿using DG.Tweening;
+﻿using System.Collections;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
+using VRTK;
 
-public class RadarController : VRTK.VRTK_InteractableObject
+public class RadarController : VRTK_InteractableObject
 {
-    [Header("Radar Settings")]
-    [SerializeField] GameObject wavePulsePrefab;
+    [Header("Radar Controller")]
+    [SerializeField] RadarTool radarTool;
 
-    public override void StartUsing(VRTK.VRTK_InteractUse usingObject)
+    IEnumerator Start()
     {
-        base.StartUsing(usingObject);
-        Debug.Log("Radar fired!");
-
-        CreateWavePulse();
+        yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
-    private void CreateWavePulse()
+    protected override void Update()
     {
-        Assert.IsNotNull(wavePulsePrefab);
+        base.Update();
 
-        const float duration = 2.0f;
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        GameObject pulse = Instantiate(wavePulsePrefab, transform.position, Quaternion.identity);
-        Transform tf = pulse.transform;
+        if (Input.GetKeyDown(KeyCode.Space))
+            radarTool.Probe();
+    }
 
-        tf.localScale = Vector3.zero;
-        tf.DOScale(20, duration).SetEase(Ease.Linear);
-
-        Destroy(pulse, duration);
+    public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
+    {
+        base.StartUsing(currentUsingObject);
+        radarTool.Probe();
     }
 }
 
