@@ -97,7 +97,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -10832,7 +10832,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588690812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.81, y: -0.337, z: 11.4}
+  m_LocalPosition: {x: 32.81, y: 0.398, z: 11.4}
   m_LocalScale: {x: 0.4, y: 1, z: 0.4}
   m_Children: []
   m_Father: {fileID: 1741521917}
@@ -14521,17 +14521,17 @@ PrefabInstance:
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.8501
+      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.66199994
+      value: 1.458
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.055099964
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174586, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
@@ -14573,10 +14573,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
       objectReference: {fileID: 0}
-    - target: {fileID: 8224539706240099016, guid: fbbf6863e4ff6fc4397586df02d24473,
+    - target: {fileID: 8665307809627174577, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}
-      propertyPath: sphereCastRadius
-      value: 0.05
+      propertyPath: fireCooldown
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbbf6863e4ff6fc4397586df02d24473, type: 3}
