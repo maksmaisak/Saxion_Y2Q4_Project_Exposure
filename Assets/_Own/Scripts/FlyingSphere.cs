@@ -83,17 +83,17 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOMove(otherPosition, 0.15f)
+        transform.DOScale(0.01f, 0.15f)
             .SetEase(Ease.OutQuart)
             .OnComplete(() => Destroy(gameObject));
-
-        transform.DOScale(0.01f, 0.15f)
-            .SetEase(Ease.OutQuart);
 
         transform.DOLookAt(otherPosition - transform.position, 0.2f)
             .SetEase(Ease.OutQuart);
 
         Debug.Log("Hand is hit");
+
+        transform.parent = other.transform;
+        
         DotsManager.instance.Highlight(highlightLocation);
     }
 
