@@ -27,6 +27,7 @@ public class RadarTool : MonoBehaviour
     [Space]
     [SerializeField] FlyingSphere flyingSpherePrefab;
     [SerializeField] Transform flyingSphereTarget;
+    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 1.0f;
 
     void Update()
     {
@@ -82,19 +83,47 @@ public class RadarTool : MonoBehaviour
         // Handle the spherecast hits
         int numHits = 0;
         float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-        foreach (RaycastHit hit in results
-            .Where(r => r.collider)
-            .Shuffle())
-            //.OrderBy(r => dotsManager.registry.GetNumDotsAround(r.point)))
+
+        RaycastHit[] hits = results.Where(r => r.collider).ToArray();
+        
+        if (hits.Length > 0)
         {
-            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
-            bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
-            if (!didHit) 
-                continue;
+            var usedHitIndices = new List<int>();
+            Func<ValueTuple<RaycastHit, int>, bool> isUseable = tuple => {
+                
+                (RaycastHit hit, int index) = tuple;
+                
+                Vector3 point = hit.point;
+
+                return usedHitIndices
+                    .All(i => i == index || Vector3.Distance(hits[i].point, point) > minDistanceBetweenSpawnedWavespheres);
+            };
             
-            numHits += 1;
-            if (numHits >= maxNumWavespheresPerPulse)
-                break;
+            while (usedHitIndices.Count < hits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
+            {
+                int index = hits
+                    .Select((h, i) => (h, i))
+                    .Where(tuple => !usedHitIndices.Contains(tuple.i) && isUseable(tuple))
+                    .DefaultIfEmpty((new RaycastHit(), -1))
+                    .ArgMin(tuple => dotsManager.registry.GetNumDotsAround(tuple.Item1.point)).Item2;
+
+                if (index == -1)
+                    break;
+                
+                usedHitIndices.Add(index);
+            }
+            
+            foreach (RaycastHit hit in usedHitIndices.Select(i => hits[i]))
+            {
+                float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
+                bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
+                if (!didHit)
+                    continue;
+            
+                numHits += 1;
+                if (numHits >= maxNumWavespheresPerPulse)
+                    break;
+            }
         }
 
         results.Dispose();
