@@ -14,9 +14,6 @@ using Random = UnityEngine.Random;
 public class RadarTool : MonoBehaviour
 {
     private const int MaxNumRaysPerAxis = 21;
-    
-    [SerializeField] float sphereCastRadius = 0.2f;
-    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
 
     [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
@@ -24,14 +21,16 @@ public class RadarTool : MonoBehaviour
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
     [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
+    [SerializeField] float sphereCastRadius = 0.2f;
     [SerializeField] int maxNumWavespheresPerPulse = 10;
     
     [Header("Wavesphere settings")]
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
-    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 1.0f;
+    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 2.0f;
     [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
+    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f;
 
     private new Transform transform;
     
@@ -48,13 +47,16 @@ public class RadarTool : MonoBehaviour
         commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
         hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
 
+        // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
+        const int MidIndex = MaxNumRaysPerAxis / 2;
         rayIndices = Enumerable
             .Range(0, MaxNumRaysPerAxis)
             .SelectMany(x => Enumerable.Range(0, MaxNumRaysPerAxis).Select(y => (x, y)))
+            .OrderBy(tuple => Mathf.Abs(tuple.x - MidIndex) + Mathf.Abs(tuple.y - MidIndex))
             .ToArray();
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         if (commands.IsCreated)
             commands.Dispose();
@@ -89,8 +91,6 @@ public class RadarTool : MonoBehaviour
         const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
         const float HalfStep = Step * 0.5f;
         
-        // Shuffle to prevent prioritizing spawning wavespheres from the top left corner
-        rayIndices.Shuffle();
         for (int i = 0; i < rayIndices.Length; ++i)
         {
             (int indexX, int indexY) = rayIndices[i];
@@ -118,9 +118,17 @@ public class RadarTool : MonoBehaviour
 
     private void HandleSpherecastResults()
     {
-        if (hits.Length <= 0) 
-            return;
+        // The candidates are sorted into bands with similar distance.
+        // Candidates in the same band preserve the initial order.
+        const float DistanceBandWidth = 2.0f;
+        RaycastHit[] candidateHits = hits
+            .Where(hit => hit.collider)
+            .OrderBy(hit => Mathf.RoundToInt(hit.distance / DistanceBandWidth))
+            .ToArray();
         
+        if (candidateHits.Length <= 0) 
+            return;
+
         var usedHitIndices = new List<int>();
 
         bool IsUsable((RaycastHit, int) tuple)
@@ -129,18 +137,21 @@ public class RadarTool : MonoBehaviour
             
             Vector3 point = hit.point;
             return usedHitIndices.All(i =>
-                i == index || Vector3.Distance(hits[i].point, point) > minDistanceBetweenSpawnedWavespheres
+                i == index || Vector3.Distance(candidateHits[i].point, point) > minDistanceBetweenSpawnedWavespheres
             );
         }
 
         DotsRegistry dotsRegistry = DotsManager.instance.registry;
-        while (usedHitIndices.Count < hits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
+        const ulong NumDotsBandWidth = 20;
+        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
+        
+        while (usedHitIndices.Count < candidateHits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
         {
-            int index = hits
+            int index = candidateHits
                 .Select((hit, i) => (hit, i))
                 .Where(tuple => tuple.hit.collider && !usedHitIndices.Contains(tuple.i) && IsUsable(tuple))
                 .DefaultIfEmpty((new RaycastHit(), -1))
-                .ArgMin(tuple => dotsRegistry.GetNumDotsAround(tuple.Item1.point)).Item2;
+                .ArgMin(tuple => GetRoundedNumDotsAround(tuple.Item1.point)).Item2;
 
             if (index == -1)
                 break;
@@ -148,11 +159,11 @@ public class RadarTool : MonoBehaviour
             usedHitIndices.Add(index);
         }
 
+        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
         foreach (int i in usedHitIndices)
         {
-            float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * candidateHits[i].distance + 1.0f, dotConeAngleFalloffPower);
+            HandleHit(candidateHits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
         }
     }
 
@@ -179,7 +190,7 @@ public class RadarTool : MonoBehaviour
             originalRay = originalRay,
             pointOnSurface = hit.point,
             dotEmissionConeAngle = dotConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
+            maxDotDistanceFromSurfacePointAlongOriginalRay = maxDotDistanceFromSurfacePointAlongOriginalRay
         };
         
         Assert.IsNotNull(wavespherePrefab);

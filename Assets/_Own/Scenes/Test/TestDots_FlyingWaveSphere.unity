@@ -5870,7 +5870,7 @@ MonoBehaviour:
   wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
   wavesphereTarget: {fileID: 0}
-  minDistanceBetweenSpawnedWavespheres: 1
+  minDistanceBetweenSpawnedWavespheres: 2
   dotConeAngleFalloff: 0.02
   dotConeAngleFalloffPower: 1
 --- !u!135 &1687258589
