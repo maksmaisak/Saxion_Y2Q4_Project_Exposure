@@ -14,6 +14,9 @@ public class DotsManager : Singleton<DotsManager>
    [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
    [SerializeField] float maxDotSpawnDistance = 200.0f;
    
+   [Range(1, 5)]
+   [SerializeField] float displacementRadiusCoefficient = 3.0f;
+   
    private ParticleSystem dotsParticleSystem;
 
    void Start()
@@ -48,6 +51,11 @@ public class DotsManager : Singleton<DotsManager>
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
       
+      float displacementMultiplier =  Mathf.Max(1.0f,
+         distanceFromCamera / displacementRadiusCoefficient);
+
+      displacementRadius *= displacementMultiplier;
+
       const int MaxNumDots = 400;
       var results  = new NativeArray<RaycastHit>    (MaxNumDots, Allocator.TempJob);
       var commands = new NativeArray<RaycastCommand>(MaxNumDots, Allocator.TempJob);
