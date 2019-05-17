@@ -3,9 +3,10 @@
     Properties
     {
         [NoScaleOffset] Texture2D_3F810299("Base Texture", 2D) = "white" {}
-Vector1_324C3AD2("Alpha Clipping Threshold", Range(0, 1)) = 0.5
+Vector1_324C3AD2("Alpha Clipping Threshold", Range(0, 1)) = 0.1
 [HDR]Color_296807D0("Emission", Color) = (1,1,1,0)
-Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
+Vector1_A1B84C3E("Falloff Multiplier", Range(0, 10)) = 1
+Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
 
     }
     SubShader
@@ -68,6 +69,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -88,6 +90,16 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
             void Unity_Length_float3(float3 In, out float Out)
             {
                 Out = length(In);
+            }
+
+            void Unity_Subtract_float(float A, float B, out float Out)
+            {
+                Out = A - B;
+            }
+
+            void Unity_Maximum_float(float A, float B, out float Out)
+            {
+                Out = max(A, B);
             }
 
             void Unity_Multiply_float (float A, float B, out float Out)
@@ -168,8 +180,13 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
                 SurfaceDescription surface = (SurfaceDescription)0;
                 float _Length_38C506F0_Out;
                 Unity_Length_float3(IN.ViewSpacePosition, _Length_38C506F0_Out);
+                float _Property_2EC7C888_Out = Vector1_ADA3E76E;
+                float _Subtract_4E8D09D0_Out;
+                Unity_Subtract_float(_Length_38C506F0_Out, _Property_2EC7C888_Out, _Subtract_4E8D09D0_Out);
+                float _Maximum_8B83FBC0_Out;
+                Unity_Maximum_float(_Subtract_4E8D09D0_Out, 0, _Maximum_8B83FBC0_Out);
                 float _Multiply_8257CEE7_Out;
-                Unity_Multiply_float(_Length_38C506F0_Out, _Length_38C506F0_Out, _Multiply_8257CEE7_Out);
+                Unity_Multiply_float(_Maximum_8B83FBC0_Out, _Maximum_8B83FBC0_Out, _Multiply_8257CEE7_Out);
 
                 float _Property_F4FBDF53_Out = Vector1_A1B84C3E;
                 float _Multiply_88D93AF6_Out;
@@ -372,6 +389,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -592,6 +610,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 21)) = 1
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
