@@ -3,9 +3,10 @@
     Properties
     {
         [NoScaleOffset] Texture2D_3F810299("Base Texture", 2D) = "white" {}
-Vector1_324C3AD2("Alpha Clipping Threshold", Range(0, 1)) = 0.5
+Vector1_324C3AD2("Alpha Clipping Threshold", Range(0, 1)) = 0.1
 [HDR]Color_296807D0("Emission", Color) = (1,1,1,0)
-Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
+Vector1_A1B84C3E("Falloff Multiplier", Range(0, 10)) = 1
+Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
 
     }
     SubShader
@@ -68,6 +69,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -90,6 +92,16 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 Out = length(In);
             }
 
+            void Unity_Subtract_float(float A, float B, out float Out)
+            {
+                Out = A - B;
+            }
+
+            void Unity_Maximum_float(float A, float B, out float Out)
+            {
+                Out = max(A, B);
+            }
+
             void Unity_Multiply_float (float A, float B, out float Out)
             {
                 Out = A * B;
@@ -108,6 +120,11 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             void Unity_Clamp_float(float In, float Min, float Max, out float Out)
             {
                 Out = clamp(In, Min, Max);
+            }
+
+            void Unity_OneMinus_float(float In, out float Out)
+            {
+                Out = 1 - In;
             }
 
             void Unity_ColorspaceConversion_HSV_RGB_float(float3 In, out float3 Out)
@@ -163,8 +180,13 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 SurfaceDescription surface = (SurfaceDescription)0;
                 float _Length_38C506F0_Out;
                 Unity_Length_float3(IN.ViewSpacePosition, _Length_38C506F0_Out);
+                float _Property_2EC7C888_Out = Vector1_ADA3E76E;
+                float _Subtract_4E8D09D0_Out;
+                Unity_Subtract_float(_Length_38C506F0_Out, _Property_2EC7C888_Out, _Subtract_4E8D09D0_Out);
+                float _Maximum_8B83FBC0_Out;
+                Unity_Maximum_float(_Subtract_4E8D09D0_Out, 0, _Maximum_8B83FBC0_Out);
                 float _Multiply_8257CEE7_Out;
-                Unity_Multiply_float(_Length_38C506F0_Out, _Length_38C506F0_Out, _Multiply_8257CEE7_Out);
+                Unity_Multiply_float(_Maximum_8B83FBC0_Out, _Maximum_8B83FBC0_Out, _Multiply_8257CEE7_Out);
 
                 float _Property_F4FBDF53_Out = Vector1_A1B84C3E;
                 float _Multiply_88D93AF6_Out;
@@ -176,7 +198,12 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 Unity_Divide_float(1, _Add_803D74C4_Out, _Divide_E99BDECB_Out);
                 float _Clamp_704E249_Out;
                 Unity_Clamp_float(_Divide_E99BDECB_Out, 0, 1, _Clamp_704E249_Out);
-                float3 _Vector3_9720648F_Out = float3(_Clamp_704E249_Out,1,1);
+                float _OneMinus_F0841AD_Out;
+                Unity_OneMinus_float(_Clamp_704E249_Out, _OneMinus_F0841AD_Out);
+                float _Multiply_E6658460_Out;
+                Unity_Multiply_float(_OneMinus_F0841AD_Out, 0.5, _Multiply_E6658460_Out);
+
+                float3 _Vector3_9720648F_Out = float3(_Multiply_E6658460_Out,1,1);
                 float3 _ColorspaceConversion_EC19C6C4_Out;
                 Unity_ColorspaceConversion_HSV_RGB_float(_Vector3_9720648F_Out, _ColorspaceConversion_EC19C6C4_Out);
                 float4 _UV_135E4AC0_Out = IN.uv0;
@@ -205,12 +232,9 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 float3 _Multiply_C4824BBA_Out;
                 Unity_Multiply_float((_Clamp_704E249_Out.xxx), _Multiply_E9B250E3_Out, _Multiply_C4824BBA_Out);
 
-                float _Multiply_A198A7B6_Out;
-                Unity_Multiply_float(_Clamp_704E249_Out, _Split_7535A2B5_A, _Multiply_A198A7B6_Out);
-
                 float _Property_C9327209_Out = Vector1_324C3AD2;
                 surface.Color = _Multiply_C4824BBA_Out;
-                surface.Alpha = _Multiply_A198A7B6_Out;
+                surface.Alpha = _Split_7535A2B5_A;
                 surface.AlphaClipThreshold = _Property_C9327209_Out;
                 return surface;
             }
@@ -365,6 +389,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -376,36 +401,10 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
 
             struct SurfaceDescriptionInputs
             {
-                float3 ViewSpacePosition;
                 float4 VertexColor;
                 half4 uv0;
             };
 
-
-            void Unity_Length_float3(float3 In, out float Out)
-            {
-                Out = length(In);
-            }
-
-            void Unity_Multiply_float (float A, float B, out float Out)
-            {
-                Out = A * B;
-            }
-
-            void Unity_Add_float(float A, float B, out float Out)
-            {
-                Out = A + B;
-            }
-
-            void Unity_Divide_float(float A, float B, out float Out)
-            {
-                Out = A / B;
-            }
-
-            void Unity_Clamp_float(float In, float Min, float Max, out float Out)
-            {
-                Out = clamp(In, Min, Max);
-            }
 
             void Unity_Multiply_float (float4 A, float4 B, out float4 Out)
             {
@@ -433,21 +432,6 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             SurfaceDescription PopulateSurfaceData(SurfaceDescriptionInputs IN)
             {
                 SurfaceDescription surface = (SurfaceDescription)0;
-                float _Length_38C506F0_Out;
-                Unity_Length_float3(IN.ViewSpacePosition, _Length_38C506F0_Out);
-                float _Multiply_8257CEE7_Out;
-                Unity_Multiply_float(_Length_38C506F0_Out, _Length_38C506F0_Out, _Multiply_8257CEE7_Out);
-
-                float _Property_F4FBDF53_Out = Vector1_A1B84C3E;
-                float _Multiply_88D93AF6_Out;
-                Unity_Multiply_float(_Multiply_8257CEE7_Out, _Property_F4FBDF53_Out, _Multiply_88D93AF6_Out);
-
-                float _Add_803D74C4_Out;
-                Unity_Add_float(_Multiply_88D93AF6_Out, 1, _Add_803D74C4_Out);
-                float _Divide_E99BDECB_Out;
-                Unity_Divide_float(1, _Add_803D74C4_Out, _Divide_E99BDECB_Out);
-                float _Clamp_704E249_Out;
-                Unity_Clamp_float(_Divide_E99BDECB_Out, 0, 1, _Clamp_704E249_Out);
                 float4 _UV_135E4AC0_Out = IN.uv0;
                 float4 _SampleTexture2D_E713EA74_RGBA = SAMPLE_TEXTURE2D(Texture2D_3F810299, samplerTexture2D_3F810299, (_UV_135E4AC0_Out.xy));
                 float _SampleTexture2D_E713EA74_R = _SampleTexture2D_E713EA74_RGBA.r;
@@ -461,11 +445,8 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 float _Split_7535A2B5_G = _Multiply_1CF743E_Out[1];
                 float _Split_7535A2B5_B = _Multiply_1CF743E_Out[2];
                 float _Split_7535A2B5_A = _Multiply_1CF743E_Out[3];
-                float _Multiply_A198A7B6_Out;
-                Unity_Multiply_float(_Clamp_704E249_Out, _Split_7535A2B5_A, _Multiply_A198A7B6_Out);
-
                 float _Property_C9327209_Out = Vector1_324C3AD2;
-                surface.Alpha = _Multiply_A198A7B6_Out;
+                surface.Alpha = _Split_7535A2B5_A;
                 surface.AlphaClipThreshold = _Property_C9327209_Out;
                 return surface;
             }
@@ -568,12 +549,10 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 float4 VertexColor = IN.VertexColor;
                 float4 uv0 = IN.uv0;
                 float4 uv1 = IN.uv1;
-                float3 ViewSpacePosition = mul(UNITY_MATRIX_V,float4(WorldSpacePosition,1.0)).xyz;
 
                 SurfaceDescriptionInputs surfaceInput = (SurfaceDescriptionInputs)0;
 
         		// Surface description inputs defined by graph
-                surfaceInput.ViewSpacePosition = ViewSpacePosition;
                 surfaceInput.VertexColor = VertexColor;
                 surfaceInput.uv0 = uv0;
 
@@ -631,6 +610,7 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             float Vector1_324C3AD2;
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
+            float Vector1_ADA3E76E;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -642,36 +622,10 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
 
             struct SurfaceDescriptionInputs
             {
-                float3 ViewSpacePosition;
                 float4 VertexColor;
                 half4 uv0;
             };
 
-
-            void Unity_Length_float3(float3 In, out float Out)
-            {
-                Out = length(In);
-            }
-
-            void Unity_Multiply_float (float A, float B, out float Out)
-            {
-                Out = A * B;
-            }
-
-            void Unity_Add_float(float A, float B, out float Out)
-            {
-                Out = A + B;
-            }
-
-            void Unity_Divide_float(float A, float B, out float Out)
-            {
-                Out = A / B;
-            }
-
-            void Unity_Clamp_float(float In, float Min, float Max, out float Out)
-            {
-                Out = clamp(In, Min, Max);
-            }
 
             void Unity_Multiply_float (float4 A, float4 B, out float4 Out)
             {
@@ -699,21 +653,6 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
             SurfaceDescription PopulateSurfaceData(SurfaceDescriptionInputs IN)
             {
                 SurfaceDescription surface = (SurfaceDescription)0;
-                float _Length_38C506F0_Out;
-                Unity_Length_float3(IN.ViewSpacePosition, _Length_38C506F0_Out);
-                float _Multiply_8257CEE7_Out;
-                Unity_Multiply_float(_Length_38C506F0_Out, _Length_38C506F0_Out, _Multiply_8257CEE7_Out);
-
-                float _Property_F4FBDF53_Out = Vector1_A1B84C3E;
-                float _Multiply_88D93AF6_Out;
-                Unity_Multiply_float(_Multiply_8257CEE7_Out, _Property_F4FBDF53_Out, _Multiply_88D93AF6_Out);
-
-                float _Add_803D74C4_Out;
-                Unity_Add_float(_Multiply_88D93AF6_Out, 1, _Add_803D74C4_Out);
-                float _Divide_E99BDECB_Out;
-                Unity_Divide_float(1, _Add_803D74C4_Out, _Divide_E99BDECB_Out);
-                float _Clamp_704E249_Out;
-                Unity_Clamp_float(_Divide_E99BDECB_Out, 0, 1, _Clamp_704E249_Out);
                 float4 _UV_135E4AC0_Out = IN.uv0;
                 float4 _SampleTexture2D_E713EA74_RGBA = SAMPLE_TEXTURE2D(Texture2D_3F810299, samplerTexture2D_3F810299, (_UV_135E4AC0_Out.xy));
                 float _SampleTexture2D_E713EA74_R = _SampleTexture2D_E713EA74_RGBA.r;
@@ -727,11 +666,8 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 float _Split_7535A2B5_G = _Multiply_1CF743E_Out[1];
                 float _Split_7535A2B5_B = _Multiply_1CF743E_Out[2];
                 float _Split_7535A2B5_A = _Multiply_1CF743E_Out[3];
-                float _Multiply_A198A7B6_Out;
-                Unity_Multiply_float(_Clamp_704E249_Out, _Split_7535A2B5_A, _Multiply_A198A7B6_Out);
-
                 float _Property_C9327209_Out = Vector1_324C3AD2;
-                surface.Alpha = _Multiply_A198A7B6_Out;
+                surface.Alpha = _Split_7535A2B5_A;
                 surface.AlphaClipThreshold = _Property_C9327209_Out;
                 return surface;
             }
@@ -820,12 +756,10 @@ Vector1_A1B84C3E("Quadratic Falloff", Range(0, 1)) = 0.02
                 float4 VertexColor = IN.VertexColor;
                 float4 uv0 = IN.uv0;
                 float4 uv1 = IN.uv1;
-                float3 ViewSpacePosition = mul(UNITY_MATRIX_V,float4(WorldSpacePosition,1.0)).xyz;
 
                 SurfaceDescriptionInputs surfaceInput = (SurfaceDescriptionInputs)0;
 
         		// Surface description inputs defined by graph
-                surfaceInput.ViewSpacePosition = ViewSpacePosition;
                 surfaceInput.VertexColor = VertexColor;
                 surfaceInput.uv0 = uv0;
 
