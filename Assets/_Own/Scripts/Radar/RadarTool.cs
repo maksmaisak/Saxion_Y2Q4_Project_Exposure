@@ -48,13 +48,16 @@ public class RadarTool : MonoBehaviour
         commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
         hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
 
+        // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
+        const int MidIndex = MaxNumRaysPerAxis / 2;
         rayIndices = Enumerable
             .Range(0, MaxNumRaysPerAxis)
             .SelectMany(x => Enumerable.Range(0, MaxNumRaysPerAxis).Select(y => (x, y)))
+            .OrderBy(tuple => Mathf.Abs(tuple.x - MidIndex) + Mathf.Abs(tuple.y - MidIndex))
             .ToArray();
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         if (commands.IsCreated)
             commands.Dispose();
@@ -89,8 +92,6 @@ public class RadarTool : MonoBehaviour
         const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
         const float HalfStep = Step * 0.5f;
         
-        // Shuffle to prevent prioritizing spawning wavespheres from the top left corner
-        rayIndices.Shuffle();
         for (int i = 0; i < rayIndices.Length; ++i)
         {
             (int indexX, int indexY) = rayIndices[i];
@@ -118,12 +119,12 @@ public class RadarTool : MonoBehaviour
 
     private void HandleSpherecastResults()
     {
-        // The bit with RoundToInt makes sure the candidates are divided into bands with similar distance.
+        // The candidates are sorted into bands with similar distance.
         // Candidates in the same band preserve the initial order.
-        const float BandWidth = 4.0f;
+        const float BandWidth = 5.0f;
         RaycastHit[] candidateHits = hits
             .Where(hit => hit.collider)
-            .OrderBy(hit => Mathf.RoundToInt(hit.distance * BandWidth))
+            .OrderBy(hit => Mathf.RoundToInt(hit.distance / BandWidth))
             .ToArray();
         
         if (candidateHits.Length <= 0) 
