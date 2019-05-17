@@ -6,7 +6,9 @@ using DG.Tweening;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class RadarTool : MonoBehaviour
@@ -21,115 +23,128 @@ public class RadarTool : MonoBehaviour
     [SerializeField] GameObject wavePulsePrefab;
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleHorizontal = 90.0f;
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
-    [SerializeField] float wavePulseSpeed = 10.0f;
+    [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
     [SerializeField] int maxNumWavespheresPerPulse = 10;
     [Space]
-    [SerializeField] FlyingSphere flyingSpherePrefab;
-    [SerializeField] Transform flyingSphereTarget;
+    [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
+    [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
     [SerializeField] float minDistanceBetweenSpawnedWavespheres = 1.0f;
+
+    private new Transform transform;
+    
+    private NativeArray<SpherecastCommand> commands;
+    private NativeArray<RaycastHit>        hits;
+
+    void Awake()
+    {
+        transform = GetComponent<Transform>();
+        
+        const int MaxNumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
+        commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
+        hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
+    }
+
+    private void OnDestroy()
+    {
+        if (commands.IsCreated)
+            commands.Dispose();
+        
+        if (hits.IsCreated)
+            hits.Dispose();
+    }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
         if (Input.GetKeyDown(KeyCode.Space)) 
             Probe();
     }
     
     public void Probe()
     {
-        var dotsManager = DotsManager.instance;
-        LayerMask layerMask = dotsManager.GetDotsSurfaceLayerMask();
+        CreateWavePulse();
+        
+        GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
+        SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
+        HandleSpherecastResults();
+    }
 
-        var rotation = Quaternion.LookRotation(transform.forward); // transform.rotation;
-        Vector3 origin = transform.position;
+    private void HandleSpherecastResults()
+    {
+        if (hits.Length <= 0) 
+            return;
+        
+        var usedHitIndices = new List<int>();
 
-        const int NumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
-        var results  = new NativeArray<RaycastHit>       (NumSpherecasts, Allocator.TempJob);
-        var commands = new NativeArray<SpherecastCommand>(NumSpherecasts, Allocator.TempJob);
+        bool IsUsable((RaycastHit, int) tuple)
+        {
+            (RaycastHit hit, int index) = tuple;
+            
+            Vector3 point = hit.point;
+            return usedHitIndices.All(i =>
+                i == index || Vector3.Distance(hits[i].point, point) > minDistanceBetweenSpawnedWavespheres
+            );
+        }
 
-        // Populated the commands
-        int commandIndex = 0;
+        DotsRegistry dotsRegistry = DotsManager.instance.registry;
+        while (usedHitIndices.Count < hits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
+        {
+            int index = hits
+                .Select((hit, i) => (hit, i))
+                .Where(tuple => tuple.hit.collider && !usedHitIndices.Contains(tuple.i) && IsUsable(tuple))
+                .DefaultIfEmpty((new RaycastHit(), -1))
+                .ArgMin(tuple => dotsRegistry.GetNumDotsAround(tuple.Item1.point)).Item2;
+
+            if (index == -1)
+                break;
+
+            usedHitIndices.Add(index);
+        }
+
+        foreach (int i in usedHitIndices)
+        {
+            float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
+            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hits[i].distance / dotConeAngleMultiplier);
+            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+        }
+    }
+
+    private void GenerateSpherecastCommands(LayerMask layerMask)
+    {
+        Vector3    origin   = transform.position;
+        Quaternion rotation = transform.rotation;
         
         const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
         const float HalfStep = Step * 0.5f;
+        
+        int commandIndex = 0;
         for (int indexX = 0; indexX < MaxNumRaysPerAxis; ++indexX)
         {
             for (int indexY = 0; indexY < MaxNumRaysPerAxis; ++indexY)
-            { 
-                var normalizedPos = MaxNumRaysPerAxis > 1 ? 
-                    new Vector3(indexX * Step, indexY * Step) :
-                    new Vector3(0.5f, 0.5f);
+            {
+                var normalizedPos = MaxNumRaysPerAxis > 1
+                    ? new Vector3(indexX * Step, indexY * Step)
+                    : new Vector3(0.5f, 0.5f);
 
                 // Randomize the ray direction a bit
-                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));  
-                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));  
-        
+                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));
+                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));
+
                 Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
                 commands[commandIndex++] = new SpherecastCommand(
-                    ray.origin, 
-                    sphereCastRadius, 
+                    ray.origin,
+                    sphereCastRadius,
                     ray.direction,
                     wavePulseMaxRange,
                     layerMask
                 );
-                
+
                 Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
             }
         }
-
-        JobHandle jobHandle = SpherecastCommand.ScheduleBatch(commands, results, 1);
-        jobHandle.Complete();
-
-        // Handle the spherecast hits
-        int numHits = 0;
-        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-
-        RaycastHit[] hits = results.Where(r => r.collider).ToArray();
-        
-        if (hits.Length > 0)
-        {
-            var usedHitIndices = new List<int>();
-            Func<ValueTuple<RaycastHit, int>, bool> isUseable = tuple => {
-                
-                (RaycastHit hit, int index) = tuple;
-                
-                Vector3 point = hit.point;
-
-                return usedHitIndices
-                    .All(i => i == index || Vector3.Distance(hits[i].point, point) > minDistanceBetweenSpawnedWavespheres);
-            };
-            
-            while (usedHitIndices.Count < hits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
-            {
-                int index = hits
-                    .Select((h, i) => (h, i))
-                    .Where(tuple => !usedHitIndices.Contains(tuple.i) && isUseable(tuple))
-                    .DefaultIfEmpty((new RaycastHit(), -1))
-                    .ArgMin(tuple => dotsManager.registry.GetNumDotsAround(tuple.Item1.point)).Item2;
-
-                if (index == -1)
-                    break;
-                
-                usedHitIndices.Add(index);
-            }
-            
-            foreach (RaycastHit hit in usedHitIndices.Select(i => hits[i]))
-            {
-                float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
-                bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
-                if (!didHit)
-                    continue;
-            
-                numHits += 1;
-                if (numHits >= maxNumWavespheresPerPulse)
-                    break;
-            }
-        }
-
-        results.Dispose();
-        commands.Dispose();
-
-        CreateWavePulse();
     }
 
     private void CreateWavePulse()
@@ -147,8 +162,8 @@ public class RadarTool : MonoBehaviour
 
     private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
-        flyingSphereTarget = flyingSphereTarget ? flyingSphereTarget : Camera.main.transform;
-        Vector3 originPosition = flyingSphereTarget.position;
+        wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
+        Vector3 originPosition = wavesphereTarget.position;
 
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
@@ -158,12 +173,12 @@ public class RadarTool : MonoBehaviour
             maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
         };
         
-        Assert.IsNotNull(flyingSpherePrefab);
+        Assert.IsNotNull(wavespherePrefab);
 
         float hitDistance = Vector3.Distance(hit.point, originPosition);
         this.Delay(hitDistance / wavePulseSpeed, () =>
         {
-            FlyingSphere flyingSphere = Instantiate(flyingSpherePrefab, hit.point, Quaternion.identity);
+            FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
             flyingSphere.SetTarget(originPosition);
             flyingSphere.highlightLocation = highlightLocation;
         });
