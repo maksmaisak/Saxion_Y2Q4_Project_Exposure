@@ -243,7 +243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphereCastRadius: 0.05
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
-  dotConeAngleMultiplier: 1
+  dotConeAngleMultiplier: 2.3
+  minDotAngle: 8
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
   wavePulseAngleHorizontal: 90

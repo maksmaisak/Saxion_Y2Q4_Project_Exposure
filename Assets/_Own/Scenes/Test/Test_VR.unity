@@ -2300,6 +2300,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 10035
   maxDotSpawnDistance: 200
+  displacementRadiusCoefficient: 3
 --- !u!199 &542943727
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14572,6 +14573,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224539706240099016, guid: fbbf6863e4ff6fc4397586df02d24473,
+        type: 3}
+      propertyPath: dotConeAngleMultiplier
+      value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224539706240099016, guid: fbbf6863e4ff6fc4397586df02d24473,
+        type: 3}
+      propertyPath: minDotAngle
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8665307809627174577, guid: fbbf6863e4ff6fc4397586df02d24473,
         type: 3}

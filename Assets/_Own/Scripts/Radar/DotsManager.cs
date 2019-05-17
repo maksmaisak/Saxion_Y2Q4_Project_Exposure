@@ -50,11 +50,6 @@ public class DotsManager : Singleton<DotsManager>
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
-      
-      float displacementMultiplier =  Mathf.Max(1.0f,
-         distanceFromCamera / displacementRadiusCoefficient);
-
-      displacementRadius *= displacementMultiplier;
 
       const int MaxNumDots = 400;
       var results  = new NativeArray<RaycastHit>    (MaxNumDots, Allocator.TempJob);
