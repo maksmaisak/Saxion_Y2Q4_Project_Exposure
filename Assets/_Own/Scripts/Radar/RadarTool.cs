@@ -16,8 +16,7 @@ public class RadarTool : MonoBehaviour
     [SerializeField] float sphereCastRadius = 0.2f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     [SerializeField] [Range(0.05f, 5.0f)] float dotConeAngleMultiplier = 1.0f;
-    [SerializeField] float minDotAngle = 5.0f;
-    
+
     [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleHorizontal = 90.0f;
@@ -87,8 +86,7 @@ public class RadarTool : MonoBehaviour
             .Shuffle())
             //.OrderBy(r => r.distance))
         {
-            float dotConeAngle = Mathf.Max(minDotAngle, baseDotConeAngle - (baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier)));
-            bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);
+            bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), baseDotConeAngle);
             if (!didHit) 
                 continue;
             

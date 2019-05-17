@@ -13,10 +13,7 @@ public class DotsManager : Singleton<DotsManager>
    [Tooltip("Dots can only appear on surfaces with these layers.")] 
    [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
    [SerializeField] float maxDotSpawnDistance = 200.0f;
-   
-   [Range(1, 5)]
-   [SerializeField] float displacementRadiusCoefficient = 3.0f;
-   
+
    private ParticleSystem dotsParticleSystem;
 
    void Start()
