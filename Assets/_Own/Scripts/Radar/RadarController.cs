@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VRTK;
 
 public class RadarController : VRTK_InteractableObject
@@ -49,7 +48,7 @@ public class RadarController : VRTK_InteractableObject
 
         StopAllCoroutines();
         
-        if(attachedColliders != null)
+        if (attachedColliders != null)
             foreach (Collider col in attachedColliders)
                 col.enabled = true;
         
@@ -57,14 +56,6 @@ public class RadarController : VRTK_InteractableObject
             rb = GetComponent<Rigidbody>();
             
         rb.useGravity = true;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
