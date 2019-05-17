@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,30 +12,51 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] float fireCooldown = 1.0f;
     
     private bool canShoot = true;
+    private Rigidbody rb;
+    private Collider[] attachedColliders;
 
     IEnumerator Start()
     {
-        yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
+        rb = rb ? rb : GetComponent<Rigidbody>();
+        attachedColliders = GetComponentsInChildren<Collider>();
+        
+        yield return new WaitUntil(() =>
+                radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        return;
+        StopAllCoroutines();
 
-        foreach (Collider col in GetComponentsInChildren<Collider>())
-            col.enabled = false;
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+        
+        rb.useGravity = false;
+        
+        this.Delay(0.5f, () =>
+        {
+            if(attachedColliders != null)
+                foreach (Collider col in attachedColliders)
+                    col.enabled = false;
+        });
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
 
-        return;
-
-        foreach (Collider col in GetComponentsInChildren<Collider>())
-            col.enabled = true;
+        StopAllCoroutines();
+        
+        if(attachedColliders != null)
+            foreach (Collider col in attachedColliders)
+                col.enabled = true;
+        
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+            
+        rb.useGravity = true;
     }
 
     protected override void Update()
