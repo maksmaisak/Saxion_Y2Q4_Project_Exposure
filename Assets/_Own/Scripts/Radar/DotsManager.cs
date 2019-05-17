@@ -77,8 +77,10 @@ public class DotsManager : Singleton<DotsManager>
          RaycastHit dotHit = results[i];
          if (!dotHit.collider) // This only works as long as maxHits is one.
             continue;
-         
-         if (Vector3.Dot(dotHit.point - location.pointOnSurface, location.originalRay.direction) > location.maxDotDistanceFromSurfacePointAlongOriginalRayDirection)
+
+         Vector3 delta = dotHit.point - location.pointOnSurface;
+         float distanceAlongRay = Vector3.Dot(delta, location.originalRay.direction);
+         if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
             continue;
 
          //Debug.DrawLine(commands[i].from, dotHit.point, Color.cyan * 0.25f, 20.0f);

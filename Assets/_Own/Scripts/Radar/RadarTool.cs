@@ -14,9 +14,6 @@ using Random = UnityEngine.Random;
 public class RadarTool : MonoBehaviour
 {
     private const int MaxNumRaysPerAxis = 21;
-    
-    [SerializeField] float sphereCastRadius = 0.2f;
-    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
 
     [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
@@ -24,6 +21,7 @@ public class RadarTool : MonoBehaviour
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
     [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
+    [SerializeField] float sphereCastRadius = 0.2f;
     [SerializeField] int maxNumWavespheresPerPulse = 10;
     
     [Header("Wavesphere settings")]
@@ -32,6 +30,7 @@ public class RadarTool : MonoBehaviour
     [SerializeField] float minDistanceBetweenSpawnedWavespheres = 2.0f;
     [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
+    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f;
 
     private new Transform transform;
     
@@ -121,10 +120,10 @@ public class RadarTool : MonoBehaviour
     {
         // The candidates are sorted into bands with similar distance.
         // Candidates in the same band preserve the initial order.
-        const float BandWidth = 5.0f;
+        const float DistanceBandWidth = 2.0f;
         RaycastHit[] candidateHits = hits
             .Where(hit => hit.collider)
-            .OrderBy(hit => Mathf.RoundToInt(hit.distance / BandWidth))
+            .OrderBy(hit => Mathf.RoundToInt(hit.distance / DistanceBandWidth))
             .ToArray();
         
         if (candidateHits.Length <= 0) 
@@ -141,15 +140,18 @@ public class RadarTool : MonoBehaviour
                 i == index || Vector3.Distance(candidateHits[i].point, point) > minDistanceBetweenSpawnedWavespheres
             );
         }
-        
+
         DotsRegistry dotsRegistry = DotsManager.instance.registry;
+        const ulong NumDotsBandWidth = 20;
+        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
+        
         while (usedHitIndices.Count < candidateHits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
         {
             int index = candidateHits
                 .Select((hit, i) => (hit, i))
                 .Where(tuple => tuple.hit.collider && !usedHitIndices.Contains(tuple.i) && IsUsable(tuple))
                 .DefaultIfEmpty((new RaycastHit(), -1))
-                .ArgMin(tuple => dotsRegistry.GetNumDotsAround(tuple.Item1.point)).Item2;
+                .ArgMin(tuple => GetRoundedNumDotsAround(tuple.Item1.point)).Item2;
 
             if (index == -1)
                 break;
@@ -188,7 +190,7 @@ public class RadarTool : MonoBehaviour
             originalRay = originalRay,
             pointOnSurface = hit.point,
             dotEmissionConeAngle = dotConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRayDirection = maxDotDistanceFromSurfacePointAlongOriginalRayDirection
+            maxDotDistanceFromSurfacePointAlongOriginalRay = maxDotDistanceFromSurfacePointAlongOriginalRay
         };
         
         Assert.IsNotNull(wavespherePrefab);
