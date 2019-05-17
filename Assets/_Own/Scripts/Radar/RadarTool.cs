@@ -36,6 +36,8 @@ public class RadarTool : MonoBehaviour
     private NativeArray<SpherecastCommand> commands;
     private NativeArray<RaycastHit>        hits;
 
+    private (int indexX, int indexY)[] rayIndices;
+
     void Awake()
     {
         transform = GetComponent<Transform>();
@@ -43,6 +45,11 @@ public class RadarTool : MonoBehaviour
         const int MaxNumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
         commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
         hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
+
+        rayIndices = Enumerable
+            .Range(0, MaxNumRaysPerAxis)
+            .SelectMany(x => Enumerable.Range(0, MaxNumRaysPerAxis).Select(y => (x, y)))
+            .ToArray();
     }
 
     private void OnDestroy()
@@ -70,6 +77,41 @@ public class RadarTool : MonoBehaviour
         GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
         SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
         HandleSpherecastResults();
+    }
+    
+    private void GenerateSpherecastCommands(LayerMask layerMask)
+    {
+        Vector3    origin   = transform.position;
+        Quaternion rotation = transform.rotation;
+        
+        const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
+        const float HalfStep = Step * 0.5f;
+        
+        // Shuffle to prevent prioritizing spawning wavespheres from the top left corner
+        rayIndices.Shuffle();
+        for (int i = 0; i < rayIndices.Length; ++i)
+        {
+            (int indexX, int indexY) = rayIndices[i];
+            
+            var normalizedPos = MaxNumRaysPerAxis > 1
+                ? new Vector3(indexX * Step, indexY * Step)
+                : new Vector3(0.5f, 0.5f);
+
+            // Randomize the ray direction a bit
+            normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));
+            normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));
+
+            Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
+            commands[i] = new SpherecastCommand(
+                ray.origin,
+                sphereCastRadius,
+                ray.direction,
+                wavePulseMaxRange,
+                layerMask
+            );
+
+            Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
+        }
     }
 
     private void HandleSpherecastResults()
@@ -109,41 +151,6 @@ public class RadarTool : MonoBehaviour
             float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
             float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hits[i].distance / dotConeAngleMultiplier);
             HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
-        }
-    }
-
-    private void GenerateSpherecastCommands(LayerMask layerMask)
-    {
-        Vector3    origin   = transform.position;
-        Quaternion rotation = transform.rotation;
-        
-        const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
-        const float HalfStep = Step * 0.5f;
-        
-        int commandIndex = 0;
-        for (int indexX = 0; indexX < MaxNumRaysPerAxis; ++indexX)
-        {
-            for (int indexY = 0; indexY < MaxNumRaysPerAxis; ++indexY)
-            {
-                var normalizedPos = MaxNumRaysPerAxis > 1
-                    ? new Vector3(indexX * Step, indexY * Step)
-                    : new Vector3(0.5f, 0.5f);
-
-                // Randomize the ray direction a bit
-                normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));
-                normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));
-
-                Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
-                commands[commandIndex++] = new SpherecastCommand(
-                    ray.origin,
-                    sphereCastRadius,
-                    ray.direction,
-                    wavePulseMaxRange,
-                    layerMask
-                );
-
-                Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
-            }
         }
     }
 
