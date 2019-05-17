@@ -29,7 +29,7 @@ public class RadarTool : MonoBehaviour
     [Header("Wavesphere settings")]
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
-    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 1.0f;
+    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 2.0f;
     [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
 
@@ -118,9 +118,17 @@ public class RadarTool : MonoBehaviour
 
     private void HandleSpherecastResults()
     {
-        if (hits.Length <= 0) 
-            return;
+        // The bit with RoundToInt makes sure the candidates are divided into bands with similar distance.
+        // Candidates in the same band preserve the initial order.
+        const float BandWidth = 4.0f;
+        RaycastHit[] candidateHits = hits
+            .Where(hit => hit.collider)
+            .OrderBy(hit => Mathf.RoundToInt(hit.distance * BandWidth))
+            .ToArray();
         
+        if (candidateHits.Length <= 0) 
+            return;
+
         var usedHitIndices = new List<int>();
 
         bool IsUsable((RaycastHit, int) tuple)
@@ -129,14 +137,14 @@ public class RadarTool : MonoBehaviour
             
             Vector3 point = hit.point;
             return usedHitIndices.All(i =>
-                i == index || Vector3.Distance(hits[i].point, point) > minDistanceBetweenSpawnedWavespheres
+                i == index || Vector3.Distance(candidateHits[i].point, point) > minDistanceBetweenSpawnedWavespheres
             );
         }
-
+        
         DotsRegistry dotsRegistry = DotsManager.instance.registry;
-        while (usedHitIndices.Count < hits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
+        while (usedHitIndices.Count < candidateHits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
         {
-            int index = hits
+            int index = candidateHits
                 .Select((hit, i) => (hit, i))
                 .Where(tuple => tuple.hit.collider && !usedHitIndices.Contains(tuple.i) && IsUsable(tuple))
                 .DefaultIfEmpty((new RaycastHit(), -1))
@@ -148,11 +156,11 @@ public class RadarTool : MonoBehaviour
             usedHitIndices.Add(index);
         }
 
+        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
         foreach (int i in usedHitIndices)
         {
-            float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * candidateHits[i].distance + 1.0f, dotConeAngleFalloffPower);
+            HandleHit(candidateHits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
         }
     }
 
