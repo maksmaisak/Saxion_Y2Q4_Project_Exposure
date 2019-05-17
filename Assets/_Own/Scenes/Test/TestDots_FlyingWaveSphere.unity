@@ -5860,7 +5860,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphereCastRadius: 0.2
   maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
-  dotConeAngleMultiplier: 2
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
   wavePulseAngleHorizontal: 40
@@ -5872,6 +5871,8 @@ MonoBehaviour:
     type: 3}
   wavesphereTarget: {fileID: 0}
   minDistanceBetweenSpawnedWavespheres: 1
+  dotConeAngleFalloff: 0.02
+  dotConeAngleFalloffPower: 1
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0

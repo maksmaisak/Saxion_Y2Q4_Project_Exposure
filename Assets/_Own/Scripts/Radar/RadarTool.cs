@@ -17,7 +17,6 @@ public class RadarTool : MonoBehaviour
     
     [SerializeField] float sphereCastRadius = 0.2f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
-    [SerializeField] [Range(0.05f, 5.0f)] float dotConeAngleMultiplier = 1.0f;
 
     [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
@@ -26,10 +25,13 @@ public class RadarTool : MonoBehaviour
     [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
     [SerializeField] int maxNumWavespheresPerPulse = 10;
-    [Space]
+    
+    [Header("Wavesphere settings")]
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
     [SerializeField] float minDistanceBetweenSpawnedWavespheres = 1.0f;
+    [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
+    [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
 
     private new Transform transform;
     
@@ -149,7 +151,8 @@ public class RadarTool : MonoBehaviour
         foreach (int i in usedHitIndices)
         {
             float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), baseDotConeAngle);
+            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
+            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
         }
     }
 
