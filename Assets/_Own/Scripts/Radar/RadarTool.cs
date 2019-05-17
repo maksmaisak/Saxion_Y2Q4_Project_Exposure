@@ -36,7 +36,8 @@ public class RadarTool : MonoBehaviour
     
     public void Probe()
     {
-        LayerMask layerMask = DotsManager.instance.GetDotsSurfaceLayerMask();
+        var dotsManager = DotsManager.instance;
+        LayerMask layerMask = dotsManager.GetDotsSurfaceLayerMask();
 
         var rotation = Quaternion.LookRotation(transform.forward); // transform.rotation;
         Vector3 origin = transform.position;
@@ -84,7 +85,7 @@ public class RadarTool : MonoBehaviour
         foreach (RaycastHit hit in results
             .Where(r => r.collider)
             .Shuffle())
-            //.OrderBy(r => r.distance))
+            //.OrderBy(r => dotsManager.registry.GetNumDotsAround(r.point)))
         {
             float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hit.distance / dotConeAngleMultiplier);
             bool didHit = HandleHit(hit, new Ray(origin, hit.point - origin), dotConeAngle);

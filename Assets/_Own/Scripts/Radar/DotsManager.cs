@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 /// A globally-accessible service for managing dot-based object highlighting.
@@ -14,12 +15,21 @@ public class DotsManager : Singleton<DotsManager>
    [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
    [SerializeField] float maxDotSpawnDistance = 200.0f;
    
+   public DotsRegistry registry { get; private set; }
+
    private ParticleSystem dotsParticleSystem;
 
    void Start()
    {
       Physics.queriesHitTriggers = false;
       dotsParticleSystem = GetComponent<ParticleSystem>();
+      
+      registry = new DotsRegistry();
+   }
+
+   void Update()
+   {
+      Assert.AreEqual(dotsParticleSystem.particleCount, registry.totalNumDots);
    }
 
    public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
@@ -87,6 +97,11 @@ public class DotsManager : Singleton<DotsManager>
       //StartCoroutine(AddDotsOverTime(positions));
    }
    
+   public void DrawDebugInfoInEditor()
+   {
+      registry?.DrawDebugInfoInEditor();
+   }
+   
    private IEnumerator AddDotsOverTime(IList<Vector3> positions, float totalTime = 0.5f)
    {
       float numDotsPerFrame = positions.Count * Time.deltaTime / totalTime;
@@ -117,7 +132,10 @@ public class DotsManager : Singleton<DotsManager>
       var particleBuffer = new ParticleSystem.Particle[positions.Count];
       dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
       for (int i = 0; i < numParticlesAdded; ++i)
+      {
+         registry.RegisterDot(positions[i]);
          particleBuffer[i].position = positions[i];
+      }
       dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
       
       // To make it recalculate the bounds used for culling
@@ -126,12 +144,11 @@ public class DotsManager : Singleton<DotsManager>
     
    private void AddDot(Vector3 position)
    {
+      registry.RegisterDot(position);
+
       dotsParticleSystem = dotsParticleSystem ? dotsParticleSystem : GetComponent<ParticleSystem>();
       
-      var emitParams = new ParticleSystem.EmitParams
-      {
-         position = position,
-      };
+      var emitParams = new ParticleSystem.EmitParams {position = position};
       emitParams.ResetStartColor();
       dotsParticleSystem.Emit(emitParams, 1);
 
