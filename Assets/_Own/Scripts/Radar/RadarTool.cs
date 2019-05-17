@@ -18,7 +18,7 @@ public class RadarTool : MonoBehaviour
     [SerializeField] float sphereCastRadius = 0.2f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRayDirection = 1.0f;
     [SerializeField] [Range(0.05f, 5.0f)] float dotConeAngleMultiplier = 1.0f;
-    
+
     [Header("Wave pulse settings")]
     [SerializeField] GameObject wavePulsePrefab;
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleHorizontal = 90.0f;
@@ -149,8 +149,7 @@ public class RadarTool : MonoBehaviour
         foreach (int i in usedHitIndices)
         {
             float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
-            float dotConeAngle = baseDotConeAngle / Mathf.Max(1.0f, hits[i].distance / dotConeAngleMultiplier);
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), baseDotConeAngle);
         }
     }
 
