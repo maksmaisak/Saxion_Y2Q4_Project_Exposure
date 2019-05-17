@@ -17,7 +17,7 @@ public class DotsRegistry
     
     public int totalNumDots { get; private set; }
 
-    public DotsRegistry(float cellSize = 2.0f)
+    public DotsRegistry(float cellSize = 1.0f)
     {
         this.cellSize = cellSize;
         sceneBounds = GetSceneBounds();
