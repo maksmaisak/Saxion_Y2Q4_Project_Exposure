@@ -33,9 +33,9 @@ public class RadarTool : MonoBehaviour
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f;
 
-    [Header("Debug")] 
-    [Tooltip("Highlight areas immediately without spawning wavespheres.")]
+    [Header("Debug settings")] 
     [SerializeField] bool highlightWithoutWavespheres = false;
+    [SerializeField] bool drawSpherecastRays          = false;
 
     private new Transform transform;
     
@@ -119,7 +119,8 @@ public class RadarTool : MonoBehaviour
                 layerMask
             );
 
-            Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
+            if (drawSpherecastRays)
+                Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white * 0.1f, 10.0f, true);
         }
     }
 

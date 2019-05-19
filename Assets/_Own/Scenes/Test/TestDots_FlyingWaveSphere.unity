@@ -5944,8 +5944,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
-  wavePulseAngleHorizontal: 40
-  wavePulseAngleVertical: 40
+  wavePulseAngleHorizontal: 90
+  wavePulseAngleVertical: 90
   wavePulseSpeed: 10
   wavePulseMaxRange: 20
   sphereCastRadius: 0.2
@@ -5959,6 +5959,7 @@ MonoBehaviour:
   dotConeAngleFalloffPower: 1
   maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 0
+  drawSpherecastRays: 0
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0
