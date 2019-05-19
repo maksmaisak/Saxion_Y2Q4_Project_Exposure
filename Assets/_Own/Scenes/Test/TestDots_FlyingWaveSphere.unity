@@ -5123,6 +5123,90 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 296138508}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &459198574
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_Name
+      value: WavePulse
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.657
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.907
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -16.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 22e6971030cfb4b7ab97cc509def0ae4, type: 3}
 --- !u!1 &635588106
 GameObject:
   m_ObjectHideFlags: 0
@@ -5858,14 +5942,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCastRadius: 0.2
-  maxDotDistanceFromSurfacePointAlongOriginalRayDirection: 1
   wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
     type: 3}
   wavePulseAngleHorizontal: 40
   wavePulseAngleVertical: 40
   wavePulseSpeed: 10
   wavePulseMaxRange: 20
+  sphereCastRadius: 0.2
   maxNumWavespheresPerPulse: 6
   wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
@@ -5873,6 +5956,7 @@ MonoBehaviour:
   minDistanceBetweenSpawnedWavespheres: 2
   dotConeAngleFalloff: 0.02
   dotConeAngleFalloffPower: 1
+  maxDotDistanceFromSurfacePointAlongOriginalRay: 1
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0

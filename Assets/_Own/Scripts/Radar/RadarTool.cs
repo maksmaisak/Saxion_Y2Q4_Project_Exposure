@@ -112,7 +112,7 @@ public class RadarTool : MonoBehaviour
                 layerMask
             );
 
-            Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
+            //Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
         }
     }
 
@@ -129,7 +129,7 @@ public class RadarTool : MonoBehaviour
         if (candidateHits.Length <= 0) 
             return;
 
-        var usedHitIndices = new List<int>();
+        var usedHitIndices = new List<int>(maxNumWavespheresPerPulse);
 
         bool IsUsable((RaycastHit, int) tuple)
         {
@@ -171,7 +171,7 @@ public class RadarTool : MonoBehaviour
     {
         Assert.IsNotNull(wavePulsePrefab);
         
-        GameObject pulse = Instantiate(wavePulsePrefab, transform.position, Quaternion.identity);
+        GameObject pulse = Instantiate(wavePulsePrefab, transform.position, transform.rotation);
         
         Transform tf = pulse.transform;
         tf.localScale = Vector3.zero;
