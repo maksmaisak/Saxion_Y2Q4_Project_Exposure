@@ -76,8 +76,8 @@ Material:
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
-    - _CosHalfHorizontalAngle: 0.4
-    - _CosHalfVerticalAngle: 0.03
+    - _CosHalfHorizontalAngle: 0
+    - _CosHalfVerticalAngle: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DstBlend: 0
@@ -86,7 +86,9 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
+    - _Multiplier: 3
     - _OcclusionStrength: 1
+    - _Offset: 0.6
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SinHalfHorizontalAngle: 0.2
@@ -100,6 +102,7 @@ Material:
     m_Colors:
     - Color_D8EB590D: {r: 0.0706212, g: 0.6509434, b: 0.0859913, a: 1}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Color: {r: 0.0706212, g: 0.6509434, b: 0.0859913, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PatternScale: {r: 100, g: 100, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

@@ -5138,17 +5138,17 @@ PrefabInstance:
     - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.657
+      value: 1.355
       objectReference: {fileID: 0}
     - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.907
+      value: 1.263
       objectReference: {fileID: 0}
     - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.98
+      value: -15.509
       objectReference: {fileID: 0}
     - target: {fileID: 6446712241796211182, guid: 22e6971030cfb4b7ab97cc509def0ae4,
         type: 3}
@@ -5954,9 +5954,11 @@ MonoBehaviour:
     type: 3}
   wavesphereTarget: {fileID: 0}
   minDistanceBetweenSpawnedWavespheres: 2
+  baseDotConeAngle: 20
   dotConeAngleFalloff: 0.02
   dotConeAngleFalloffPower: 1
   maxDotDistanceFromSurfacePointAlongOriginalRay: 1
+  highlightWithoutWavespheres: 0
 --- !u!135 &1687258589
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -28,25 +28,28 @@ public class RadarTool : MonoBehaviour
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
     [SerializeField] float minDistanceBetweenSpawnedWavespheres = 2.0f;
+    [SerializeField] [Range(0.0f, 360.0f)] float baseDotConeAngle = 20.0f;
     [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
     [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f;
 
+    [Header("Debug")] 
+    [Tooltip("Highlight areas immediately without spawning wavespheres.")]
+    [SerializeField] bool highlightWithoutWavespheres = false;
+
     private new Transform transform;
     
+    private (int indexX, int indexY)[] rayIndices;
     private NativeArray<SpherecastCommand> commands;
     private NativeArray<RaycastHit>        hits;
-
-    private (int indexX, int indexY)[] rayIndices;
+    
+    private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
+    private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
 
     void Awake()
     {
         transform = GetComponent<Transform>();
         
-        const int MaxNumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
-        commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
-        hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
-
         // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
         const int MidIndex = MaxNumRaysPerAxis / 2;
         rayIndices = Enumerable
@@ -54,6 +57,10 @@ public class RadarTool : MonoBehaviour
             .SelectMany(x => Enumerable.Range(0, MaxNumRaysPerAxis).Select(y => (x, y)))
             .OrderBy(tuple => Mathf.Abs(tuple.x - MidIndex) + Mathf.Abs(tuple.y - MidIndex))
             .ToArray();
+        
+        const int MaxNumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
+        commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
+        hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
     }
 
     void OnDestroy()
@@ -112,7 +119,7 @@ public class RadarTool : MonoBehaviour
                 layerMask
             );
 
-            //Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
+            Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white, 10.0f, true);
         }
     }
 
@@ -121,9 +128,11 @@ public class RadarTool : MonoBehaviour
         // The candidates are sorted into bands with similar distance.
         // Candidates in the same band preserve the initial order.
         const float DistanceBandWidth = 2.0f;
-        RaycastHit[] candidateHits = hits
-            .Where(hit => hit.collider)
-            .OrderBy(hit => Mathf.RoundToInt(hit.distance / DistanceBandWidth))
+
+        (RaycastHit hit, int index)[] candidateHits = hits
+            .Select((hit, index) => (hit, index))
+            .Where(tuple => tuple.hit.collider)
+            .OrderBy(tuple => Mathf.RoundToInt(tuple.hit.distance / DistanceBandWidth))
             .ToArray();
         
         if (candidateHits.Length <= 0) 
@@ -131,14 +140,10 @@ public class RadarTool : MonoBehaviour
 
         var usedHitIndices = new List<int>(maxNumWavespheresPerPulse);
 
-        bool IsUsable((RaycastHit, int) tuple)
+        bool IsTooCloseToAlreadyUsedLocations(Vector3 point)
         {
-            (RaycastHit hit, int index) = tuple;
-            
-            Vector3 point = hit.point;
-            return usedHitIndices.All(i =>
-                i == index || Vector3.Distance(candidateHits[i].point, point) > minDistanceBetweenSpawnedWavespheres
-            );
+            float sqrMinDistance = minDistanceBetweenSpawnedWavespheres * minDistanceBetweenSpawnedWavespheres;
+            return usedHitIndices.Any(i => Vector3.SqrMagnitude(hits[i].point - point) < sqrMinDistance);
         }
 
         DotsRegistry dotsRegistry = DotsManager.instance.registry;
@@ -148,10 +153,9 @@ public class RadarTool : MonoBehaviour
         while (usedHitIndices.Count < candidateHits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
         {
             int index = candidateHits
-                .Select((hit, i) => (hit, i))
-                .Where(tuple => tuple.hit.collider && !usedHitIndices.Contains(tuple.i) && IsUsable(tuple))
-                .DefaultIfEmpty((new RaycastHit(), -1))
-                .ArgMin(tuple => GetRoundedNumDotsAround(tuple.Item1.point)).Item2;
+                .Where(tuple => !usedHitIndices.Contains(tuple.index) && !IsTooCloseToAlreadyUsedLocations(tuple.hit.point))
+                .DefaultIfEmpty((hit: new RaycastHit(), index: -1))
+                .ArgMin(tuple => GetRoundedNumDotsAround(tuple.hit.point)).index;
 
             if (index == -1)
                 break;
@@ -159,11 +163,10 @@ public class RadarTool : MonoBehaviour
             usedHitIndices.Add(index);
         }
 
-        float baseDotConeAngle = Mathf.Max(wavePulseAngleHorizontal, wavePulseAngleVertical) * 0.5f;
         foreach (int i in usedHitIndices)
         {
-            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * candidateHits[i].distance + 1.0f, dotConeAngleFalloffPower);
-            HandleHit(candidateHits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
+            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
         }
     }
 
@@ -178,13 +181,14 @@ public class RadarTool : MonoBehaviour
         tf.DOScale(wavePulseMaxRange * 2.0f, wavePulseMaxRange / wavePulseSpeed)
             .SetEase(Ease.Linear)
             .OnComplete(() => Destroy(pulse));
+        
+        var material = pulse.GetComponent<Renderer>().material;
+        material.SetFloat(CosHalfHorizontalAngle, Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleHorizontal * 0.5f));
+        material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleVertical   * 0.5f));
     }
 
-    private bool HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
+    private void HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
     {
-        wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
-        Vector3 originPosition = wavesphereTarget.position;
-
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
             originalRay = originalRay,
@@ -194,19 +198,24 @@ public class RadarTool : MonoBehaviour
         };
         
         Assert.IsNotNull(wavespherePrefab);
-
-        float hitDistance = Vector3.Distance(hit.point, originPosition);
-        this.Delay(hitDistance / wavePulseSpeed, () =>
+        
+        this.Delay(hit.distance / wavePulseSpeed, () =>
         {
+            if (highlightWithoutWavespheres)
+            {
+                DotsManager.instance.Highlight(highlightLocation);
+                return;
+            }
+            
+            wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
+            
             FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.SetTarget(originPosition);
+            flyingSphere.SetTarget(wavesphereTarget.position);
             flyingSphere.highlightLocation = highlightLocation;
         });
-
-        return true;
     }
     
-    private Vector3 GetRayDirection(Vector3 normalizedPos)
+    private Vector3 GetRayDirection(Vector2 normalizedPos)
     {
         float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
         float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
