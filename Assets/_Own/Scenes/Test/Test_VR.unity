@@ -97,7 +97,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -12272,7 +12272,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2060411768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea5335256d44a94bab9d156994a3f72, type: 3}
+  m_Script: {fileID: 11500000, guid: a6626694564cdc64e9b0b937678f9bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftController: {fileID: 418459438}
