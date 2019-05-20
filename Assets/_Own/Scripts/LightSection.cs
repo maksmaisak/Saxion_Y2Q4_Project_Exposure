@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// A collection of objects that are dark and shown with dots, but may be lit up.
 /// </summary>
-public class LightZone : MonoBehaviour
+public class LightSection : MonoBehaviour
 {
     struct GameObjectSavedData
     {
@@ -32,27 +32,30 @@ public class LightZone : MonoBehaviour
     [Space] 
     [SerializeField] LayerMask exceptionLayer;
 
+    private ParticleSystem dotsParticleSystem;
+    
     private Dictionary<GameObject, GameObjectSavedData> savedGameObjectData = new Dictionary<GameObject, GameObjectSavedData>();
 
-    private int colorPropertyId;
+    private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
     void Awake()
-    {
-        colorPropertyId = Shader.PropertyToID("_Color");
-    }
-
-    void Start()
     {
         if (isGlobal)
         {
             lights = new List<Light>(FindObjectsOfType<Light>());
             gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>()
-                    .Select(r => r.gameObject)
-                    .Where(go => !go.GetComponent<ParticleSystem>()));
-
-            gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
+                .Select(r => r.gameObject)
+                .Where(go => !go.GetComponent<ParticleSystem>()));
         }
         
+        gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
+    }
+    
+    void Start()
+    {
+        dotsParticleSystem = GetComponentInChildren<ParticleSystem>();
+        Assert.IsNotNull(dotsParticleSystem);
+
         HideAllRenderers();
     }
 
@@ -63,6 +66,8 @@ public class LightZone : MonoBehaviour
             FadeIn();
         }
     }
+
+    public List<GameObject> GetGameObjects() => gameObjects;
     
     [ContextMenu("Fade in")]
     public void FadeIn()
@@ -76,7 +81,8 @@ public class LightZone : MonoBehaviour
             FadeInRenderer(kvp.Value);
         }
         
-        DotsManager.instance.FadeOutDots();
+        // TODO Temporary. Makde the DotsManager decide when to fade in. Or something that controls both the dotsmanager and the lightsections
+        DotsManager.instance.FadeOutDots(GetComponentInChildren<ParticleSystem>());
 
         FadeInLights();
     }
@@ -114,12 +120,12 @@ public class LightZone : MonoBehaviour
         // TODO use sharedMaterials here
         foreach (var material in data.renderer.materials)
         {
-            if (!material.HasProperty(colorPropertyId))
+            if (!material.HasProperty(ColorPropertyId))
                 return;
 
             DOTween.ToAlpha(
-                () => material.GetColor(colorPropertyId), 
-                color => material.SetColor(colorPropertyId, color),
+                () => material.GetColor(ColorPropertyId), 
+                color => material.SetColor(ColorPropertyId, color),
                 0.0f,
                 Random.Range(1.0f, 4.0f)
             ).SetTarget(material).From();
