@@ -17,5 +17,5 @@ public struct RadarHighlightLocation
     public float dotEmissionConeAngle;
     
     // Dots will only be added if they are close enough to the pointOnSurface (along originalRay).
-    public float maxDotDistanceFromSurfacePointAlongOriginalRayDirection;
+    public float maxDotDistanceFromSurfacePointAlongOriginalRay;
 }

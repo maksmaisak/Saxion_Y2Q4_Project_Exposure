@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 /// A globally-accessible service for managing dot-based object highlighting.
@@ -14,12 +15,21 @@ public class DotsManager : Singleton<DotsManager>
    [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
    [SerializeField] float maxDotSpawnDistance = 200.0f;
    
+   public DotsRegistry registry { get; private set; }
+   
    private ParticleSystem dotsParticleSystem;
 
    void Start()
    {
       Physics.queriesHitTriggers = false;
       dotsParticleSystem = GetComponent<ParticleSystem>();
+      
+      registry = new DotsRegistry();
+   }
+
+   void Update()
+   {
+      Assert.AreEqual(dotsParticleSystem.particleCount, registry.totalNumDots);
    }
 
    public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
@@ -47,7 +57,7 @@ public class DotsManager : Singleton<DotsManager>
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
       float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
       float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
-      
+
       const int MaxNumDots = 400;
       var results  = new NativeArray<RaycastHit>    (MaxNumDots, Allocator.TempJob);
       var commands = new NativeArray<RaycastCommand>(MaxNumDots, Allocator.TempJob);
@@ -67,8 +77,10 @@ public class DotsManager : Singleton<DotsManager>
          RaycastHit dotHit = results[i];
          if (!dotHit.collider) // This only works as long as maxHits is one.
             continue;
-         
-         if (Vector3.Dot(dotHit.point - location.pointOnSurface, location.originalRay.direction) > location.maxDotDistanceFromSurfacePointAlongOriginalRayDirection)
+
+         Vector3 delta = dotHit.point - location.pointOnSurface;
+         float distanceAlongRay = Vector3.Dot(delta, location.originalRay.direction);
+         if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
             continue;
 
          //Debug.DrawLine(commands[i].from, dotHit.point, Color.cyan * 0.25f, 20.0f);
@@ -85,6 +97,11 @@ public class DotsManager : Singleton<DotsManager>
       AddDotsImmediately(positions);
 
       //StartCoroutine(AddDotsOverTime(positions));
+   }
+   
+   public void DrawDebugInfoInEditor()
+   {
+      registry?.DrawDebugInfoInEditor();
    }
    
    private IEnumerator AddDotsOverTime(IList<Vector3> positions, float totalTime = 0.5f)
@@ -117,7 +134,10 @@ public class DotsManager : Singleton<DotsManager>
       var particleBuffer = new ParticleSystem.Particle[positions.Count];
       dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
       for (int i = 0; i < numParticlesAdded; ++i)
+      {
+         registry.RegisterDot(positions[i]);
          particleBuffer[i].position = positions[i];
+      }
       dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
       
       // To make it recalculate the bounds used for culling
@@ -126,12 +146,11 @@ public class DotsManager : Singleton<DotsManager>
     
    private void AddDot(Vector3 position)
    {
+      registry.RegisterDot(position);
+
       dotsParticleSystem = dotsParticleSystem ? dotsParticleSystem : GetComponent<ParticleSystem>();
       
-      var emitParams = new ParticleSystem.EmitParams
-      {
-         position = position,
-      };
+      var emitParams = new ParticleSystem.EmitParams {position = position};
       emitParams.ResetStartColor();
       dotsParticleSystem.Emit(emitParams, 1);
 
