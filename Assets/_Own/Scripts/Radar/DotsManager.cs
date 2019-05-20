@@ -56,26 +56,14 @@ public class DotsManager : Singleton<DotsManager>
    }
 
    void Update()
-   {
-      Assert.AreEqual(lightSectionInfos.Sum(i => i.dotsParticleSystem.particleCount), registry.totalNumDots);
+   { 
+      //Assert.AreEqual(lightSectionInfos.Sum(i => i.dotsParticleSystem.particleCount), registry.totalNumDots);
+      if (lightSectionInfos.Any(i => i.dotsParticleSystem.isPlaying)) 
+         Debug.Log("dotsParticleSystem.isPlaying == true");
    }
 
    public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
-
-   public void FadeOutDots(ParticleSystem dotsParticleSystem, float duration = 2.0f)
-   {
-      // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
-      var particles = new ParticleSystem.Particle[dotsParticleSystem.main.maxParticles];
-      int numAliveParticles = dotsParticleSystem.GetParticles(particles);
-
-      for (int i = 0; i < numAliveParticles; ++i)
-         particles[i].remainingLifetime = particles[i].startLifetime = Random.Range(0.0f, duration);
-
-      dotsParticleSystem.SetParticles(particles, numAliveParticles);
-      
-      dotsParticleSystem.Play();
-   }
-
+   
    public void Highlight(RadarHighlightLocation location) => Highlight(location, dotsSurfaceLayerMask);
 
    public void Highlight(RadarHighlightLocation location, LayerMask layerMask)
@@ -116,7 +104,7 @@ public class DotsManager : Singleton<DotsManager>
          
          if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
             continue;
-            
+
          lightSectionInfos[sectionIndex].positionsBuffer.Add(dotHit.point);
       }
       
@@ -126,11 +114,15 @@ public class DotsManager : Singleton<DotsManager>
       for (int i = 0; i < lightSectionInfos.Length; ++i)
       {
          var positionsBuffer = lightSectionInfos[i].positionsBuffer;
-         AddDotsImmediately(lightSectionInfos[i].dotsParticleSystem, positionsBuffer);
+         var section = lightSectionInfos[i].section;
+         
+         if (!section.isRevealed)
+            AddDotsImmediately(lightSectionInfos[i].dotsParticleSystem, positionsBuffer);
+         
+         section.RegisterDots(positionsBuffer);
+
          positionsBuffer.Clear();
       }
-
-      //StartCoroutine(AddDotsOverTime(positions));
    }
    
    public void DrawDebugInfoInEditor()
@@ -161,8 +153,11 @@ public class DotsManager : Singleton<DotsManager>
          particleBuffer[i].position = positions[i];
       }
       dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
-      
-      // To make it recalculate the bounds used for culling
-      dotsParticleSystem.Simulate(0.01f, false, false, false);
+
+      if (!dotsParticleSystem.isPlaying)
+      {
+         // To make it recalculate the bounds used for culling
+         dotsParticleSystem.Simulate(0.01f, false, false, false);
+      }
    }
 }

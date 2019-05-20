@@ -13,7 +13,9 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class LightSection : MonoBehaviour
 {
-    struct GameObjectSavedData
+    private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
+
+    struct GameObjectMaterialData
     {
         public Renderer renderer;
         public Material[] sharedMaterials;
@@ -23,21 +25,20 @@ public class LightSection : MonoBehaviour
     [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
     [SerializeField] bool isGlobal = false;
 
-    [Space] 
+    [Header("Hiding settings")] 
     [SerializeField] private Material hiddenMaterial;
-
-    [Space]
-    [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
-
-    [Space] 
     [SerializeField] LayerMask exceptionLayer;
 
-    private ParticleSystem dotsParticleSystem;
+    [Header("Reveal settings")] 
+    [SerializeField] int numDotsToReveal = 10000;
+    [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
+
+    private readonly Dictionary<GameObject, GameObjectMaterialData> savedGameObjectData = new Dictionary<GameObject, GameObjectMaterialData>();
+
+    public bool isRevealed { get; private set; } = false;
     
-    private Dictionary<GameObject, GameObjectSavedData> savedGameObjectData = new Dictionary<GameObject, GameObjectSavedData>();
-
-    private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
-
+    private int numDots = 0;
+    
     void Awake()
     {
         if (isGlobal)
@@ -45,29 +46,34 @@ public class LightSection : MonoBehaviour
             lights = new List<Light>(FindObjectsOfType<Light>());
             gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>()
                 .Select(r => r.gameObject)
-                .Where(go => !go.GetComponent<ParticleSystem>()));
+                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer)));
         }
-        
-        gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
+        else
+        {
+            gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
+        }
     }
     
     void Start()
     {
-        dotsParticleSystem = GetComponentInChildren<ParticleSystem>();
-        Assert.IsNotNull(dotsParticleSystem);
-
         HideAllRenderers();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(fadeInKeyCode))
+        if (!isRevealed && (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode)))
         {
+            isRevealed = true;
             FadeIn();
         }
     }
 
     public List<GameObject> GetGameObjects() => gameObjects;
+
+    public void RegisterDots(IList<Vector3> positions)
+    {
+        numDots += positions.Count;
+    }
     
     [ContextMenu("Fade in")]
     public void FadeIn()
@@ -81,12 +87,29 @@ public class LightSection : MonoBehaviour
             FadeInRenderer(kvp.Value);
         }
         
-        // TODO Temporary. Makde the DotsManager decide when to fade in. Or something that controls both the dotsmanager and the lightsections
-        DotsManager.instance.FadeOutDots(GetComponentInChildren<ParticleSystem>());
+        // TODO make sections keep track of their particle system etc.
+        FadeOutDots(GetComponentInChildren<ParticleSystem>());
 
         FadeInLights();
     }
     
+    private void FadeOutDots(ParticleSystem dotsParticleSystem, float duration = 2.0f)
+    {
+        // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
+        var particleBuffer = new ParticleSystem.Particle[dotsParticleSystem.main.maxParticles];
+        int numAliveParticles = dotsParticleSystem.GetParticles(particleBuffer);
+
+        for (int i = 0; i < numAliveParticles; ++i)
+            particleBuffer[i].remainingLifetime = particleBuffer[i].startLifetime = Random.Range(0.0f, duration);
+
+        dotsParticleSystem.SetParticles(particleBuffer, numAliveParticles);
+      
+        dotsParticleSystem.GetParticles(particleBuffer, numAliveParticles);
+        Assert.IsTrue(particleBuffer.Take(numAliveParticles).All(p => p.remainingLifetime <= duration));
+
+        dotsParticleSystem.Play();
+    }
+
     private void HideAllRenderers()
     {
         Assert.IsNotNull(hiddenMaterial);
@@ -100,7 +123,7 @@ public class LightSection : MonoBehaviour
 
             Material[] rendererSharedMaterials = renderer.sharedMaterials;
             
-            savedGameObjectData.Add(go, new GameObjectSavedData
+            savedGameObjectData.Add(go, new GameObjectMaterialData
             {
                 renderer = renderer,
                 sharedMaterials = (Material[])rendererSharedMaterials.Clone()
@@ -113,7 +136,7 @@ public class LightSection : MonoBehaviour
         }
     }
 
-    private void FadeInRenderer(GameObjectSavedData data)
+    private void FadeInRenderer(GameObjectMaterialData data)
     {
         data.renderer.sharedMaterials = data.sharedMaterials;
 
