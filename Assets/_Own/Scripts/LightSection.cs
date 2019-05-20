@@ -20,6 +20,7 @@ public class LightSection : MonoBehaviour
     {
         public Renderer renderer;
         public Material[] sharedMaterials;
+        public Material[] sectionOnlyMaterials; // Same as sharedMaterials, but only shared between objects in the same section.
     }
     
     [SerializeField] List<Light> lights = new List<Light>();
@@ -34,7 +35,7 @@ public class LightSection : MonoBehaviour
     [SerializeField] int numDotsToReveal = 10000;
     [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
 
-    private readonly Dictionary<GameObject, GameObjectMaterialData> savedGameObjectData = new Dictionary<GameObject, GameObjectMaterialData>();
+    private readonly List<GameObjectMaterialData> gameObjectMaterialData = new List<GameObjectMaterialData>();
 
     public bool isRevealed { get; private set; } = false;
     
@@ -46,13 +47,18 @@ public class LightSection : MonoBehaviour
         if (isGlobal)
         {
             lights = new List<Light>(FindObjectsOfType<Light>());
-            gameObjects = new List<GameObject>(FindObjectsOfType<Renderer>()
+            gameObjects = FindObjectsOfType<Renderer>()
                 .Select(r => r.gameObject)
-                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer)));
+                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer))
+                .ToList();
         }
         else
         {
-            gameObjects.RemoveAll(go => exceptionLayer.ContainsLayer(go.layer));
+            lights = GetComponentsInChildren<Light>().ToList();
+            gameObjects = GetComponentsInChildren<Renderer>()
+                .Select(r => r.gameObject)
+                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer))
+                .ToList();
         }
     }
     
@@ -110,19 +116,80 @@ public class LightSection : MonoBehaviour
         
         Debug.Log("Revealing LightSection: " + this);
         isRevealed = true;
-        
-        foreach (var kvp in savedGameObjectData)
-        {
-            GameObject go = kvp.Key;
-            if (!go || !kvp.Value.renderer)
-                continue;
 
-            FadeInRenderer(kvp.Value);
-        }
-        
+        FadeInRenderers();
+
         FadeOutDots();
 
         FadeInLights();
+    }
+    
+    private void HideAllRenderers()
+    {
+        Assert.IsNotNull(hiddenMaterial);
+        
+        gameObjects.RemoveAll(go => !go);
+        foreach (GameObject go in gameObjects)
+        {
+            var renderer = go.GetComponent<Renderer>();
+            if (!renderer)
+                continue;
+
+            Material[] rendererSharedMaterials = renderer.sharedMaterials;
+            
+            gameObjectMaterialData.Add(new GameObjectMaterialData 
+            {
+                renderer = renderer,
+                sharedMaterials = (Material[])rendererSharedMaterials.Clone(),
+                sectionOnlyMaterials = new Material[rendererSharedMaterials.Length]
+            });
+
+            for (int i = 0; i < renderer.sharedMaterials.Length; ++i)
+                rendererSharedMaterials[i] = hiddenMaterial;
+
+            renderer.sharedMaterials = rendererSharedMaterials;
+        }
+        
+        // Ensure that different sections have different material instances.
+        var materialToSectionMaterial = new Dictionary<Material, Material>();
+        Material GetOrAddSectionMaterial(Material material)
+        {
+            bool wasPresent = materialToSectionMaterial.TryGetValue(material, out Material sectionMaterial);
+            if (wasPresent) 
+                return sectionMaterial;
+            
+            sectionMaterial = Instantiate(material);
+            materialToSectionMaterial.Add(material, sectionMaterial);
+            return sectionMaterial;
+        }
+        
+        foreach (var data in gameObjectMaterialData)
+            for (int i = 0; i < data.sharedMaterials.Length; ++i)
+                data.sectionOnlyMaterials[i] = GetOrAddSectionMaterial(data.sharedMaterials[i]);
+    }
+    
+    private void FadeInRenderers()
+    {
+        foreach (GameObjectMaterialData data in gameObjectMaterialData)
+        {
+            if (!data.renderer)
+                continue;
+
+            data.renderer.sharedMaterials = data.sectionOnlyMaterials;
+        }
+
+        foreach (var sectionMaterial in gameObjectMaterialData.SelectMany(d => d.sectionOnlyMaterials).Distinct())
+        {
+            if (!sectionMaterial.HasProperty(ColorPropertyId))
+                return;
+
+            DOTween.ToAlpha(
+                () => sectionMaterial.GetColor(ColorPropertyId), 
+                color => sectionMaterial.SetColor(ColorPropertyId, color),
+                0.0f,
+                Random.Range(1.0f, 4.0f)
+            ).SetTarget(sectionMaterial).From();
+        };
     }
 
     private void FadeOutDots(float duration = 2.0f)
@@ -141,52 +208,7 @@ public class LightSection : MonoBehaviour
 
         dotsParticleSystem.Play();
     }
-
-    private void HideAllRenderers()
-    {
-        Assert.IsNotNull(hiddenMaterial);
-        
-        gameObjects.RemoveAll(go => !go);
-        foreach (GameObject go in gameObjects)
-        {
-            var renderer = go.GetComponent<Renderer>();
-            if (!renderer)
-                continue;
-
-            Material[] rendererSharedMaterials = renderer.sharedMaterials;
-            
-            savedGameObjectData.Add(go, new GameObjectMaterialData
-            {
-                renderer = renderer,
-                sharedMaterials = (Material[])rendererSharedMaterials.Clone()
-            });
-
-            for (int i = 0; i < renderer.sharedMaterials.Length; ++i)
-                rendererSharedMaterials[i] = hiddenMaterial;
-
-            renderer.sharedMaterials = rendererSharedMaterials;
-        }
-    }
-
-    private void FadeInRenderer(GameObjectMaterialData data)
-    {
-        data.renderer.sharedMaterials = data.sharedMaterials;
-
-        // TODO OPTIMIZE use sharedMaterials here
-        foreach (var material in data.renderer.materials)
-        {
-            if (!material.HasProperty(ColorPropertyId))
-                return;
-
-            DOTween.ToAlpha(
-                () => material.GetColor(ColorPropertyId), 
-                color => material.SetColor(ColorPropertyId, color),
-                0.0f,
-                Random.Range(1.0f, 4.0f)
-            ).SetTarget(material).From();
-        }
-    }
-
+    
     private void FadeInLights()
     {
         foreach (Light light in lights)

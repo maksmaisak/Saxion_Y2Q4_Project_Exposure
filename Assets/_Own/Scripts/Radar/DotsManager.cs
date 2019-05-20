@@ -94,7 +94,7 @@ public class DotsManager : Singleton<DotsManager>
 
          if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
          { 
-            Debug.Log($"Collider {dotHit.collider} doesn't belong to any LightSection.");
+            //Debug.Log($"Collider {dotHit.collider} doesn't belong to any LightSection.");
             continue;
          }
 
