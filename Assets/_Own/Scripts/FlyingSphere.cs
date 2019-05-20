@@ -43,6 +43,8 @@ public class FlyingSphere : MonoBehaviour
     private bool didStart;
     private bool canMove;
 
+    private AudioSource audioSource;
+    
     private Vector3? targetCenter;
 
     public RadarHighlightLocation highlightLocation { get; set; }
@@ -57,6 +59,7 @@ public class FlyingSphere : MonoBehaviour
     void Awake()
     {
         transform = GetComponent<Transform>();
+        audioSource = GetComponent<AudioSource>();
     }
     
     void Start()
@@ -84,14 +87,19 @@ public class FlyingSphere : MonoBehaviour
         if (!handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
             return;
 
-        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>().gameObject;
+        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
 
-        GetComponent<AudioSource>().PlayOneShot(grabAudio);
-
-        OVRInput.Controller controllerType = 
-            VRTK_DeviceFinder.IsControllerLeftHand(otherController) ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
-
-        VibrationManager.instance.TriggerVibration(grabAudio, controllerType);
+        if (otherController)
+        {
+            OVRInput.Controller controllerType =
+                VRTK_DeviceFinder.IsControllerLeftHand(otherController)
+                    ? OVRInput.Controller.LTouch
+                    : OVRInput.Controller.RTouch;
+            
+            VibrationManager.instance.TriggerVibration(grabAudio, controllerType);
+        }
+        
+        audioSource.PlayOneShot(grabAudio);
 
         canMove = false;
 
@@ -105,8 +113,6 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOLookAt(otherPosition - transform.position, 0.2f)
             .SetEase(Ease.OutQuart);
-
-        Debug.Log("Hand is hit");
 
         transform.parent = other.transform;
         
