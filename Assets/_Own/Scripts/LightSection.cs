@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// A collection of objects that are dark and shown with dots, but may be lit up.
 /// </summary>
+[RequireComponent(typeof(ParticleSystem))]
 public class LightSection : MonoBehaviour
 {
     private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
@@ -26,7 +27,7 @@ public class LightSection : MonoBehaviour
     [SerializeField] bool isGlobal = false;
 
     [Header("Hiding settings")] 
-    [SerializeField] private Material hiddenMaterial;
+    [SerializeField] Material hiddenMaterial;
     [SerializeField] LayerMask exceptionLayer;
 
     [Header("Reveal settings")] 
@@ -37,6 +38,7 @@ public class LightSection : MonoBehaviour
 
     public bool isRevealed { get; private set; } = false;
     
+    private ParticleSystem dotsParticleSystem;
     private int numDots = 0;
     
     void Awake()
@@ -56,6 +58,9 @@ public class LightSection : MonoBehaviour
     
     void Start()
     {
+        dotsParticleSystem = GetComponentInChildren<ParticleSystem>();
+        Assert.IsNotNull(dotsParticleSystem);
+        
         HideAllRenderers();
     }
 
@@ -63,21 +68,49 @@ public class LightSection : MonoBehaviour
     {
         if (!isRevealed && (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode)))
         {
-            isRevealed = true;
-            FadeIn();
+            Reveal();
         }
     }
 
     public List<GameObject> GetGameObjects() => gameObjects;
 
-    public void RegisterDots(IList<Vector3> positions)
+    public void AddDots(IList<Vector3> positions)
     {
+        if (isRevealed)
+            return;
+        
         numDots += positions.Count;
+
+        int numParticlesAdded = positions.Count;
+        int oldNumParticles   = dotsParticleSystem.particleCount;
+        
+        // Emit the particles
+        dotsParticleSystem.Emit(numParticlesAdded);
+
+        // Read out into a buffer, set positions, Write back in
+        var particleBuffer = new ParticleSystem.Particle[positions.Count];
+        dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+        for (int i = 0; i < numParticlesAdded; ++i)
+            particleBuffer[i].position = positions[i];
+        
+        dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
+
+        if (!dotsParticleSystem.isPlaying)
+        {
+            // To make it recalculate the bounds used for culling
+            dotsParticleSystem.Simulate(0.01f, false, false, false);
+        }
     }
     
-    [ContextMenu("Fade in")]
-    public void FadeIn()
+    [ContextMenu("Reveal")]
+    public void Reveal()
     {
+        if (isRevealed)
+            return;
+        
+        Debug.Log("Revealing LightSection: " + this);
+        isRevealed = true;
+        
         foreach (var kvp in savedGameObjectData)
         {
             GameObject go = kvp.Key;
@@ -87,13 +120,12 @@ public class LightSection : MonoBehaviour
             FadeInRenderer(kvp.Value);
         }
         
-        // TODO make sections keep track of their particle system etc.
-        FadeOutDots(GetComponentInChildren<ParticleSystem>());
+        FadeOutDots();
 
         FadeInLights();
     }
-    
-    private void FadeOutDots(ParticleSystem dotsParticleSystem, float duration = 2.0f)
+
+    private void FadeOutDots(float duration = 2.0f)
     {
         // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
         var particleBuffer = new ParticleSystem.Particle[dotsParticleSystem.main.maxParticles];
@@ -140,7 +172,7 @@ public class LightSection : MonoBehaviour
     {
         data.renderer.sharedMaterials = data.sharedMaterials;
 
-        // TODO use sharedMaterials here
+        // TODO OPTIMIZE use sharedMaterials here
         foreach (var material in data.renderer.materials)
         {
             if (!material.HasProperty(ColorPropertyId))

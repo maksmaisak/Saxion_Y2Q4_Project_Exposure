@@ -14,52 +14,39 @@ public class DotsManager : Singleton<DotsManager>
    [Tooltip("Dots can only appear on surfaces with these layers.")] 
    [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
    [SerializeField] float maxDotSpawnDistance = 200.0f;
-   [SerializeField] ParticleSystem dotsParticleSystemPrefab;
 
    const int MaxNumDotsPerHighlight = 400;
 
    public DotsRegistry registry { get; private set; }
 
-   struct LightSectionInfo
-   {
-      public LightSection section;
-      public List<Vector3> positionsBuffer;
-      public ParticleSystem dotsParticleSystem;
-   }
+   private LightSection [] lightSections;
+   private List<Vector3>[] positionsBuffers;
 
-   private LightSectionInfo[] lightSectionInfos;
-   
-   private Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
+   private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
    
    void Start()
    {
       Physics.queriesHitTriggers = false;
       
       registry = new DotsRegistry();
-      
-      lightSectionInfos = FindObjectsOfType<LightSection>().Select(s => new LightSectionInfo
-      {
-         section = s,
-         positionsBuffer = new List<Vector3>(MaxNumDotsPerHighlight),
-         dotsParticleSystem = AddParticleSystem(s)
-      }).ToArray();
 
-      for (int i = 0; i < lightSectionInfos.Length; ++i)
+      lightSections = FindObjectsOfType<LightSection>().ToArray();
+      positionsBuffers = Enumerable
+         .Range(0, lightSections.Length)
+         .Select(i => new List<Vector3>(MaxNumDotsPerHighlight))
+         .ToArray();
+
+      for (int i = 0; i < lightSections.Length; ++i)
       {
-         var colliders = lightSectionInfos[i].section.GetGameObjects()
+         var colliders = lightSections[i].GetGameObjects()
             .SelectMany(go => go.GetComponentsInChildren<Collider>())
             .Distinct();
          
          foreach (Collider col in colliders)
             colliderToLightSectionIndex.Add(col, i);
       }
-   }
-
-   void Update()
-   { 
-      //Assert.AreEqual(lightSectionInfos.Sum(i => i.dotsParticleSystem.particleCount), registry.totalNumDots);
-      if (lightSectionInfos.Any(i => i.dotsParticleSystem.isPlaying)) 
-         Debug.Log("dotsParticleSystem.isPlaying == true");
+      
+      Assert.IsTrue(lightSections.Length > 0, "There must be at least one LightSection in the scene!");
    }
 
    public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
@@ -71,21 +58,24 @@ public class DotsManager : Singleton<DotsManager>
       //Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
       Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
-      float distanceFromCamera = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
-      float displacementRadius = distanceFromCamera * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
+      float distanceFromOrigin = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
+      float displacementRadius = distanceFromOrigin * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
 
       var results  = new NativeArray<RaycastHit>    (MaxNumDotsPerHighlight, Allocator.TempJob);
       var commands = new NativeArray<RaycastCommand>(MaxNumDotsPerHighlight, Allocator.TempJob);
 
+      // Generate raycast commands
       for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
-      {
+      { 
          Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
          commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
       }
 
+      // Execute the raycasts
       JobHandle jobHandle = RaycastCommand.ScheduleBatch(commands, results, 1);
       jobHandle.Complete();
       
+      // Process raycast results
       for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
       {
          RaycastHit dotHit = results[i];
@@ -101,63 +91,33 @@ public class DotsManager : Singleton<DotsManager>
 
          // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fade in.
          // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
-         
-         if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
-            continue;
 
-         lightSectionInfos[sectionIndex].positionsBuffer.Add(dotHit.point);
+         if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
+         { 
+            Debug.Log($"Collider {dotHit.collider} doesn't belong to any LightSection.");
+            continue;
+         }
+
+         positionsBuffers[sectionIndex].Add(dotHit.point);
+      }
+
+      for (int i = 0; i < lightSections.Length; ++i)
+      {
+         LightSection section = lightSections[i];
+         List<Vector3> positionsBuffer = positionsBuffers[i];
+
+         section.AddDots(positionsBuffer);
+         positionsBuffer.ForEach(registry.RegisterDot);
+         
+         positionsBuffer.Clear();
       }
       
       results.Dispose();
       commands.Dispose();
-
-      for (int i = 0; i < lightSectionInfos.Length; ++i)
-      {
-         var positionsBuffer = lightSectionInfos[i].positionsBuffer;
-         var section = lightSectionInfos[i].section;
-         
-         if (!section.isRevealed)
-            AddDotsImmediately(lightSectionInfos[i].dotsParticleSystem, positionsBuffer);
-         
-         section.RegisterDots(positionsBuffer);
-
-         positionsBuffer.Clear();
-      }
    }
    
    public void DrawDebugInfoInEditor()
    {
       registry?.DrawDebugInfoInEditor();
-   }
-   
-   private ParticleSystem AddParticleSystem(LightSection lightSection)
-   {
-      Assert.IsNotNull(dotsParticleSystemPrefab);
-      return Instantiate(dotsParticleSystemPrefab, lightSection.transform);
-   }
-
-   private void AddDotsImmediately(ParticleSystem dotsParticleSystem, IList<Vector3> positions)
-   {
-      int numParticlesAdded = positions.Count;
-      int oldNumParticles   = dotsParticleSystem.particleCount;
-      
-      // Emit the particles
-      dotsParticleSystem.Emit(numParticlesAdded);
-
-      // Read out into a buffer, set positions, Write back in
-      var particleBuffer = new ParticleSystem.Particle[positions.Count];
-      dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
-      for (int i = 0; i < numParticlesAdded; ++i)
-      {
-         registry.RegisterDot(positions[i]);
-         particleBuffer[i].position = positions[i];
-      }
-      dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
-
-      if (!dotsParticleSystem.isPlaying)
-      {
-         // To make it recalculate the bounds used for culling
-         dotsParticleSystem.Simulate(0.01f, false, false, false);
-      }
    }
 }

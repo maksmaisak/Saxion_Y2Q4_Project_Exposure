@@ -90,7 +90,7 @@ public class FlyingSphere : MonoBehaviour
         transform.DOLookAt(otherPosition - transform.position, 0.2f)
             .SetEase(Ease.OutQuart);
 
-        Debug.Log("Hand is hit");
+        //Debug.Log("Hand is hit");
 
         transform.parent = other.transform;
         
