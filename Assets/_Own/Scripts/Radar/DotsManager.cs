@@ -29,7 +29,7 @@ public class DotsManager : Singleton<DotsManager>
 
    void Update()
    {
-      Assert.AreEqual(dotsParticleSystem.particleCount, registry.totalNumDots);
+      //Assert.AreEqual(dotsParticleSystem.particleCount, registry.totalNumDots);
    }
 
    public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;

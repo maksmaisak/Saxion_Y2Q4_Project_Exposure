@@ -228,6 +228,7 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   destroyImmediatelyOnThrow: 1
+  breakForce: 1500
 --- !u!114 &8224539706240099016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,7 +246,7 @@ MonoBehaviour:
   wavePulseAngleHorizontal: 90
   wavePulseAngleVertical: 90
   wavePulseSpeed: 10
-  wavePulseMaxRange: 20
+  wavePulseMaxRange: 100
   sphereCastRadius: 0.05
   maxNumWavespheresPerPulse: 6
   wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
