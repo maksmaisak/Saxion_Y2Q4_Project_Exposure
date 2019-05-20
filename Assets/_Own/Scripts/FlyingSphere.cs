@@ -4,26 +4,33 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using VRTK;
 using Random = UnityEngine.Random;
 
 public class FlyingSphere : MonoBehaviour
 {
-    [Header("Movement Settings")] 
+    [Header("Movement Settings")]
     [SerializeField] float randomMinSpeed = 0.8f;
     [SerializeField] float randomMaxSpeed = 2.5f;
-    
+
     [Header("Scaling Settings")]
     [SerializeField] float scaleTarget = 0.8f;
     [SerializeField] float scaleDuration = 0.7f;
     [SerializeField] float scaleRandomMin = 0.4f;
 
-    [Header("Color Settings")] 
+    [Header("Color Settings")]
     [SerializeField] string albedoColorId = "_AlbedoColor_549AC39B";
     [SerializeField] string emissionColorId = "_EmissionColor_40E9251C";
     [SerializeField] List<Color> albedoColors = new List<Color>();
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
+    [Header("Vibration Settings")]
+    [SerializeField] int vibrationDuration = 40;
+    [SerializeField] int frequency = 2;
+    [SerializeField] int strength = 100;
+
     [Header("Other Settings")]
+    [SerializeField] AudioClip grabAudio;
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
     [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
@@ -76,6 +83,15 @@ public class FlyingSphere : MonoBehaviour
     {
         if (!handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
             return;
+
+        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>().gameObject;
+
+        GetComponent<AudioSource>().PlayOneShot(grabAudio);
+
+        OVRInput.Controller controllerType = 
+            VRTK_DeviceFinder.IsControllerLeftHand(otherController) ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
+
+        VibrationManager.instance.TriggerVibration(grabAudio, controllerType);
 
         canMove = false;
 
