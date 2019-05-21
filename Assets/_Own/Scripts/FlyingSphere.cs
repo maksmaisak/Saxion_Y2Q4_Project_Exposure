@@ -31,6 +31,8 @@ public class FlyingSphere : MonoBehaviour
 
     [Header("Other Settings")]
     [SerializeField] AudioClip grabAudio;
+    [SerializeField] AudioClip movingSound;
+    [SerializeField] AudioClip spawnAudio;
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
     [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
@@ -71,6 +73,12 @@ public class FlyingSphere : MonoBehaviour
         RandomizeScale();
         RandomizeSpeedAndDirection();
 
+        audioSource.PlayOneShot(spawnAudio);
+
+        audioSource.clip = movingSound;
+        audioSource.loop = true;
+        audioSource.Play();
+
         Destroy(gameObject, delayToDespawn);
     }
     
@@ -96,9 +104,9 @@ public class FlyingSphere : MonoBehaviour
                     ? OVRInput.Controller.LTouch
                     : OVRInput.Controller.RTouch;
             
-            VibrationManager.instance.TriggerVibration(grabAudio, controllerType);
+            VibrationManager.instance.TriggerVibration(vibrationDuration,frequency,strength, controllerType);
         }
-        
+
         audioSource.PlayOneShot(grabAudio);
 
         canMove = false;
@@ -107,7 +115,7 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(0.01f, 0.15f)
+        transform.DOScale(0.01f, 0.6f)
             .SetEase(Ease.OutQuart)
             .OnComplete(() => Destroy(gameObject));
 
