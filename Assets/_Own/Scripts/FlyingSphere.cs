@@ -134,9 +134,9 @@ public class FlyingSphere : MonoBehaviour
                 ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
                 : VRTK_DeviceFinder.GetControllerReferenceRightHand();
             
-            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, grabAudio);
+            VibrationManager.instance.TriggerVibration(vibrationDuration,frequency,strength, controllerType);
         }
-        
+
         audioSource.PlayOneShot(grabAudio);
 
         canMove = false;
@@ -203,3 +203,7 @@ public class FlyingSphere : MonoBehaviour
             renderer.material.SetColor(emissionColorId, emissionColors[Random.Range(0, emissionColors.Count)]);
     }
 }
+
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, grabAudio);
+        }
+        
