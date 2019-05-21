@@ -218,8 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angularSpeed: 1.37
+  attractionRadius: 1.08
   randomMinSpeed: 2.4
   randomMaxSpeed: 4.5
+  targetSphereRadius: 0.5
+  slowdownRadius: 4
   scaleTarget: 0.27
   scaleDuration: 2
   scaleRandomMin: 0.32
@@ -237,8 +241,6 @@ MonoBehaviour:
   strength: 100
   grabAudio: {fileID: 8300000, guid: eb233f207486aa943b93cb6c4ac22a91, type: 3}
   delayToDespawn: 25
-  targetSphereRadius: 0.5
-  slowdownRadius: 4
   handsCollisionLayer:
     serializedVersion: 2
     m_Bits: 16384

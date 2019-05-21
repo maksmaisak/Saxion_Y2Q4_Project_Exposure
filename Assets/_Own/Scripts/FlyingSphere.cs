@@ -121,12 +121,13 @@ public class FlyingSphere : MonoBehaviour
 
         if (otherController)
         {
-            OVRInput.Controller controllerType =
-                VRTK_DeviceFinder.IsControllerLeftHand(otherController)
-                    ? OVRInput.Controller.LTouch
-                    : OVRInput.Controller.RTouch;
+            bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
+
+            VRTK_ControllerReference controllerReference = isLeftHand
+                ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
+                : VRTK_DeviceFinder.GetControllerReferenceRightHand();
             
-            VibrationManager.instance.TriggerVibration(grabAudio, controllerType);
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, grabAudio);
         }
         
         audioSource.PlayOneShot(grabAudio);
