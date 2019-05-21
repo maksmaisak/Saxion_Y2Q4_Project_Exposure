@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 public class FlyingSphere : MonoBehaviour
 {
     [Header("Movement Settings")] 
-    [SerializeField] float angularSpeed = 10.0f;
+    [SerializeField] float angularSpeed = 1.0f;
     [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float randomMinSpeed = 0.8f;
     [SerializeField] float randomMaxSpeed = 2.5f;
@@ -96,11 +96,10 @@ public class FlyingSphere : MonoBehaviour
 
         if (targetTransforms.Count == 0)
             return;
-
-        targetTransforms =
-            targetTransforms.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToList();
         
-        Vector3 targetDir = targetTransforms[0].position - transform.position;
+        Transform targetTransform = targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
+        
+        Vector3 targetDir = targetTransform.position - transform.position;
 
         if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
             return;
