@@ -182,6 +182,7 @@ public class LightSection : MonoBehaviour
     
     private void FadeInRenderers()
     {
+        // Switch to section-wide shared materials for the duration of the tweens.
         foreach (GameObjectMaterialData data in gameObjectMaterialData)
         {
             if (!data.renderer)
@@ -189,15 +190,16 @@ public class LightSection : MonoBehaviour
 
             data.renderer.sharedMaterials = data.sectionOnlyMaterials;
         }
+        
+        var sectionSequence = DOTween.Sequence();
 
         var sectionMaterials = gameObjectMaterialData
             .SelectMany(d => d.sectionOnlyMaterials)
             .Where(m => m.HasProperty(ColorId))
             .Distinct();
-
         foreach (var material in sectionMaterials)
         {
-            var sequence = DOTween.Sequence();
+            var materialSequence = DOTween.Sequence();
 
             float targetAlpha = 1.0f;
             
@@ -207,8 +209,8 @@ public class LightSection : MonoBehaviour
                 int newBlend = (int)UnityEngine.Rendering.BlendMode.SrcAlpha;
                 if (oldBlend != newBlend)
                 {
-                    sequence.AppendCallback(() => material.SetInt(SrcBlendId, newBlend));
-                    sequence.OnComplete(() => material.SetInt(SrcBlendId, oldBlend));
+                    materialSequence.AppendCallback(() => material.SetInt(SrcBlendId, newBlend));
+                    materialSequence.OnComplete(() => material.SetInt(SrcBlendId, oldBlend));
                 }
                 else
                 {
@@ -217,22 +219,31 @@ public class LightSection : MonoBehaviour
             }
 
             Color targetColor = material.GetColor(ColorId);
-            Debug.Log("Color was: " + targetColor);
             targetColor.a = targetAlpha;
             material.SetColor(ColorId, Color.clear);
             var tweenAlpha = DOTween.To(
                 () => material.GetColor(ColorId),
-                color =>
-                {
-                    //Debug.Log("Set color: " + color);
-                    material.SetColor(ColorId, color);
-                },
+                color => material.SetColor(ColorId, color),
                 targetColor,
                 revealDuration
             ).SetTarget(material);
             
-            sequence.Append(tweenAlpha);
+            materialSequence.Append(tweenAlpha);
+
+            sectionSequence.Join(materialSequence);
         }
+
+        // Switch to globally shared materials again once done tweening
+        sectionSequence.OnComplete(() =>
+        {
+            foreach (GameObjectMaterialData data in gameObjectMaterialData)
+            {
+                if (!data.renderer)
+                    continue;
+
+                data.renderer.sharedMaterials = data.sharedMaterials;
+            }
+        });
     }
 
     private void FadeOutDots()
