@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -9,9 +10,14 @@ using Random = UnityEngine.Random;
 
 public class FlyingSphere : MonoBehaviour
 {
-    [Header("Movement Settings")]
+    [Header("Movement Settings")] 
+    [SerializeField] float angularSpeed = 1.0f;
+    [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float randomMinSpeed = 0.8f;
     [SerializeField] float randomMaxSpeed = 2.5f;
+    [SerializeField] float targetSphereRadius = 0.25f;
+    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
+    [SerializeField] float slowdownRadius = 4.0f;
 
     [Header("Scaling Settings")]
     [SerializeField] float scaleTarget = 0.8f;
@@ -34,9 +40,6 @@ public class FlyingSphere : MonoBehaviour
     [SerializeField] AudioClip movingSound;
     [SerializeField] AudioClip spawnAudio;
     [SerializeField] float delayToDespawn = 20.0f;
-    [SerializeField] float targetSphereRadius = 0.25f;
-    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
-    [SerializeField] float slowdownRadius = 4.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
     private new Transform transform;
@@ -48,6 +51,8 @@ public class FlyingSphere : MonoBehaviour
     private AudioSource audioSource;
     
     private Vector3? targetCenter;
+
+    private List<Transform> targetTransforms = new List<Transform>();
 
     public RadarHighlightLocation highlightLocation { get; set; }
     
@@ -62,6 +67,14 @@ public class FlyingSphere : MonoBehaviour
     {
         transform = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
+        
+        targetTransforms.Add(Camera.main.gameObject.transform);
+
+        if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
+            return;
+            
+        targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
+        targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
     }
     
     void Start()
@@ -81,13 +94,29 @@ public class FlyingSphere : MonoBehaviour
 
         Destroy(gameObject, delayToDespawn);
     }
-    
+
     void Update()
     {
         if (!canMove)
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
+
+        if (targetTransforms.Count == 0)
+            return;
+        
+        Transform targetTransform = targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
+        
+        Vector3 targetDir = targetTransform.position - transform.position;
+
+        if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
+            return;
+        
+        Vector3 newDir =
+            Vector3.RotateTowards(transform.forward, targetDir, 
+                angularSpeed * Time.deltaTime, 0.0f);
+
+        transform.rotation = Quaternion.LookRotation(newDir);
     }
 
     void OnTriggerEnter(Collider other)
@@ -99,14 +128,15 @@ public class FlyingSphere : MonoBehaviour
 
         if (otherController)
         {
-            OVRInput.Controller controllerType =
-                VRTK_DeviceFinder.IsControllerLeftHand(otherController)
-                    ? OVRInput.Controller.LTouch
-                    : OVRInput.Controller.RTouch;
-            
-            VibrationManager.instance.TriggerVibration(vibrationDuration,frequency,strength, controllerType);
-        }
+            bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
 
+            VRTK_ControllerReference controllerReference = isLeftHand
+                ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
+                : VRTK_DeviceFinder.GetControllerReferenceRightHand();
+            
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, grabAudio);
+        }
+        
         audioSource.PlayOneShot(grabAudio);
 
         canMove = false;
@@ -115,9 +145,10 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(0.01f, 0.6f)
-            .SetEase(Ease.OutQuart)
-            .OnComplete(() => Destroy(gameObject));
+        transform.DOScale(0.01f, 0.2f)
+            .SetEase(Ease.OutQuart);
+        
+        Destroy(gameObject, 0.6f);
 
         transform.DOLookAt(otherPosition - transform.position, 0.2f)
             .SetEase(Ease.OutQuart);
