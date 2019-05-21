@@ -14,7 +14,14 @@ public class RadarGrabbable : VRTK_FixedJointGrabAttach
         rb = rb ? rb : GetComponent<Rigidbody>();
         attachedColliders = GetComponentsInChildren<Collider>();
     }
-    
+
+    protected override void SetSnappedObjectPosition(GameObject obj)
+    {
+        base.SetSnappedObjectPosition(obj);
+
+        transform.parent = controllerAttachPoint.transform;
+    }
+
     public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)
     {
         if (!base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint))
@@ -24,13 +31,13 @@ public class RadarGrabbable : VRTK_FixedJointGrabAttach
 
         rb.useGravity = false;
         rb.detectCollisions = false;
+        rb.isKinematic = true;
         
         this.Delay(0.5f, () =>
         {
             foreach (Collider col in attachedColliders)
                 col.enabled = false;
         });
-
         return true;
     }
 
@@ -42,6 +49,7 @@ public class RadarGrabbable : VRTK_FixedJointGrabAttach
 
         rb.useGravity = true;
         rb.detectCollisions = true;
+        rb.isKinematic = false;
 
         foreach (Collider col in attachedColliders)
             col.enabled = true;
