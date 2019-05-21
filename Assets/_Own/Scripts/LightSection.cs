@@ -8,7 +8,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Assertions;
-using UnityEngine.Experimental.ParticleSystemJobs;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -50,8 +49,9 @@ public class LightSection : MonoBehaviour
     public bool isRevealed { get; private set; } = false;
     
     private ParticleSystem dotsParticleSystem;
+    private ParticleSystem.Particle[] particleBuffer = new ParticleSystem.Particle[1_000_000];
     private int numDots = 0;
-    
+
     void Awake()
     {
         if (isGlobal)
@@ -86,7 +86,7 @@ public class LightSection : MonoBehaviour
     {
         if (isRevealed || numDotsToReveal < 0)
             return;
-        
+
         if (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode))
         {
             Reveal();
@@ -108,7 +108,7 @@ public class LightSection : MonoBehaviour
         // Emit the particles
         dotsParticleSystem.Emit(numParticlesAdded);
 
-        // Read out into a buffer, set positions, Write back in
+        // Read out into a buffer, set positions, write back in
         var particleBuffer = new ParticleSystem.Particle[positions.Count];
         dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
         for (int i = 0; i < numParticlesAdded; ++i)
@@ -209,7 +209,33 @@ public class LightSection : MonoBehaviour
                 .Each(d => d.renderer.sharedMaterials = d.sharedMaterials);
         });
     }
+    
+    private void FadeOutDots()
+    {
+        Assert.IsTrue(dotsParticleSystem.particleCount <= particleBuffer.Length, $"The dots particle system has more than {particleBuffer.Length} particles, which is not supported.");
 
+        var random = new System.Random();
+        var ease = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(Ease.OutQuad);
+        
+        int numParticles = dotsParticleSystem.GetParticles(particleBuffer, particleBuffer.Length);
+        for (int i = 0; i < numParticles; ++i)
+        {
+            float t = ease(1.0f - (float)random.NextDouble(), 1.0f, 0.0f, 0.0f);
+            particleBuffer[i].startLifetime = particleBuffer[i].remainingLifetime = t * revealDuration;
+        }
+        
+        dotsParticleSystem.SetParticles(particleBuffer, numParticles);
+    }
+    
+    private void FadeInLights()
+    {
+        foreach (Light light in lights)
+        {
+            light.enabled = true;
+            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.OutQuad);
+        }
+    }
+    
     private Sequence FadeInMaterial(Material material)
     {
         var sequence = DOTween.Sequence();
@@ -244,37 +270,5 @@ public class LightSection : MonoBehaviour
         sequence.Append(tweenAlpha);
         
         return sequence;
-    }
-
-    private void FadeOutDots()
-    {
-        dotsParticleSystem.SetJob(new FadeOutParticlesJob {duration = revealDuration});
-        dotsParticleSystem.Play();
-    }
-    
-    private void FadeInLights()
-    {
-        foreach (Light light in lights)
-        {
-            light.enabled = true;
-            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.OutQuad);
-        }
-    }
-
-    struct FadeOutParticlesJob : IParticleSystemJob
-    {
-        [ReadOnly] public float duration;
-        
-        public void ProcessParticleSystem(ParticleSystemJobData jobData)
-        {
-            NativeArray<float> inverseStartLifetimes = jobData.inverseStartLifetimes;
-            var random = new System.Random();
-            var ease = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(Ease.OutQuad);
-            for (int i = 0; i < jobData.count; ++i)
-            {
-                float t = ease(1.0f - (float)random.NextDouble(), 1.0f, 0.0f, 0.0f);
-                inverseStartLifetimes[i] = 1.0f / (t * duration);
-            }
-        }
     }
 }

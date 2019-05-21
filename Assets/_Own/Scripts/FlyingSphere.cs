@@ -145,7 +145,7 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(0.01f, 0.2f)
+        transform.DOScale(0.0f, 0.2f)
             .SetEase(Ease.OutQuart);
         
         Destroy(gameObject, 0.6f);
