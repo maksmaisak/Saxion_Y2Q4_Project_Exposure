@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Jobs;
 using UnityEngine.Assertions;
+using UnityEngine.Experimental.ParticleSystemJobs;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -229,24 +232,12 @@ public class LightSection : MonoBehaviour
             ).SetTarget(material);
             
             sequence.Append(tweenAlpha);
-        };
-        
+        }
     }
 
-    private void FadeOutDots(float duration = 2.0f)
+    private void FadeOutDots()
     {
-        // TODO: preallocate this and keep it bundled with its particle system. Big performance hit allocating this.
-        var particleBuffer = new ParticleSystem.Particle[dotsParticleSystem.main.maxParticles];
-        int numAliveParticles = dotsParticleSystem.GetParticles(particleBuffer);
-
-        for (int i = 0; i < numAliveParticles; ++i)
-            particleBuffer[i].remainingLifetime = particleBuffer[i].startLifetime = Random.Range(0.0f, duration);
-
-        dotsParticleSystem.SetParticles(particleBuffer, numAliveParticles);
-      
-        dotsParticleSystem.GetParticles(particleBuffer, numAliveParticles);
-        Assert.IsTrue(particleBuffer.Take(numAliveParticles).All(p => p.remainingLifetime <= duration));
-
+        dotsParticleSystem.SetJob(new FadeOutParticlesJob {duration = revealDuration});
         dotsParticleSystem.Play();
     }
     
@@ -255,7 +246,24 @@ public class LightSection : MonoBehaviour
         foreach (Light light in lights)
         {
             light.enabled = true;
-            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.InQuad);
+            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.OutQuad);
+        }
+    }
+
+    struct FadeOutParticlesJob : IParticleSystemJob
+    {
+        [ReadOnly] public float duration;
+        
+        public void ProcessParticleSystem(ParticleSystemJobData jobData)
+        {
+            NativeArray<float> inverseStartLifetimes = jobData.inverseStartLifetimes;
+            var random = new System.Random();
+            var ease = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(Ease.OutQuad);
+            for (int i = 0; i < jobData.count; ++i)
+            {
+                float t = ease(1.0f - (float)random.NextDouble(), 1.0f, 0.0f, 0.0f);
+                inverseStartLifetimes[i] = 1.0f / (t * duration);
+            }
         }
     }
 }
