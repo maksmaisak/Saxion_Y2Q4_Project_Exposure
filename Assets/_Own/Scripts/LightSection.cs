@@ -84,7 +84,10 @@ public class LightSection : MonoBehaviour
 
     void Update()
     {
-        if (!isRevealed && (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode)))
+        if (isRevealed || numDotsToReveal < 0)
+            return;
+        
+        if (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode))
         {
             Reveal();
         }
