@@ -14,7 +14,9 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(ParticleSystem))]
 public class LightSection : MonoBehaviour
 {
-    private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
+    private static readonly int ColorId    = Shader.PropertyToID("_BaseColor");
+    private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
+    private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
 
     struct GameObjectMaterialData
     {
@@ -178,18 +180,50 @@ public class LightSection : MonoBehaviour
             data.renderer.sharedMaterials = data.sectionOnlyMaterials;
         }
 
-        foreach (var sectionMaterial in gameObjectMaterialData.SelectMany(d => d.sectionOnlyMaterials).Distinct())
-        {
-            if (!sectionMaterial.HasProperty(ColorPropertyId))
-                return;
+        var sectionMaterials = gameObjectMaterialData
+            .SelectMany(d => d.sectionOnlyMaterials)
+            .Where(m => m.HasProperty(ColorId))
+            .Distinct();
 
-            DOTween.ToAlpha(
-                () => sectionMaterial.GetColor(ColorPropertyId), 
-                color => sectionMaterial.SetColor(ColorPropertyId, color),
-                0.0f,
-                Random.Range(1.0f, 4.0f)
-            ).SetTarget(sectionMaterial).From();
+        foreach (var material in sectionMaterials)
+        {
+            var sequence = DOTween.Sequence();
+
+            float targetAlpha = 1.0f;
+            
+            if (material.HasProperty(SrcBlendId))
+            {
+                int oldBlend = material.GetInt(SrcBlendId);
+                int newBlend = (int)UnityEngine.Rendering.BlendMode.SrcAlpha;
+                if (oldBlend != newBlend)
+                {
+                    sequence.AppendCallback(() => material.SetInt(SrcBlendId, newBlend));
+                    sequence.OnComplete(() => material.SetInt(SrcBlendId, oldBlend));
+                }
+                else
+                {
+                    targetAlpha = material.GetColor(ColorId).a;
+                }
+            }
+
+            Color targetColor = material.GetColor(ColorId);
+            Debug.Log("Color was: " + targetColor);
+            targetColor.a = targetAlpha;
+            material.SetColor(ColorId, Color.clear);
+            var tweenAlpha = DOTween.To(
+                () => material.GetColor(ColorId),
+                color =>
+                {
+                    //Debug.Log("Set color: " + color);
+                    material.SetColor(ColorId, color);
+                },
+                targetColor,
+                4.0f
+            ).SetTarget(material);
+            
+            sequence.Append(tweenAlpha);
         };
+        
     }
 
     private void FadeOutDots(float duration = 2.0f)
