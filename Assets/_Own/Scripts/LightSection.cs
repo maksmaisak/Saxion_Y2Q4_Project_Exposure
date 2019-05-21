@@ -14,7 +14,6 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// A collection of objects that are dark and shown with dots, but may be lit up.
 /// </summary>
-[RequireComponent(typeof(ParticleSystem))]
 public class LightSection : MonoBehaviour
 {
     private static readonly int ColorId    = Shader.PropertyToID("_BaseColor");
@@ -27,9 +26,10 @@ public class LightSection : MonoBehaviour
         public Material[] sharedMaterials;
         public Material[] sectionOnlyMaterials; // Same as sharedMaterials, but only shared between objects in the same section.
     }
-    
-    [SerializeField] List<Light> lights = new List<Light>();
-    [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
+
+    [Header("General")]
+    [SerializeField] ParticleSystem dotsParticleSystemPrefab;
+    [Tooltip("A global section will contain all objects in the scene")]
     [SerializeField] bool isGlobal = false;
 
     [Header("Hiding settings")] 
@@ -40,6 +40,10 @@ public class LightSection : MonoBehaviour
     [SerializeField] int numDotsToReveal = 10000;
     [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
     [SerializeField] [Range(0.0f, 10.0f)] float revealDuration = 4.0f;
+    
+    [Header("Debug")]
+    [SerializeField] List<Light> lights = new List<Light>();
+    [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
 
     private readonly List<GameObjectMaterialData> gameObjectMaterialData = new List<GameObjectMaterialData>();
 
@@ -70,7 +74,8 @@ public class LightSection : MonoBehaviour
     
     void Start()
     {
-        dotsParticleSystem = GetComponentInChildren<ParticleSystem>();
+        Assert.IsNotNull(dotsParticleSystemPrefab);
+        dotsParticleSystem = Instantiate(dotsParticleSystemPrefab, transform, worldPositionStays: true);
         Assert.IsNotNull(dotsParticleSystem);
         
         HideRenderers();
@@ -125,9 +130,7 @@ public class LightSection : MonoBehaviour
         isRevealed = true;
 
         FadeInRenderers();
-
         FadeOutDots();
-
         FadeInLights();
     }
     
