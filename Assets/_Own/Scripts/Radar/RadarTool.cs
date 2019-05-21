@@ -73,9 +73,9 @@ public class RadarTool : MonoBehaviour
     }
 
     void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.R))
-          //  SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    { 
+        if (Input.GetKeyDown(KeyCode.R)) 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
         if (Input.GetKeyDown(KeyCode.Space)) 
             Probe();
