@@ -31,6 +31,7 @@ public class FlyingSphere : MonoBehaviour
 
     [Header("Other Settings")]
     [SerializeField] AudioClip grabAudio;
+    [SerializeField] AudioClip movingSound;
     [SerializeField] AudioClip spawnAudio;
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] float targetSphereRadius = 0.25f;
@@ -73,6 +74,11 @@ public class FlyingSphere : MonoBehaviour
         RandomizeSpeedAndDirection();
 
         audioSource.PlayOneShot(spawnAudio);
+
+        audioSource.clip = movingSound;
+        audioSource.loop = true;
+        audioSource.Play();
+
         Destroy(gameObject, delayToDespawn);
     }
     
