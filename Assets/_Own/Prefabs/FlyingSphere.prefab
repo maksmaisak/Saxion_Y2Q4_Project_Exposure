@@ -105,8 +105,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -150,7 +150,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -235,7 +235,8 @@ MonoBehaviour:
   vibrationDuration: 40
   frequency: 2
   strength: 100
-  grabAudio: {fileID: 8300000, guid: eb233f207486aa943b93cb6c4ac22a91, type: 3}
+  grabAudio: {fileID: 8300000, guid: 0c44f90d51d69df439aef30e606bf51f, type: 3}
+  spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
   delayToDespawn: 25
   targetSphereRadius: 0.5
   slowdownRadius: 4
