@@ -4,6 +4,12 @@ using System.Linq;
 
 public static class EnumerableExtensions
 {
+    public static void Each<T>(this IEnumerable<T> items, Action<T> action)
+    {
+        foreach (T item in items)
+            action(item);
+    }
+    
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
     {
         return source.Shuffle(new Random());
