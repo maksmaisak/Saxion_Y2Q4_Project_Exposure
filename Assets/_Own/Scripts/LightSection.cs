@@ -36,6 +36,7 @@ public class LightSection : MonoBehaviour
     [Header("Reveal settings")] 
     [SerializeField] int numDotsToReveal = 10000;
     [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
+    [SerializeField] [Range(0.0f, 10.0f)] float revealDuration = 4.0f;
 
     private readonly List<GameObjectMaterialData> gameObjectMaterialData = new List<GameObjectMaterialData>();
 
@@ -69,7 +70,8 @@ public class LightSection : MonoBehaviour
         dotsParticleSystem = GetComponentInChildren<ParticleSystem>();
         Assert.IsNotNull(dotsParticleSystem);
         
-        HideAllRenderers();
+        HideRenderers();
+        HideLights();
     }
 
     void Update()
@@ -109,7 +111,7 @@ public class LightSection : MonoBehaviour
             dotsParticleSystem.Simulate(0.01f, false, false, false);
         }
     }
-    
+
     [ContextMenu("Reveal")]
     public void Reveal()
     {
@@ -126,7 +128,7 @@ public class LightSection : MonoBehaviour
         FadeInLights();
     }
     
-    private void HideAllRenderers()
+    private void HideRenderers()
     {
         Assert.IsNotNull(hiddenMaterial);
         
@@ -168,6 +170,11 @@ public class LightSection : MonoBehaviour
         foreach (var data in gameObjectMaterialData)
             for (int i = 0; i < data.sharedMaterials.Length; ++i)
                 data.sectionOnlyMaterials[i] = GetOrAddSectionMaterial(data.sharedMaterials[i]);
+    }
+    
+    private void HideLights()
+    {
+        lights.ForEach(l => l.enabled = false);
     }
     
     private void FadeInRenderers()
@@ -218,7 +225,7 @@ public class LightSection : MonoBehaviour
                     material.SetColor(ColorId, color);
                 },
                 targetColor,
-                4.0f
+                revealDuration
             ).SetTarget(material);
             
             sequence.Append(tweenAlpha);
@@ -248,14 +255,7 @@ public class LightSection : MonoBehaviour
         foreach (Light light in lights)
         {
             light.enabled = true;
-            light.DOIntensity(0.0f, 2.0f).From().SetEase(Ease.InQuad);
+            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.InQuad);
         }
-
-        DOTween.To(
-            () => RenderSettings.ambientLight,
-            color => RenderSettings.ambientLight = color,
-            Color.black,
-            2.0f
-        ).From();
     }
 }
