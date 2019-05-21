@@ -218,8 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularSpeed: 1.37
-  attractionRadius: 1.08
+  angularSpeed: 1
+  attractionRadius: 1
   randomMinSpeed: 2.4
   randomMaxSpeed: 4.5
   targetSphereRadius: 0.5
