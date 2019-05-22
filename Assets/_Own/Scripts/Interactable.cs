@@ -5,7 +5,15 @@ using UnityEngine.Events;
 
 public class Interactable : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    [SerializeField] private UnityEvent OnReveal;
-    
-    public void On(OnRevealEvent reveal) => OnReveal?.Invoke();
+    [SerializeField] private UnityEvent onReveal;
+
+    public void On(OnRevealEvent reveal)
+    {
+        // If there is nothing hooked up to this event then there is no reason to continue
+        if (onReveal == null)
+            return;
+        
+        if(reveal.lightSection.GetGameObjects().Contains(gameObject))
+            onReveal.Invoke();
+    }
 }
