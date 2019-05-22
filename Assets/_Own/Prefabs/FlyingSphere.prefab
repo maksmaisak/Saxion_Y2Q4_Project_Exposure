@@ -239,7 +239,7 @@ MonoBehaviour:
   vibrationDuration: 40
   frequency: 2
   strength: 100
-  grabAudio: {fileID: 8300000, guid: 0c44f90d51d69df439aef30e606bf51f, type: 3}
+  grabAudio: {fileID: 8300000, guid: 8d0eb3dedb4c8b04d8ebf40fcdf720e0, type: 3}
   movingSound: {fileID: 0}
   spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
   delayToDespawn: 25
