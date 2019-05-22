@@ -135,10 +135,11 @@ public class FlyingSphere : MonoBehaviour
                 ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
                 : VRTK_DeviceFinder.GetControllerReferenceRightHand();
 
-            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, grabAudio);
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, 0.2f);
         }
 
-        audioSource.PlayOneShot(grabAudio);
+        audioSource.clip = grabAudio;
+        audioSource.Play();
         
         const float Duration = 0.2f;
         
@@ -157,6 +158,7 @@ public class FlyingSphere : MonoBehaviour
         
         DotsManager.instance.Highlight(highlightLocation);
     }
+
 
     void RandomizeSpeedAndDirection()
     {
