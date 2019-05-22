@@ -46,7 +46,7 @@ public class FlyingSphere : MonoBehaviour
     private float speed;
 
     private bool didStart;
-    private bool canMove;
+    private bool isCaught;
 
     private AudioSource audioSource;
     
@@ -80,7 +80,6 @@ public class FlyingSphere : MonoBehaviour
     void Start()
     {
         didStart = true;
-        canMove = true;
 
         RandomizeColor();
         RandomizeScale();
@@ -97,7 +96,7 @@ public class FlyingSphere : MonoBehaviour
 
     void Update()
     {
-        if (!canMove)
+        if (isCaught)
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
@@ -121,8 +120,10 @@ public class FlyingSphere : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
+        if (isCaught || !handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
             return;
+
+        isCaught = true;
 
         GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
 
@@ -138,19 +139,18 @@ public class FlyingSphere : MonoBehaviour
         }
 
         audioSource.PlayOneShot(grabAudio);
-
-        canMove = false;
-
-        Vector3 otherPosition = other.transform.position;
-
+        
+        const float Duration = 0.2f;
+        
         transform.DOKill();
 
-        transform.DOScale(0.0f, 0.2f)
+        transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
         
-        Destroy(gameObject, 0.6f);
+        Destroy(gameObject, Mathf.Max(grabAudio.length, Duration));
 
-        transform.DOLookAt(otherPosition - transform.position, 0.2f)
+        Vector3 otherPosition = other.transform.position;
+        transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
         transform.parent = other.transform;
