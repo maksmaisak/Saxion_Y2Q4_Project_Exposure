@@ -46,7 +46,7 @@ public class FlyingSphere : MonoBehaviour
     private float speed;
 
     private bool didStart;
-    private bool canMove;
+    private bool isCaught;
 
     private AudioSource audioSource;
     
@@ -80,7 +80,6 @@ public class FlyingSphere : MonoBehaviour
     void Start()
     {
         didStart = true;
-        canMove = true;
 
         RandomizeColor();
         RandomizeScale();
@@ -97,7 +96,7 @@ public class FlyingSphere : MonoBehaviour
 
     void Update()
     {
-        if (!canMove)
+        if (isCaught)
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
@@ -121,8 +120,10 @@ public class FlyingSphere : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
+        if (isCaught || !handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
             return;
+
+        isCaught = true;
 
         GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
 
@@ -138,9 +139,7 @@ public class FlyingSphere : MonoBehaviour
         }
 
         audioSource.PlayOneShot(grabAudio);
-
-        canMove = false;
-
+        
         const float Duration = 0.2f;
         
         transform.DOKill();
