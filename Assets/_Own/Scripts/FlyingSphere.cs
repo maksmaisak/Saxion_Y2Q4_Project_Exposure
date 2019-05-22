@@ -135,7 +135,9 @@ public class FlyingSphere : MonoBehaviour
                 ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
                 : VRTK_DeviceFinder.GetControllerReferenceRightHand();
 
-            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, 0.2f);
+            float pulseInterval = 0.02f;
+
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval);
         }
 
         audioSource.clip = grabAudio;
@@ -147,8 +149,8 @@ public class FlyingSphere : MonoBehaviour
 
         transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-        
-        Destroy(gameObject, Mathf.Max(grabAudio.length, Duration));
+
+        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
 
         Vector3 otherPosition = other.transform.position;
         transform.DOLookAt(otherPosition - transform.position, Duration)
