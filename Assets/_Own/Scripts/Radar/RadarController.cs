@@ -28,15 +28,15 @@ public class RadarController : VRTK_InteractableObject
 
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
     {
-        audioSource.clip = shootClip;
-        audioSource.volume = volume;
-        audioSource.Play();
-
         base.StartUsing(currentUsingObject);
 
         if (!canShoot)
             return;
-        
+     
+        audioSource.clip = shootClip;
+        audioSource.volume = volume;
+        audioSource.Play();
+
         canShoot = false;
         
         radarTool.Probe();
