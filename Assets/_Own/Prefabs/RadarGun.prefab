@@ -305,9 +305,11 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
   radarTool: {fileID: 8224539706240099016}
-  fireCooldown: 0.8
-  shootClip: {fileID: 0}
-  volume: 1
+  shootClip: {fileID: 8300000, guid: 9717569c2721084468ad1dc28c5d599f, type: 3}
+  chargeUpClip: {fileID: 8300000, guid: 20cdf96a39634b94c80d9c7fc5e3a065, type: 3}
+  interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
+  shootVolume: 0.8
+  chargeUpVolume: 0.6
 --- !u!114 &1299959288381345908
 MonoBehaviour:
   m_ObjectHideFlags: 0

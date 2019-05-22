@@ -2,25 +2,32 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Assertions;
 using VRTK;
 
 public class RadarController : VRTK_InteractableObject
 {
     [Header("Radar Controller")]
     [SerializeField] RadarTool radarTool;
-    [SerializeField] float fireCooldown = 1.0f;
 
-    AudioSource audioSource;
-
-    [Header("Sound Settings")]
+    [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
-    [SerializeField] float volume = 1.0f;
+    [SerializeField] AudioClip chargeUpClip;
+    [SerializeField] AudioClip interruptClip;
+    [SerializeField] float shootVolume = 0.8f;
+    [SerializeField] float chargeUpVolume = 0.6f;
     
-    private bool canShoot = true;
+    private AudioSource audioSource;
+
+    private float lastChargeUpStartedTime;
 
     IEnumerator Start()
     {
         audioSource = GetComponent<AudioSource>();
+        
+        Assert.IsNotNull(shootClip);
+        Assert.IsNotNull(chargeUpClip);
+        Assert.IsNotNull(interruptClip);
 
         yield return new WaitUntil(() =>
                 radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
@@ -30,18 +37,37 @@ public class RadarController : VRTK_InteractableObject
     {
         base.StartUsing(currentUsingObject);
 
-        if (!canShoot)
-            return;
-     
-        audioSource.clip = shootClip;
-        audioSource.volume = volume;
+        lastChargeUpStartedTime = Time.time;
+
+        audioSource.clip = chargeUpClip;
+        audioSource.volume = chargeUpVolume;
         audioSource.Play();
-
-        canShoot = false;
         
-        radarTool.Probe();
+        // Maybe use DOTween
+        this.Delay(chargeUpClip.length - 0.2f, () =>
+        {
+            audioSource.Stop();
+            audioSource.clip = shootClip;
+            audioSource.volume = shootVolume;
+            audioSource.Play(); 
+            
+            radarTool.Probe();
+        });
+    }
 
-        this.Delay(fireCooldown, () => canShoot = true);
+    public override void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
+    {
+        base.StopUsing(previousUsingObject, resetUsingObjectState);
+
+        if (Time.time - lastChargeUpStartedTime < chargeUpClip.length - 0.2f)
+        {
+            StopAllCoroutines();
+            
+            audioSource.Stop();
+            audioSource.clip = interruptClip;
+            audioSource.volume = chargeUpVolume;
+            audioSource.Play();
+        }
     }
 }
 
