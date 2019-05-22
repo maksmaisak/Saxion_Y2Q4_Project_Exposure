@@ -13,8 +13,6 @@ public class FlyingSphere : MonoBehaviour
     [Header("Movement Settings")] 
     [SerializeField] float angularSpeed = 1.0f;
     [SerializeField] float attractionRadius = 1.5f;
-    [SerializeField] float randomMinSpeed = 0.8f;
-    [SerializeField] float randomMaxSpeed = 2.5f;
     [SerializeField] float targetSphereRadius = 0.25f;
     [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
     [SerializeField] float slowdownRadius = 4.0f;
@@ -43,7 +41,7 @@ public class FlyingSphere : MonoBehaviour
     [SerializeField] LayerMask handsCollisionLayer;
 
     private new Transform transform;
-    private float speed;
+    private float speed = 1.0f;
 
     private bool didStart;
     private bool isCaught;
@@ -52,15 +50,17 @@ public class FlyingSphere : MonoBehaviour
     
     private Vector3? targetCenter;
 
-    private List<Transform> targetTransforms = new List<Transform>();
+    private readonly List<Transform> targetTransforms = new List<Transform>();
 
     public RadarHighlightLocation highlightLocation { get; set; }
+
+    private static float lastTimeWasCaught;
     
-    public void SetTarget(Vector3 position)
+    public void Initialize(Vector3 target, float movementSpeed)
     {
-        Assert.IsFalse(didStart, "Can't SetTarget of a wavesphere after it started moving.");
-        
-        targetCenter = position;
+        Assert.IsFalse(didStart, "Can't Initialize a wavesphere after it started moving.");
+        targetCenter = target;
+        speed = movementSpeed;
     }
 
     void Awake()
@@ -124,6 +124,8 @@ public class FlyingSphere : MonoBehaviour
             return;
 
         isCaught = true;
+        //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
+        lastTimeWasCaught = Time.time;
 
         GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
 
@@ -161,10 +163,8 @@ public class FlyingSphere : MonoBehaviour
         DotsManager.instance.Highlight(highlightLocation);
     }
 
-
     void RandomizeSpeedAndDirection()
     {
-        speed = Random.Range(randomMinSpeed, randomMaxSpeed);
         float targetPositionRandomizationRadius = targetSphereRadius;
 
         Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;

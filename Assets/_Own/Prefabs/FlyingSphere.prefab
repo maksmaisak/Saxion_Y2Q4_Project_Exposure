@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   angularSpeed: 1
   attractionRadius: 1
-  randomMinSpeed: 2.4
+  randomMinSpeed: 2.5
   randomMaxSpeed: 4.5
   targetSphereRadius: 0.5
   slowdownRadius: 4

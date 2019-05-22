@@ -305,6 +305,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
   radarTool: {fileID: 8224539706240099016}
+  chargeUpDuration: 1.6
   shootClip: {fileID: 8300000, guid: 9717569c2721084468ad1dc28c5d599f, type: 3}
   chargeUpClip: {fileID: 8300000, guid: 20cdf96a39634b94c80d9c7fc5e3a065, type: 3}
   interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
@@ -349,13 +350,15 @@ MonoBehaviour:
   wavePulseSpeed: 10
   wavePulseMaxRange: 100
   sphereCastRadius: 0.05
-  maxNumWavespheresPerPulse: 15
+  minDistanceBetweenSpawnedWavespheres: 2
+  maxNumWavespheresPerSecond: 2
+  wavesphereSpeedMin: 2.5
+  wavesphereSpeedMax: 4.5
   wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
     type: 3}
   wavesphereTarget: {fileID: 0}
-  minDistanceBetweenSpawnedWavespheres: 2
   baseDotConeAngle: 40
-  dotConeAngleFalloff: 0.01
+  dotConeAngleFalloff: 0.04
   dotConeAngleFalloffPower: 1
   maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 0

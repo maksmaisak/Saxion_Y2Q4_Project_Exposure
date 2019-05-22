@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
+using VRTK;
 using Random = UnityEngine.Random;
 
 public class RadarTool : MonoBehaviour
@@ -22,12 +23,14 @@ public class RadarTool : MonoBehaviour
     [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
     [SerializeField] float sphereCastRadius = 0.2f;
-    [SerializeField] int maxNumWavespheresPerPulse = 10;
     
     [Header("Wavesphere settings")]
+    [SerializeField] [Range(0.2f, 5.0f)]  float minDistanceBetweenSpawnedWavespheres = 2.0f;
+    [SerializeField] [Range(0.2f, 10.0f)] float maxNumWavespheresPerSecond = 2.0f;
+    [SerializeField] float wavesphereSpeedMin = 2.5f;
+    [SerializeField] float wavesphereSpeedMax = 4.5f;
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
-    [SerializeField] float minDistanceBetweenSpawnedWavespheres = 2.0f;
     [SerializeField] [Range(0.0f, 360.0f)] float baseDotConeAngle = 20.0f;
     [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
     [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
@@ -124,50 +127,78 @@ public class RadarTool : MonoBehaviour
         }
     }
 
+    private struct CandidateLocation
+    {
+        public int hitIndex;
+        public Vector3 point;
+        public float speed;
+        public float timeToArrive;
+        public ulong numDots;
+    }
+
     private void HandleSpherecastResults()
     {
         // The candidates are sorted into bands with similar distance.
         // Candidates in the same band preserve the initial order.
         const float DistanceBandWidth = 2.0f;
-
-        (RaycastHit hit, int index)[] candidateHits = hits
-            .Select((hit, index) => (hit, index))
-            .Where(tuple => tuple.hit.collider)
-            .OrderBy(tuple => Mathf.RoundToInt(tuple.hit.distance / DistanceBandWidth))
-            .ToArray();
+        const ulong NumDotsBandWidth = 20;
         
-        if (candidateHits.Length <= 0) 
+        DotsRegistry dotsRegistry = DotsManager.instance.registry;
+        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
+
+        CandidateLocation[] candidateLocations = hits
+            .Select((hit, i) => (hit, i))
+            .Where(tuple => tuple.hit.collider)
+            .Select(tuple =>
+            {
+                float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
+                return new CandidateLocation
+                {
+                    hitIndex = tuple.i,
+                    point = tuple.hit.point,
+                    speed = speed,
+                    timeToArrive = tuple.hit.distance / speed,
+                    numDots = GetRoundedNumDotsAround(tuple.hit.point),
+                };
+            })
+            .OrderBy(l => Mathf.RoundToInt(hits[l.hitIndex].distance / DistanceBandWidth))
+            .ToArray();
+
+        if (candidateLocations.Length <= 0) 
             return;
 
-        var usedHitIndices = new List<int>(maxNumWavespheresPerPulse);
-
-        bool IsTooCloseToAlreadyUsedLocations(Vector3 point)
-        {
-            float sqrMinDistance = minDistanceBetweenSpawnedWavespheres * minDistanceBetweenSpawnedWavespheres;
-            return usedHitIndices.Any(i => Vector3.SqrMagnitude(hits[i].point - point) < sqrMinDistance);
-        }
-
-        DotsRegistry dotsRegistry = DotsManager.instance.registry;
-        const ulong NumDotsBandWidth = 20;
-        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
+        var usedCandidateIndices = new List<int>();
         
-        while (usedHitIndices.Count < candidateHits.Length && usedHitIndices.Count < maxNumWavespheresPerPulse)
+        float minTimeDistanceBetweenWavespheres = 1.0f / maxNumWavespheresPerSecond;
+        float sqrMinDistance = minDistanceBetweenSpawnedWavespheres * minDistanceBetweenSpawnedWavespheres;
+        bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
         {
-            int index = candidateHits
-                .Where(tuple => !usedHitIndices.Contains(tuple.index) && !IsTooCloseToAlreadyUsedLocations(tuple.hit.point))
-                .DefaultIfEmpty((hit: new RaycastHit(), index: -1))
-                .ArgMin(tuple => GetRoundedNumDotsAround(tuple.hit.point)).index;
+            Vector3 point = candidateLocations[candidateIndex].point;
+            float timeOfArrival = candidateLocations[candidateIndex].timeToArrive;
+            return 
+                usedCandidateIndices.Any(i => Vector3.SqrMagnitude(candidateLocations[i].point - point) < sqrMinDistance) || 
+                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeToArrive - timeOfArrival) < minTimeDistanceBetweenWavespheres);
+        }
+        
+        while (usedCandidateIndices.Count < candidateLocations.Length)
+        {
+            int candidateIndex = candidateLocations
+                .Select((l, i) => i)
+                .Where(i => !usedCandidateIndices.Contains(i) && !IsTooCloseToAlreadyUsedLocations(i))
+                .DefaultIfEmpty(-1)
+                .ArgMin(i => i == -1 ? ulong.MaxValue : candidateLocations[i].numDots);
 
-            if (index == -1)
+            if (candidateIndex == -1)
                 break;
 
-            usedHitIndices.Add(index);
+            usedCandidateIndices.Add(candidateIndex);
         }
 
-        foreach (int i in usedHitIndices)
+        foreach (int candidateIndex in usedCandidateIndices)
         {
-            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            ref var location = ref candidateLocations[candidateIndex];
+            int i = location.hitIndex;
+            SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed);
         }
     }
 
@@ -188,8 +219,10 @@ public class RadarTool : MonoBehaviour
         material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleVertical   * 0.5f));
     }
 
-    private void HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
+    private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed)
     {
+        float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hit.distance + 1.0f, dotConeAngleFalloffPower);
+
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
             originalRay = originalRay,
@@ -211,7 +244,7 @@ public class RadarTool : MonoBehaviour
             wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
             
             FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.SetTarget(wavesphereTarget.position);
+            flyingSphere.Initialize(wavesphereTarget.position, speed);
             flyingSphere.highlightLocation = highlightLocation;
         });
     }
