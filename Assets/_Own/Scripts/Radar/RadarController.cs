@@ -10,6 +10,8 @@ public class RadarController : VRTK_InteractableObject
     [Header("Radar Controller")]
     [SerializeField] RadarTool radarTool;
 
+    [SerializeField] float chargeUpDuration = 1.6f;
+    
     [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
     [SerializeField] AudioClip chargeUpClip;
@@ -43,8 +45,8 @@ public class RadarController : VRTK_InteractableObject
         audioSource.volume = chargeUpVolume;
         audioSource.Play();
         
-        // Maybe use DOTween
-        this.Delay(chargeUpClip.length - 0.2f, () =>
+        // Maybe use DOTween and instead of chargeUpDuration use clip.length (however this is easier to change)
+        this.Delay(chargeUpDuration, () =>
         {
             audioSource.Stop();
             audioSource.clip = shootClip;
@@ -59,7 +61,7 @@ public class RadarController : VRTK_InteractableObject
     {
         base.StopUsing(previousUsingObject, resetUsingObjectState);
 
-        if (Time.time - lastChargeUpStartedTime < chargeUpClip.length - 0.2f)
+        if (Time.time - lastChargeUpStartedTime < chargeUpDuration)
         {
             StopAllCoroutines();
             
