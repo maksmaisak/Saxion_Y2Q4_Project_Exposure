@@ -20,17 +20,30 @@ ScriptedImporter:
     outputNames: baseColor,normal,metallic,ambientOcclusion,emissive
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _MAINTEX _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
+      shaderKeywords: _EMISSION _MAINTEX _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
         _OCCLUSIONMAP
-      lightmapFlags: 4
+      lightmapFlags: 2
       texEnvs:
       - name: _BaseMap
-        texture: {instanceID: 0}
+        texture: {fileID: 3531699930832850883, guid: 842eea074cf976448b17d166aff3e567,
+          type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _BumpMap
         texture: {fileID: -4428681996180148168, guid: 842eea074cf976448b17d166aff3e567,
           type: 3}
+        scale: {x: 1, y: 1}
+        offset: {x: 0, y: 0}
+      - name: _DetailAlbedoMap
+        texture: {instanceID: 0}
+        scale: {x: 1, y: 1}
+        offset: {x: 0, y: 0}
+      - name: _DetailMask
+        texture: {instanceID: 0}
+        scale: {x: 1, y: 1}
+        offset: {x: 0, y: 0}
+      - name: _DetailNormalMap
+        texture: {instanceID: 0}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _EmissionMap
@@ -53,6 +66,10 @@ ScriptedImporter:
           type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
+      - name: _ParallaxMap
+        texture: {instanceID: 0}
+        scale: {x: 1, y: 1}
+        offset: {x: 0, y: 0}
       - name: _SpecGlossMap
         texture: {instanceID: 0}
         scale: {x: 1, y: 1}
@@ -68,6 +85,8 @@ ScriptedImporter:
         float: 2
       - name: _Cutoff
         float: 0.5
+      - name: _DetailNormalMapScale
+        float: 1
       - name: _DstBlend
         float: 0
       - name: _EnvironmentReflections
@@ -80,8 +99,12 @@ ScriptedImporter:
         float: 1
       - name: _Metallic
         float: 0
+      - name: _Mode
+        float: 0
       - name: _OcclusionStrength
         float: 1
+      - name: _Parallax
+        float: 0.02
       - name: _QueueOffset
         float: 0
       - name: _ReceiveShadows
@@ -96,6 +119,8 @@ ScriptedImporter:
         float: 1
       - name: _Surface
         float: 0
+      - name: _UVSec
+        float: 0
       - name: _WorkflowMode
         float: 1
       - name: _ZWrite
@@ -106,7 +131,7 @@ ScriptedImporter:
       - name: _Color
         color: {r: 1, g: 1, b: 1, a: 1}
       - name: _EmissionColor
-        color: {r: 0, g: 0, b: 0, a: 1}
+        color: {r: 1, g: 1, b: 1, a: 1}
       - name: _SpecColor
         color: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     texturePackingList:
