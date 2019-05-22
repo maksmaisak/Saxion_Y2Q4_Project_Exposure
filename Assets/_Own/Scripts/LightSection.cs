@@ -19,11 +19,17 @@ public class LightSection : MonoBehaviour
     private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
     private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
 
-    struct GameObjectMaterialData
+    struct RendererData
     {
         public Renderer renderer;
         public Material[] sharedMaterials;
         public Material[] sectionOnlyMaterials; // Same as sharedMaterials, but only shared between objects in the same section.
+    }
+    
+    struct GameObjectSavedData
+    {
+        public RendererData[] renderers;
+        public ParticleSystem[] particleSystems;
     }
 
     [Header("General")]
@@ -44,41 +50,47 @@ public class LightSection : MonoBehaviour
     [SerializeField] List<Light> lights = new List<Light>();
     [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
 
-    private readonly List<GameObjectMaterialData> gameObjectMaterialData = new List<GameObjectMaterialData>();
+    private readonly List<GameObjectSavedData> gameObjectData = new List<GameObjectSavedData>();
 
     public bool isRevealed { get; private set; } = false;
     
     private ParticleSystem dotsParticleSystem;
-    private ParticleSystem.Particle[] particleBuffer = new ParticleSystem.Particle[1_000_000];
+    private readonly ParticleSystem.Particle[] particleBuffer = new ParticleSystem.Particle[1_000_000];
     private int numDots = 0;
-
-    void Awake()
-    {
-        if (isGlobal)
-        {
-            lights = new List<Light>(FindObjectsOfType<Light>());
-            gameObjects = FindObjectsOfType<Renderer>()
-                .Select(r => r.gameObject)
-                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer))
-                .ToList();
-        }
-        else
-        {
-            lights = GetComponentsInChildren<Light>().ToList();
-            gameObjects = GetComponentsInChildren<Renderer>()
-                .Select(r => r.gameObject)
-                .Where(go => !go.GetComponent<ParticleSystem>() && !exceptionLayer.ContainsLayer(go.layer))
-                .ToList();
-        }
-    }
     
-    void Start()
+    void Awake()
     {
         Assert.IsNotNull(dotsParticleSystemPrefab);
         dotsParticleSystem = Instantiate(dotsParticleSystemPrefab, transform, worldPositionStays: true);
         Assert.IsNotNull(dotsParticleSystem);
+
+        IEnumerable<GameObject> withRenderer;
+        IEnumerable<GameObject> withParticleSystem;
         
-        HideRenderers();
+        if (isGlobal)
+        {
+            lights = FindObjectsOfType<Light>().ToList();
+
+            withRenderer       = FindObjectsOfType<Renderer>().Select(r => r.gameObject);
+            withParticleSystem = FindObjectsOfType<ParticleSystem>().Select(r => r.gameObject);
+        }
+        else
+        {
+            lights = GetComponentsInChildren<Light>().ToList();
+
+            withRenderer       = GetComponentsInChildren<Renderer>().Select(r => r.gameObject);
+            withParticleSystem = GetComponentsInChildren<ParticleSystem>().Select(r => r.gameObject);
+        }
+
+        gameObjects = Enumerable.Union(withRenderer, withParticleSystem)
+            .Distinct()
+            .Where(go => go != dotsParticleSystem.gameObject && !exceptionLayer.ContainsLayer(go.layer))
+            .ToList();
+    }
+    
+    void Start()
+    {
+        HideGameObjects();
         HideLights();
     }
 
@@ -88,9 +100,7 @@ public class LightSection : MonoBehaviour
             return;
 
         if (numDots >= numDotsToReveal || Input.GetKeyDown(fadeInKeyCode))
-        {
             Reveal();
-        }
     }
 
     public List<GameObject> GetGameObjects() => gameObjects;
@@ -132,41 +142,55 @@ public class LightSection : MonoBehaviour
         Debug.Log("Revealing LightSection: " + this);
         isRevealed = true;
 
-        FadeInRenderers();
-        FadeOutDots();
-        FadeInLights();
+        RevealGameObjects();
+        HideDots();
+        RevealLights();
     }
     
-    private void HideRenderers()
+    private void HideGameObjects()
     {
         Assert.IsNotNull(hiddenMaterial);
         
         gameObjects.RemoveAll(go => !go);
-        foreach (GameObject go in gameObjects)
-        {
-            var renderer = go.GetComponent<Renderer>();
-            if (!renderer)
-                continue;
-
-            Material[] rendererSharedMaterials = renderer.sharedMaterials;
+        gameObjectData.AddRange(gameObjects.Select(GetSaveData));
+        PreventMaterialSharingBetweenSectionsInSavedData();
+    }
+    
+    private GameObjectSavedData GetSaveData(GameObject go) 
+    {
+        var data = new GameObjectSavedData();
             
-            gameObjectMaterialData.Add(new GameObjectMaterialData 
-            {
-                renderer = renderer,
+        data.renderers = go.GetComponents<Renderer>().Select(r =>
+        {
+            Material[] rendererSharedMaterials = r.sharedMaterials;
+
+            r.sharedMaterials = Enumerable.Repeat(hiddenMaterial, rendererSharedMaterials.Length).ToArray();
+
+            return new RendererData {
+                renderer = r,
                 sharedMaterials = (Material[])rendererSharedMaterials.Clone(),
                 sectionOnlyMaterials = new Material[rendererSharedMaterials.Length]
-            });
+            };
+        }).ToArray();
 
-            for (int i = 0; i < renderer.sharedMaterials.Length; ++i)
-                rendererSharedMaterials[i] = hiddenMaterial;
+        data.particleSystems = go.GetComponents<ParticleSystem>().Select(ps =>
+        {
+            ps.Stop();
+            return ps;
+        }).ToArray();
 
-            renderer.sharedMaterials = rendererSharedMaterials;
-        }
-        
-        // Ensure that different sections have different material instances.
+        return data;
+    }
+
+    /// Ensures that different sections have different material instances.
+    private void PreventMaterialSharingBetweenSectionsInSavedData()
+    {
         var materialToSectionMaterial = new Dictionary<Material, Material>();
         Material GetOrAddSectionMaterial(Material material)
         {
+            if (!material)
+                return null;
+            
             bool wasPresent = materialToSectionMaterial.TryGetValue(material, out Material sectionMaterial);
             if (wasPresent) 
                 return sectionMaterial;
@@ -176,41 +200,49 @@ public class LightSection : MonoBehaviour
             return sectionMaterial;
         }
         
-        foreach (var data in gameObjectMaterialData)
-            for (int i = 0; i < data.sharedMaterials.Length; ++i)
-                data.sectionOnlyMaterials[i] = GetOrAddSectionMaterial(data.sharedMaterials[i]);
+        foreach (RendererData rendererData in gameObjectData.SelectMany(d => d.renderers))
+            for (int i = 0; i < rendererData.sharedMaterials.Length; ++i)
+                rendererData.sectionOnlyMaterials[i] = GetOrAddSectionMaterial(rendererData.sharedMaterials[i]);
     }
-    
+
     private void HideLights()
     {
         lights.ForEach(l => l.enabled = false);
     }
     
-    private void FadeInRenderers()
+    private void RevealGameObjects()
     {
         // Switch to section-wide shared materials for the duration of the tweens.
-        gameObjectMaterialData
+        gameObjectData
+            .SelectMany(d => d.renderers)
             .Where(d => d.renderer)
             .Each(d => d.renderer.sharedMaterials = d.sectionOnlyMaterials);
+
+        foreach (ParticleSystem particleSystem in gameObjectData.SelectMany(d => d.particleSystems).Where(p => p && !p.isPlaying))
+            particleSystem.Play();
         
         // Fade in the section-wide materials
         var sectionSequence = DOTween.Sequence();
-        gameObjectMaterialData
+        gameObjectData
+            .SelectMany(d => d.renderers)
             .SelectMany(d => d.sectionOnlyMaterials)
-            .Where(m => m.HasProperty(ColorId))
+            .Where(m => m && m.HasProperty(ColorId))
             .Distinct()
             .Each(material => sectionSequence.Join(FadeInMaterial(material)));
 
         // Switch to globally shared materials again once done tweening
         sectionSequence.OnComplete(() =>
         {
-            gameObjectMaterialData
+            gameObjectData
+                .SelectMany(d => d.renderers)
                 .Where(d => d.renderer)
                 .Each(d => d.renderer.sharedMaterials = d.sharedMaterials);
         });
+        
+        gameObjectData.Clear();
     }
     
-    private void FadeOutDots()
+    private void HideDots()
     {
         Assert.IsTrue(dotsParticleSystem.particleCount <= particleBuffer.Length, $"The dots particle system has more than {particleBuffer.Length} particles, which is not supported.");
 
@@ -227,7 +259,7 @@ public class LightSection : MonoBehaviour
         dotsParticleSystem.SetParticles(particleBuffer, numParticles);
     }
     
-    private void FadeInLights()
+    private void RevealLights()
     {
         foreach (Light light in lights)
         {
