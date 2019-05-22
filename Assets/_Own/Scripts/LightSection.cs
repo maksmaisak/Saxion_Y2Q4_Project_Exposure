@@ -142,6 +142,8 @@ public class LightSection : MonoBehaviour
         RevealGameObjects();
         HideDots();
         RevealLights();
+        
+        new OnRevealEvent().PostEvent();
     }
     
     private void HideGameObjects()
