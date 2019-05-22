@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
+using VRTK;
 using Random = UnityEngine.Random;
 
 public class RadarTool : MonoBehaviour
@@ -26,6 +27,8 @@ public class RadarTool : MonoBehaviour
     [Header("Wavesphere settings")]
     [SerializeField] [Range(0.2f, 5.0f)]  float minDistanceBetweenSpawnedWavespheres = 2.0f;
     [SerializeField] [Range(0.2f, 10.0f)] float maxNumWavespheresPerSecond = 2.0f;
+    [SerializeField] float wavesphereSpeedMin = 2.5f;
+    [SerializeField] float wavesphereSpeedMax = 4.5f;
     [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
     [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
     [SerializeField] [Range(0.0f, 360.0f)] float baseDotConeAngle = 20.0f;
@@ -128,7 +131,8 @@ public class RadarTool : MonoBehaviour
     {
         public int hitIndex;
         public Vector3 point;
-        public float timeOfArrival;
+        public float speed;
+        public float timeToArrive;
         public ulong numDots;
     }
 
@@ -139,24 +143,23 @@ public class RadarTool : MonoBehaviour
         const float DistanceBandWidth = 2.0f;
         const ulong NumDotsBandWidth = 20;
         
-        float GetTimeOfArrival(ref RaycastHit hit)
-        {
-            float wavesphereSpeed = 2.0f; // TEMP
-            return hit.distance / wavesphereSpeed;
-        }
-        
         DotsRegistry dotsRegistry = DotsManager.instance.registry;
         ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
 
         CandidateLocation[] candidateLocations = hits
             .Select((hit, i) => (hit, i))
             .Where(tuple => tuple.hit.collider)
-            .Select(tuple => new CandidateLocation 
+            .Select(tuple =>
             {
-                hitIndex = tuple.i,
-                point = tuple.hit.point,
-                timeOfArrival = GetTimeOfArrival(ref tuple.hit),
-                numDots = GetRoundedNumDotsAround(tuple.hit.point),
+                float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
+                return new CandidateLocation
+                {
+                    hitIndex = tuple.i,
+                    point = tuple.hit.point,
+                    speed = speed,
+                    timeToArrive = tuple.hit.distance / speed,
+                    numDots = GetRoundedNumDotsAround(tuple.hit.point),
+                };
             })
             .OrderBy(l => Mathf.RoundToInt(hits[l.hitIndex].distance / DistanceBandWidth))
             .ToArray();
@@ -171,10 +174,10 @@ public class RadarTool : MonoBehaviour
         bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
         {
             Vector3 point = candidateLocations[candidateIndex].point;
-            float timeOfArrival = candidateLocations[candidateIndex].timeOfArrival;
+            float timeOfArrival = candidateLocations[candidateIndex].timeToArrive;
             return 
                 usedCandidateIndices.Any(i => Vector3.SqrMagnitude(candidateLocations[i].point - point) < sqrMinDistance) || 
-                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeOfArrival - timeOfArrival) < minTimeDistanceBetweenWavespheres);
+                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeToArrive - timeOfArrival) < minTimeDistanceBetweenWavespheres);
         }
         
         while (usedCandidateIndices.Count < candidateLocations.Length)
@@ -193,9 +196,9 @@ public class RadarTool : MonoBehaviour
 
         foreach (int candidateIndex in usedCandidateIndices)
         {
-            int i = candidateLocations[candidateIndex].hitIndex;
-            float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hits[i].distance + 1.0f, dotConeAngleFalloffPower);
-            HandleHit(hits[i], new Ray(commands[i].origin, commands[i].direction), dotConeAngle);
+            ref var location = ref candidateLocations[candidateIndex];
+            int i = location.hitIndex;
+            SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed);
         }
     }
 
@@ -216,8 +219,10 @@ public class RadarTool : MonoBehaviour
         material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleVertical   * 0.5f));
     }
 
-    private void HandleHit(RaycastHit hit, Ray originalRay, float dotConeAngle = 10.0f)
+    private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed)
     {
+        float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hit.distance + 1.0f, dotConeAngleFalloffPower);
+
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
             originalRay = originalRay,
@@ -239,7 +244,7 @@ public class RadarTool : MonoBehaviour
             wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
             
             FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.SetTarget(wavesphereTarget.position);
+            flyingSphere.Initialize(wavesphereTarget.position, speed);
             flyingSphere.highlightLocation = highlightLocation;
         });
     }
