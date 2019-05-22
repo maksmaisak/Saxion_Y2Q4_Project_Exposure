@@ -141,16 +141,17 @@ public class FlyingSphere : MonoBehaviour
 
         canMove = false;
 
-        Vector3 otherPosition = other.transform.position;
-
+        const float Duration = 0.2f;
+        
         transform.DOKill();
 
-        transform.DOScale(0.0f, 0.2f)
+        transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
         
-        Destroy(gameObject, 0.6f);
+        Destroy(gameObject, Mathf.Max(grabAudio.length, Duration));
 
-        transform.DOLookAt(otherPosition - transform.position, 0.2f)
+        Vector3 otherPosition = other.transform.position;
+        transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
         transform.parent = other.transform;
