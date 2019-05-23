@@ -107,8 +107,8 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.25
-  m_Pitch: 0.5
+  m_Volume: 0.5
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -221,8 +221,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   angularSpeed: 1
   attractionRadius: 1
-  randomMinSpeed: 2.5
-  randomMaxSpeed: 4.5
   targetSphereRadius: 0.5
   slowdownRadius: 4
   scaleTarget: 0.27
@@ -240,7 +238,7 @@ MonoBehaviour:
   vibrationDuration: 40
   frequency: 2
   strength: 100
-  grabAudio: {fileID: 8300000, guid: 8d0eb3dedb4c8b04d8ebf40fcdf720e0, type: 3}
+  grabAudio: {fileID: 8300000, guid: 72b1410c396e3664b8c6290762fc545f, type: 3}
   movingSound: {fileID: 0}
   spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
   delayToDespawn: 25
