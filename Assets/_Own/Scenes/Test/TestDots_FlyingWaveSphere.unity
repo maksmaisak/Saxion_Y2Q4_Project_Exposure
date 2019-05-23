@@ -2661,7 +2661,7 @@ MonoBehaviour:
   dotConeAngleFalloff: 0.02
   dotConeAngleFalloffPower: 1
   maxDotDistanceFromSurfacePointAlongOriginalRay: 1
-  highlightWithoutWavespheres: 0
+  highlightWithoutWavespheres: 1
   drawSpherecastRays: 0
 --- !u!1 &840676604
 GameObject:
@@ -4734,6 +4734,53 @@ LightProbeGroup:
   - {x: -0.8738291, y: 0.51661086, z: 2.5225298}
   - {x: -1.3810283, y: 0.51661086, z: 2.9244456}
   m_Dering: 0
+--- !u!1 &1504301211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8632980727227553950, guid: c1f8e1144aac66044ae74327634361b6,
+    type: 3}
+  m_PrefabInstance: {fileID: 154852894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1504301213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504301211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94584770ed5b9b24dad680b89993313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onReveal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1504301216}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1504301216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504301211}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ed44fc739974d25b4cd171e44d2650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationPerSecond: {x: 0, y: 100, z: 0}
 --- !u!1 &1511358060
 GameObject:
   m_ObjectHideFlags: 0
