@@ -116,6 +116,15 @@ public class DotsManager : Singleton<DotsManager>
       commands.Dispose();
    }
 
+   public LightSection GetSection(Collider collider)
+   {
+      bool isInSection = colliderToLightSectionIndex.TryGetValue(collider, out int sectionIndex);
+      if (!isInSection)
+         return null;
+
+      return lightSections[sectionIndex];
+   }
+   
    public bool IsHidden(Collider collider)
    { 
       bool isInSection = colliderToLightSectionIndex.TryGetValue(collider, out int sectionIndex);
