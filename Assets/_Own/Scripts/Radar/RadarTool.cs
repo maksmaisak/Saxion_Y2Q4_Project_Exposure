@@ -142,13 +142,14 @@ public class RadarTool : MonoBehaviour
         // Candidates in the same band preserve the initial order.
         const float DistanceBandWidth = 2.0f;
         const ulong NumDotsBandWidth = 20;
-        
-        DotsRegistry dotsRegistry = DotsManager.instance.registry;
+
+        var dotsManager = DotsManager.instance;
+        DotsRegistry dotsRegistry = dotsManager.registry;
         ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
 
         CandidateLocation[] candidateLocations = hits
             .Select((hit, i) => (hit, i))
-            .Where(tuple => tuple.hit.collider)
+            .Where(tuple => tuple.hit.collider && dotsManager.IsHidden(tuple.hit.collider))
             .Select(tuple =>
             {
                 float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
