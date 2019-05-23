@@ -130,6 +130,7 @@ public class RadarTool : MonoBehaviour
     private struct CandidateLocation
     {
         public int hitIndex;
+        public LightSection lightSection;
         public Vector3 point;
         public float speed;
         public float timeToArrive;
@@ -142,19 +143,23 @@ public class RadarTool : MonoBehaviour
         // Candidates in the same band preserve the initial order.
         const float DistanceBandWidth = 2.0f;
         const ulong NumDotsBandWidth = 20;
-        
-        DotsRegistry dotsRegistry = DotsManager.instance.registry;
+
+        var dotsManager = DotsManager.instance;
+        DotsRegistry dotsRegistry = dotsManager.registry;
         ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
 
         CandidateLocation[] candidateLocations = hits
             .Select((hit, i) => (hit, i))
             .Where(tuple => tuple.hit.collider)
+            .Select(tuple => (tuple.hit, tuple.i, lightSection: dotsManager.GetSection(tuple.hit.collider)))
+            .Where(tuple => !tuple.lightSection || !tuple.lightSection.isRevealed)
             .Select(tuple =>
             {
                 float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
                 return new CandidateLocation
                 {
                     hitIndex = tuple.i,
+                    lightSection = tuple.lightSection,
                     point = tuple.hit.point,
                     speed = speed,
                     timeToArrive = tuple.hit.distance / speed,
@@ -198,7 +203,7 @@ public class RadarTool : MonoBehaviour
         {
             ref var location = ref candidateLocations[candidateIndex];
             int i = location.hitIndex;
-            SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed);
+            SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed, location.lightSection);
         }
     }
 
@@ -219,7 +224,7 @@ public class RadarTool : MonoBehaviour
         material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleVertical   * 0.5f));
     }
 
-    private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed)
+    private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed, LightSection lightSection)
     {
         float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hit.distance + 1.0f, dotConeAngleFalloffPower);
 
@@ -235,6 +240,9 @@ public class RadarTool : MonoBehaviour
         
         this.Delay(hit.distance / wavePulseSpeed, () =>
         {
+            if (lightSection && lightSection.isRevealed)
+                return;
+            
             if (highlightWithoutWavespheres)
             {
                 DotsManager.instance.Highlight(highlightLocation);
@@ -244,7 +252,7 @@ public class RadarTool : MonoBehaviour
             wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
             
             FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.Initialize(wavesphereTarget.position, speed);
+            flyingSphere.Initialize(wavesphereTarget.position, speed, lightSection);
             flyingSphere.highlightLocation = highlightLocation;
         });
     }

@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 using VRTK;
 using Random = UnityEngine.Random;
 
-public class FlyingSphere : MonoBehaviour
+public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [Header("Movement Settings")] 
     [SerializeField] float angularSpeed = 1.0f;
@@ -41,14 +41,14 @@ public class FlyingSphere : MonoBehaviour
     [SerializeField] LayerMask handsCollisionLayer;
 
     private new Transform transform;
+    private AudioSource audioSource;
+
     private float speed = 1.0f;
+    private Vector3? targetCenter;
+    private LightSection sourceLightSection;
 
     private bool didStart;
-    private bool isCaught;
-
-    private AudioSource audioSource;
-    
-    private Vector3? targetCenter;
+    private bool isFadingOut;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
@@ -56,16 +56,19 @@ public class FlyingSphere : MonoBehaviour
 
     private static float lastTimeWasCaught;
     
-    public void Initialize(Vector3 target, float movementSpeed)
+    public void Initialize(Vector3 target, float movementSpeed, LightSection sourceSection)
     {
         Assert.IsFalse(didStart, "Can't Initialize a wavesphere after it started moving.");
         targetCenter = target;
         speed = movementSpeed;
+        sourceLightSection = sourceSection;
     }
 
-    void Awake()
+    protected override void Awake()
     {
-        transform = GetComponent<Transform>();
+        base.Awake();
+        
+        transform   = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
         
         targetTransforms.Add(Camera.main.gameObject.transform);
@@ -96,74 +99,64 @@ public class FlyingSphere : MonoBehaviour
 
     void Update()
     {
-        if (isCaught)
+        if (isFadingOut)
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
-
-        if (targetTransforms.Count == 0)
-            return;
         
-        Transform targetTransform = targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
-        
-        Vector3 targetDir = targetTransform.position - transform.position;
-
-        if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
-            return;
-        
-        Vector3 newDir =
-            Vector3.RotateTowards(transform.forward, targetDir, 
-                angularSpeed * Time.deltaTime, 0.0f);
-
-        transform.rotation = Quaternion.LookRotation(newDir);
+        AttractToHands();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (isCaught || !handsCollisionLayer.ContainsLayer(other.gameObject.layer)) 
+        if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
+        
+        DotsManager.instance.Highlight(highlightLocation);
 
-        isCaught = true;
+        isFadingOut = true;
         //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
         lastTimeWasCaught = Time.time;
 
-        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
-
-        if (otherController)
-        {
-            bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
-
-            VRTK_ControllerReference controllerReference = isLeftHand
-                ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
-                : VRTK_DeviceFinder.GetControllerReferenceRightHand();
-
-            float pulseInterval = 0.02f;
-
-            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval);
-        }
+        VibrateController(other);
 
         audioSource.clip = grabAudio;
         audioSource.Play();
         
-        const float Duration = 0.2f;
+        transform.parent = other.transform;
         
         transform.DOKill();
+        
+        const float Duration = 0.2f;
 
         transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-
-        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
-
+        
         Vector3 otherPosition = other.transform.position;
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
-
-        transform.parent = other.transform;
         
-        DotsManager.instance.Highlight(highlightLocation);
+        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
     }
 
-    void RandomizeSpeedAndDirection()
+    public void On(OnRevealEvent reveal)
+    {
+        if (isFadingOut)
+            return;
+
+        Assert.IsNotNull(sourceLightSection);
+        if (!sourceLightSection || reveal.lightSection != sourceLightSection)
+            return;
+
+        isFadingOut = true;
+        transform.DOKill();
+        transform
+            .DOScale(0.0f, 0.5f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() => Destroy(gameObject));
+    }
+    
+    private void RandomizeSpeedAndDirection()
     {
         float targetPositionRandomizationRadius = targetSphereRadius;
 
@@ -184,7 +177,7 @@ public class FlyingSphere : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
 
-    void RandomizeScale()
+    private void RandomizeScale()
     {
         // Randomize scale over time
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
@@ -194,7 +187,7 @@ public class FlyingSphere : MonoBehaviour
         tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
     }
 
-    void RandomizeColor()
+    private void RandomizeColor()
     {
         Renderer renderer = GetComponent<Renderer>();
         if (!renderer)
@@ -205,6 +198,35 @@ public class FlyingSphere : MonoBehaviour
 
         if (emissionColors.Count > 0)
             renderer.material.SetColor(emissionColorId, emissionColors[Random.Range(0, emissionColors.Count)]);
+    }
+
+    private void AttractToHands()
+    {
+        if (targetTransforms.Count == 0)
+            return;
+        
+        Transform targetTransform = targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
+        Vector3 targetDir = targetTransform.position - transform.position;
+        if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
+            return;
+        
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularSpeed * Time.deltaTime, 0.0f);
+        transform.rotation = Quaternion.LookRotation(newDir);
+    }
+
+    private void VibrateController(Collider other)
+    {
+        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
+        if (!otherController) 
+            return;
+        
+        bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
+
+        VRTK_ControllerReference controllerReference = isLeftHand
+            ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
+            : VRTK_DeviceFinder.GetControllerReferenceRightHand();
+        
+        VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval: 0.02f);
     }
 }
         
