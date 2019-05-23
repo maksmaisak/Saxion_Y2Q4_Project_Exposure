@@ -240,6 +240,9 @@ public class RadarTool : MonoBehaviour
         
         this.Delay(hit.distance / wavePulseSpeed, () =>
         {
+            if (lightSection && lightSection.isRevealed)
+                return;
+            
             if (highlightWithoutWavespheres)
             {
                 DotsManager.instance.Highlight(highlightLocation);

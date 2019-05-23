@@ -48,7 +48,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private LightSection sourceLightSection;
 
     private bool didStart;
-    private bool isCaught;
+    private bool isFadingOut;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
@@ -99,7 +99,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     void Update()
     {
-        if (isCaught)
+        if (isFadingOut)
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
@@ -109,53 +109,51 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     void OnTriggerEnter(Collider other)
     {
-        if (isCaught || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
+        if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
+        
+        DotsManager.instance.Highlight(highlightLocation);
 
-        isCaught = true;
+        isFadingOut = true;
         //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
         lastTimeWasCaught = Time.time;
 
-        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
-
-        if (otherController)
-        {
-            bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
-
-            VRTK_ControllerReference controllerReference = isLeftHand
-                ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
-                : VRTK_DeviceFinder.GetControllerReferenceRightHand();
-
-            float pulseInterval = 0.02f;
-
-            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval);
-        }
+        VibrateController(other);
 
         audioSource.clip = grabAudio;
         audioSource.Play();
-
-        const float Duration = 0.2f;
-
+        
+        transform.parent = other.transform;
+        
         transform.DOKill();
+        
+        const float Duration = 0.2f;
 
         transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-
-        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
-
+        
         Vector3 otherPosition = other.transform.position;
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
-
-        transform.parent = other.transform;
-
-        DotsManager.instance.Highlight(highlightLocation);
+        
+        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
     }
 
     public void On(OnRevealEvent reveal)
     {
-        if (!isCaught && sourceLightSection && reveal.lightSection == sourceLightSection)
-            Destroy(gameObject);
+        if (isFadingOut)
+            return;
+
+        Assert.IsNotNull(sourceLightSection);
+        if (!sourceLightSection || reveal.lightSection != sourceLightSection)
+            return;
+
+        isFadingOut = true;
+        transform.DOKill();
+        transform
+            .DOScale(0.0f, 0.5f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() => Destroy(gameObject));
     }
     
     private void RandomizeSpeedAndDirection()
@@ -214,6 +212,21 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
+    }
+
+    private void VibrateController(Collider other)
+    {
+        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
+        if (!otherController) 
+            return;
+        
+        bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
+
+        VRTK_ControllerReference controllerReference = isLeftHand
+            ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
+            : VRTK_DeviceFinder.GetControllerReferenceRightHand();
+        
+        VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval: 0.02f);
     }
 }
         
