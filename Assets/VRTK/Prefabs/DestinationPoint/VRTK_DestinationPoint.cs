@@ -221,7 +221,7 @@ namespace VRTK
                 createdCollider = true;
             }
 
-            pointCollider.isTrigger = true;
+            pointCollider.isTrigger = false;
         }
 
         protected virtual void SetupRigidbody()
