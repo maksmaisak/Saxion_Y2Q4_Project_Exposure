@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 public class Interactable : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    [SerializeField] private UnityEvent onReveal;
+    [Tooltip("This will happen once the section containing this object is revealed.")]
+    [SerializeField] UnityEvent onReveal;
 
     public void On(OnRevealEvent reveal)
     {
@@ -13,7 +14,7 @@ public class Interactable : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (onReveal == null)
             return;
         
-        if(reveal.lightSection.GetGameObjects().Contains(gameObject))
+        if (reveal.lightSection.GetGameObjects().Contains(gameObject))
             onReveal.Invoke();
     }
 }
