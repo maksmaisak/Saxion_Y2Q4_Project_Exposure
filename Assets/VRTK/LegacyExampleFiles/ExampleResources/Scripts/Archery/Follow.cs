@@ -7,6 +7,7 @@
         public bool followPosition;
         public bool followRotation;
         public Transform target;
+        public float yOffset = 0.2f;
 
         private void Update()
         {
@@ -19,7 +20,7 @@
 
                 if (followPosition)
                 {
-                    transform.position = target.position;
+                    transform.position = new Vector3(target.position.x, target.position.y + yOffset, target.position.z);
                 }
             }
             else
