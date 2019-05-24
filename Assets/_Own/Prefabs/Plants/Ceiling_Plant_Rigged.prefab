@@ -379,6 +379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5140537585149230670}
   - component: {fileID: 3016523838919381812}
+  - component: {fileID: 6744888060290844048}
   m_Layer: 0
   m_Name: Ceiling_Plant_Rigged
   m_TagString: Untagged
@@ -421,6 +422,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!64 &6744888060290844048
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146310693881891933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
 --- !u!1 &8563432864579140431
 GameObject:
   m_ObjectHideFlags: 0
