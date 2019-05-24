@@ -348,7 +348,7 @@ MonoBehaviour:
   wavePulseAngleHorizontal: 40
   wavePulseAngleVertical: 40
   wavePulseSpeed: 10
-  wavePulseMaxRange: 100
+  wavePulseMaxRange: 35
   sphereCastRadius: 0.05
   minDistanceBetweenSpawnedWavespheres: 2
   maxNumWavespheresPerSecond: 2
