@@ -28,7 +28,6 @@ public class NavpointUIElement : MonoBehaviour
         Assert.IsNotNull(innerCircle);
 
         outerCircle.fillAmount = 0.0f;
-        state = State.Filling;
         
         yield return new WaitUntil(() => camera = Camera.main);
     }
@@ -77,5 +76,13 @@ public class NavpointUIElement : MonoBehaviour
 
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
             .Join(outerCircle.DOFade(0.0f, PartDuration).SetEase(Ease.OutQuart));
+    }
+
+    public void SetFilling(bool isFilling)
+    {
+        if (state != State.Filling && state != State.Unfilling)
+            return;
+
+        state = isFilling ? State.Filling : State.Unfilling;
     }
 }
