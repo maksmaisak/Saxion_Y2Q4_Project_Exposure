@@ -35,7 +35,10 @@ public class NavpointUIElement : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(camera.transform.position);
+        if (!camera)
+            return;
+        
+        transform.rotation = Quaternion.LookRotation(transform.position - camera.transform.position);
         
         switch (state)
         {
