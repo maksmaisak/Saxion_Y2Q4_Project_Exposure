@@ -3,9 +3,12 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public class NavpointUIElement : MonoBehaviour
 {
+    public UnityEvent onComplete;
+    
     [SerializeField] Image outerCircle;
     [SerializeField] Image innerCircle;
     [Space] 
@@ -62,7 +65,7 @@ public class NavpointUIElement : MonoBehaviour
 
         const float PartDuration = 0.4f;
 
-        DOTween
+        var sequence = DOTween
             .Sequence()
 
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
@@ -76,6 +79,8 @@ public class NavpointUIElement : MonoBehaviour
 
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
             .Join(outerCircle.DOFade(0.0f, PartDuration).SetEase(Ease.OutQuart));
+
+        sequence.OnComplete(() => onComplete?.Invoke());
     }
 
     public void SetFilling(bool isFilling)
