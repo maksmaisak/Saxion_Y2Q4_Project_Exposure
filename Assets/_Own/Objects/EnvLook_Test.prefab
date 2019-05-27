@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1588690813
 Transform:
@@ -332,7 +332,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2282007572126407886
 Transform:
@@ -493,7 +493,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &466140471759035282
 Transform:
@@ -668,7 +668,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6514350853208481369
 Transform:
@@ -899,7 +899,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1036888123089073140
 Transform:
@@ -1074,7 +1074,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &970526293859074658
 Transform:
@@ -1165,7 +1165,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3599269702072736222
 Transform:
@@ -1312,7 +1312,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6576350572793454424
 Transform:
@@ -1557,7 +1557,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &857211127198136786
 Transform:
@@ -1676,7 +1676,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3602404637785113716
 Transform:
@@ -1809,7 +1809,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8955802400878668488
 Transform:
@@ -2194,7 +2194,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4693036163085290046
 Transform:
@@ -2313,7 +2313,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &828090548768923958
 Transform:
@@ -2457,7 +2457,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3603065090788670444
 Transform:
@@ -2673,7 +2673,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8033212029052369695
 Transform:
@@ -2701,7 +2701,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 8
-  m_Range: 3.64
+  m_Range: 20
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -2780,7 +2780,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7223210667372218563
 Transform:
@@ -2885,7 +2885,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5802222972817789682
 Transform:
@@ -2999,6 +2999,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (52)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3080,6 +3085,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (64)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3160,6 +3170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -3252,6 +3267,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (40)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3332,6 +3352,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (70)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -3418,6 +3443,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (59)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -3510,6 +3540,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3601,6 +3636,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (45)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3686,6 +3726,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -3778,6 +3823,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (60)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3869,6 +3919,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_middle_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3137886efaf313f41acfbe785e7ca0a1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3137886efaf313f41acfbe785e7ca0a1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3949,6 +4004,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -4046,6 +4106,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_big__02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3ba26ee1feb16bb47bba2da129626cc3,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3ba26ee1feb16bb47bba2da129626cc3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4142,6 +4207,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (43)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4227,6 +4297,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -4319,6 +4394,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (33)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4409,6 +4489,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (68)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -4501,6 +4586,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (30)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4592,6 +4682,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (76)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4672,6 +4767,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -4764,6 +4864,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (61)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4854,6 +4959,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (74)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -4951,6 +5061,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5041,6 +5156,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -5133,6 +5253,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (66)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5223,6 +5348,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -5315,6 +5445,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (37)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5405,6 +5540,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -5497,6 +5637,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (25)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5588,6 +5733,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8e98beecc860d584aa3008461857e35f,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8e98beecc860d584aa3008461857e35f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5668,6 +5818,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_wallrock_big_03
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: ef8ba6cc1a96ba942935e0bf582a16ee,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef8ba6cc1a96ba942935e0bf582a16ee,
         type: 3}
@@ -5754,6 +5909,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: ExcludeTeleport
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -5846,6 +6006,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_trianglerock_big_01
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 07a54e0a19f0254489350b1ff748c55a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: -1630416403667672707, guid: 07a54e0a19f0254489350b1ff748c55a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 07a54e0a19f0254489350b1ff748c55a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5927,6 +6097,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_wallrock_big_01
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 6831970ae9097d444af2f2ad15194640,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6831970ae9097d444af2f2ad15194640,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6007,6 +6182,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_wallrock_big_02
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: e1730bc5bca7cdb40b557ded2389a55f,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e1730bc5bca7cdb40b557ded2389a55f,
         type: 3}
@@ -6099,6 +6279,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_trianglerock_big_04
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b037d7f1e6fcdbd49a2e9c56eb3a6152,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: -7438961036169885948, guid: b037d7f1e6fcdbd49a2e9c56eb3a6152,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b037d7f1e6fcdbd49a2e9c56eb3a6152,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6180,6 +6370,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_huge_02
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d00ed9c9dd01f844c850c53c1f7a7bce,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d00ed9c9dd01f844c850c53c1f7a7bce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6260,6 +6455,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_wallrock_big_04
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5fd7cd32006ba554db2d8c0ed581a060,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5fd7cd32006ba554db2d8c0ed581a060,
         type: 3}
@@ -6357,6 +6557,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_trianglerock_big_02
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8f78a2958da96ce46ae8435a83e22abc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4420868329285126589, guid: 8f78a2958da96ce46ae8435a83e22abc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8f78a2958da96ce46ae8435a83e22abc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6437,6 +6647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (47)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -6523,6 +6738,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_wallrock_big_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 6831970ae9097d444af2f2ad15194640,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6831970ae9097d444af2f2ad15194640,
         type: 3}
@@ -6615,6 +6835,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6705,6 +6930,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -6797,6 +7027,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (35)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6887,6 +7122,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -6979,6 +7219,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (56)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7070,6 +7315,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (48)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7155,6 +7405,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -7247,6 +7502,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7337,6 +7597,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -7429,6 +7694,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (54)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7509,6 +7779,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -7601,6 +7876,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (65)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7691,6 +7971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (29)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -7783,6 +8068,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (41)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7869,6 +8159,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (78)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7949,6 +8244,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (55)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -8041,6 +8341,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8132,6 +8437,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (39)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8212,6 +8522,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (44)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -8298,6 +8613,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -8390,6 +8710,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (58)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8481,6 +8806,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (67)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8571,6 +8901,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_rock_small_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
@@ -8668,6 +9003,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_03 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8759,6 +9099,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8840,6 +9185,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (77)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8920,6 +9270,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -9012,6 +9367,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9103,6 +9463,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (63)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9183,6 +9548,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (32)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -9275,6 +9645,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (53)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9355,6 +9730,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (69)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -9452,6 +9832,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9543,6 +9928,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9633,6 +10023,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -9730,6 +10125,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_03 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9810,6 +10210,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (62)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -9902,6 +10307,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (24)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9992,6 +10402,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10084,6 +10499,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_small_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10164,6 +10584,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10251,6 +10676,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_rock_huge_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: be8c72b867eb18341ab0fd3bb5e5fd86,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: be8c72b867eb18341ab0fd3bb5e5fd86,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10332,6 +10762,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (72)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10412,6 +10847,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10503,6 +10943,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (75)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10600,6 +11045,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (57)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10690,6 +11140,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (49)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10787,6 +11242,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (71)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10872,6 +11332,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -10964,6 +11429,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (42)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11049,6 +11519,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -11141,6 +11616,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11231,6 +11711,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -11328,6 +11813,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (51)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11408,6 +11898,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -11500,6 +11995,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (73)
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11580,6 +12080,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
@@ -11671,6 +12176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_toprock_big_01 (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}

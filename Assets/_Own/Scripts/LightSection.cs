@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -43,10 +44,11 @@ public class LightSection : MonoBehaviour
 
     [Header("Reveal settings")] 
     [SerializeField] int numDotsToReveal = 10000;
-    [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
     [SerializeField] [Range(0.0f, 10.0f)] float revealDuration = 4.0f;
+    public UnityEvent onReveal;
     
     [Header("Debug")]
+    [SerializeField] KeyCode fadeInKeyCode = KeyCode.Alpha1;
     [SerializeField] List<Light> lights = new List<Light>();
     [SerializeField] List<GameObject> gameObjects = new List<GameObject>();
 
@@ -143,6 +145,7 @@ public class LightSection : MonoBehaviour
         HideDots();
         RevealLights();
         
+        onReveal?.Invoke();
         new OnRevealEvent(this).PostEvent();
     }
     

@@ -325,6 +325,7 @@ GameObject:
   - component: {fileID: 7878361257375765435}
   - component: {fileID: 7878361257375765436}
   - component: {fileID: 558030851}
+  - component: {fileID: 1555223313}
   m_Layer: 0
   m_Name: Navpoint
   m_TagString: Untagged
@@ -360,9 +361,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8b735318351469db4f0b7bb72fd61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  canvasGroup: {fileID: 1555223313}
   outerCircle: {fileID: 7878361255527723950}
   innerCircle: {fileID: 7878361255405363627}
   fillDuration: 1
+  lightSectionToTrack: {fileID: 0}
 --- !u!65 &558030851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -376,3 +384,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!225 &1555223313
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7878361257375765434}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Interactable : MyBehaviour, IEventReceiver<OnRevealEvent>
+public class OnReveal : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [Tooltip("This will happen once the section containing this object is revealed.")]
-    [SerializeField] UnityEvent onReveal;
+    public UnityEvent onReveal;
 
     public void On(OnRevealEvent reveal)
     {
@@ -14,7 +14,7 @@ public class Interactable : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (onReveal == null)
             return;
         
-        if (reveal.lightSection.GetGameObjects().Contains(gameObject))
+        if (reveal.lightSection.GetGameObjects().Contains(gameObject) || transform.IsChildOf(reveal.lightSection.transform))
             onReveal.Invoke();
     }
 }

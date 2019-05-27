@@ -8,14 +8,18 @@ using UnityEngine.Events;
 public class NavpointUIElement : MonoBehaviour
 {
     public UnityEvent onComplete;
-    
+
+    [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] Image outerCircle;
     [SerializeField] Image innerCircle;
     [Space] 
     [SerializeField] float fillDuration = 1.0f;
 
-    private new Camera camera;
+    [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
+    [SerializeField] LightSection lightSectionToRevealWith;
     
+    private new Camera camera;
+
     enum State
     {
         Unfilling,
@@ -27,14 +31,23 @@ public class NavpointUIElement : MonoBehaviour
 
     IEnumerator Start()
     {
+        canvasGroup = canvasGroup ? canvasGroup : GetComponentInChildren<CanvasGroup>();
+        Assert.IsNotNull(canvasGroup);
+        
         Assert.IsNotNull(outerCircle);
         Assert.IsNotNull(innerCircle);
-
         outerCircle.fillAmount = 0.0f;
         
+        lightSectionToRevealWith = lightSectionToRevealWith ? lightSectionToRevealWith : GetComponentInParent<LightSection>();
+        if (lightSectionToRevealWith && !lightSectionToRevealWith.isRevealed)
+        {
+            Hide();
+            lightSectionToRevealWith.onReveal.AddListener(() => this.Delay(5.0f, Show));
+        }
+
         yield return new WaitUntil(() => camera = Camera.main);
     }
-
+    
     void Update()
     {
         if (!camera)
@@ -54,6 +67,24 @@ public class NavpointUIElement : MonoBehaviour
                     PlayEffect();
                 break;
         }
+    }
+
+    private void Hide()
+    {
+        GetComponentsInChildren<Collider>().Each(c => c.enabled = false);
+        canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0.0f;
+    }
+    
+    private void Show()
+    {
+        GetComponentsInChildren<Collider>().Each(c => c.enabled = true);
+        canvasGroup.interactable = true;
+
+        canvasGroup.DOKill();
+        canvasGroup.DOFade(1.0f, 1.0f);
+        transform.DOKill();
+        transform.DOPunchScale(Vector3.one * 1.1f, 1.0f, 2);
     }
 
     private void PlayEffect()
@@ -80,7 +111,11 @@ public class NavpointUIElement : MonoBehaviour
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
             .Join(outerCircle.DOFade(0.0f, PartDuration).SetEase(Ease.OutQuart));
 
-        sequence.OnComplete(() => onComplete?.Invoke());
+        sequence.OnComplete(() =>
+        {
+            onComplete?.Invoke();
+            Destroy(gameObject);
+        });
     }
 
     public void SetFilling(bool isFilling)
