@@ -436,9 +436,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operation: 1
-  checkType: 3
+  checkType: 1
   identifiers:
-  - ExcludeTeleport
   - VRTK_DestinationPoint
 --- !u!114 &1790837543658816415
 MonoBehaviour:
@@ -1758,7 +1757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableTeleport: 1
-  targetListPolicy: {fileID: 0}
+  targetListPolicy: {fileID: 19594665248946525}
   pointerRenderer: {fileID: 19594665556494899}
   activationButton: 10
   holdButtonToActivate: 1
@@ -7103,7 +7102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableTeleport: 1
-  targetListPolicy: {fileID: 0}
+  targetListPolicy: {fileID: 19594665248946525}
   pointerRenderer: {fileID: 19594666589132802}
   activationButton: 10
   holdButtonToActivate: 1
