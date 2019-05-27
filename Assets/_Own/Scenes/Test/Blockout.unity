@@ -19515,51 +19515,18 @@ Transform:
   m_Father: {fileID: 2033286509}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1187889127 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 19594665248946527, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1619674579164575260}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1187889129 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 19594665248946525, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
     type: 3}
   m_PrefabInstance: {fileID: 1619674579164575260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1187889127}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ed2aa1a29b92ca4f84a26a5f6e9218b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1187889131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1187889127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7b32d2866a5194e95e1a525bd0d06f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blinkToColor: {r: 0, g: 0, b: 0, a: 1}
-  blinkTransitionSpeed: 0.6
-  distanceBlinkDelay: 0
-  headsetPositionCompensation: 1
-  targetListPolicy: {fileID: 1187889129}
-  navMeshData: {fileID: 0}
-  navMeshLimitDistance: 0
-  snapToNearestFloor: 1
-  applyPlayareaParentOffset: 0
-  customRaycast: {fileID: 0}
-  normalLerpTime: 0.1
-  minSpeedMps: 50
-  capsuleTopOffset: 0.2
-  capsuleBottomOffset: 0.5
-  capsuleRadius: 0.5
 --- !u!1001 &1234856049
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24490,7 +24457,7 @@ MonoBehaviour:
   defaultCursorObject: {fileID: 891937133}
   hoverCursorObject: {fileID: 1164248941}
   lockedCursorObject: {fileID: 309513146}
-  destinationLocation: {fileID: 0}
+  destinationLocation: {fileID: 1146383914}
   snapToPoint: 1
   hidePointerCursorOnHover: 1
   hideDirectionIndicatorOnHover: 1
@@ -24504,7 +24471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033286507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.8, y: 4.41, z: 23.62}
+  m_LocalPosition: {x: 1.8, y: 5.578, z: 23.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 891937134}
@@ -25246,41 +25213,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594665248946514, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594665556494899, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: validCollisionColor.g
-      value: 0.85490197
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594665556494899, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: validCollisionColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594666589132802, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: validCollisionColor.g
-      value: 0.8557911
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594666589132802, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: validCollisionColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594666589132802, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: validCollisionColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594666589132802, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: customCursor
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
