@@ -56,8 +56,9 @@ GameObject:
   - component: {fileID: 1175389190}
   - component: {fileID: 1175389189}
   - component: {fileID: 1175389188}
+  - component: {fileID: 5840857828864082661}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 1175389187}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.1, z: 1.5}
+  m_LocalScale: {x: 1.5, y: 0.1, z: 1.5}
   m_Children: []
   m_Father: {fileID: 4238285338348159878}
   m_RootOrder: 3
@@ -135,6 +136,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5840857828864082661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175389187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d7ca755c75d4558b912fcc74206d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1713541265
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,8 +401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 19594665248946524}
   - component: {fileID: 19594665248946525}
-  - component: {fileID: 1187889128}
-  - component: {fileID: 1187889131}
+  - component: {fileID: 1790837543658816415}
   m_Layer: 0
   m_Name: Teleporter
   m_TagString: Untagged
@@ -428,7 +440,7 @@ MonoBehaviour:
   identifiers:
   - ExcludeTeleport
   - VRTK_DestinationPoint
---- !u!114 &1187889128
+--- !u!114 &1790837543658816415
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -437,7 +449,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 19594665248946527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8e497e5e2e9aa4395f6a2673135d45, type: 3}
+  m_Script: {fileID: 11500000, guid: 377ced3493c4e1842a5b1c23f56519db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   blinkToColor: {r: 0, g: 0, b: 0, a: 1}
@@ -450,34 +462,6 @@ MonoBehaviour:
   snapToNearestFloor: 0
   applyPlayareaParentOffset: 0
   customRaycast: {fileID: 0}
-  floatingPlatform: {fileID: 1175389187}
---- !u!114 &1187889131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 19594665248946527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7b32d2866a5194e95e1a525bd0d06f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blinkToColor: {r: 0, g: 0, b: 0, a: 1}
-  blinkTransitionSpeed: 0.6
-  distanceBlinkDelay: 0
-  headsetPositionCompensation: 1
-  targetListPolicy: {fileID: 19594665248946525}
-  navMeshData: {fileID: 0}
-  navMeshLimitDistance: 0
-  snapToNearestFloor: 1
-  applyPlayareaParentOffset: 0
-  customRaycast: {fileID: 0}
-  normalLerpTime: 0.1
-  minSpeedMps: 50
-  capsuleTopOffset: 0.2
-  capsuleBottomOffset: 0.5
-  capsuleRadius: 0.5
 --- !u!1 &19594665250212004
 GameObject:
   m_ObjectHideFlags: 0
@@ -3154,7 +3138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 19594665861988033}
   m_Layer: 0
-  m_Name: '[ExampleScene_Scripts]'
+  m_Name: '[Scene_Scripts]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
