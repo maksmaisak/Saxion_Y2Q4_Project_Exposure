@@ -743,7 +743,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20270
+  m_Name: pb_Mesh28650
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5882,7 +5882,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20142
+  m_Name: pb_Mesh28522
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6140,7 +6140,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20384
+  m_Name: pb_Mesh28762
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9431,7 +9431,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20302
+  m_Name: pb_Mesh28682
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15751,7 +15751,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20596
+  m_Name: pb_Mesh28974
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18343,7 +18343,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20332
+  m_Name: pb_Mesh28710
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -19366,7 +19366,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20366
+  m_Name: pb_Mesh28744
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -20025,7 +20025,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20462
+  m_Name: pb_Mesh28840
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -23225,7 +23225,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20560
+  m_Name: pb_Mesh28938
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -26472,7 +26472,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20530
+  m_Name: pb_Mesh28908
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -26635,7 +26635,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh20200
+  m_Name: pb_Mesh28580
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -27132,7 +27132,7 @@ PrefabInstance:
     - target: {fileID: 8088134726909832705, guid: b885f5f4a95fb4c4ca6cf347f1a95b83,
         type: 3}
       propertyPath: numDotsToReveal
-      value: 20000
+      value: 10000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b885f5f4a95fb4c4ca6cf347f1a95b83, type: 3}
@@ -28155,11 +28155,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19594665248946514, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 19594665556494899, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: validCollisionColor.g
@@ -28189,6 +28184,11 @@ PrefabInstance:
         type: 3}
       propertyPath: customCursor
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 19594665248946514, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
@@ -28347,11 +28347,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904251769}
     m_Modifications:
-    - target: {fileID: 5800065219682531846, guid: 04754977cbe664742977f4813d4fea72,
-        type: 3}
-      propertyPath: m_Name
-      value: CollapsedTunnel_01
-      objectReference: {fileID: 0}
     - target: {fileID: 338175709437579497, guid: 04754977cbe664742977f4813d4fea72,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28407,6 +28402,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5800065219682531846, guid: 04754977cbe664742977f4813d4fea72,
+        type: 3}
+      propertyPath: m_Name
+      value: CollapsedTunnel_01
+      objectReference: {fileID: 0}
     - target: {fileID: 9209741295588591374, guid: 04754977cbe664742977f4813d4fea72,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -28421,11 +28421,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1923523666}
     m_Modifications:
-    - target: {fileID: 1782116254896468793, guid: ad35519829bc29b4e82c358b607bb4ab,
-        type: 3}
-      propertyPath: m_Name
-      value: WildCave_01
-      objectReference: {fileID: 0}
     - target: {fileID: 8320606359908410889, guid: ad35519829bc29b4e82c358b607bb4ab,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28481,6 +28476,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1782116254896468793, guid: ad35519829bc29b4e82c358b607bb4ab,
+        type: 3}
+      propertyPath: m_Name
+      value: WildCave_01
+      objectReference: {fileID: 0}
     - target: {fileID: 8105566892247499033, guid: ad35519829bc29b4e82c358b607bb4ab,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -28495,11 +28495,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 578323032}
     m_Modifications:
-    - target: {fileID: 5811591976857579517, guid: 4c708eecb60886941844e4ac3adb0be4,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialCave_01
-      objectReference: {fileID: 0}
     - target: {fileID: 8981975815082808418, guid: 4c708eecb60886941844e4ac3adb0be4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28554,6 +28549,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811591976857579517, guid: 4c708eecb60886941844e4ac3adb0be4,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialCave_01
       objectReference: {fileID: 0}
     - target: {fileID: 7413519479894773325, guid: 4c708eecb60886941844e4ac3adb0be4,
         type: 3}
