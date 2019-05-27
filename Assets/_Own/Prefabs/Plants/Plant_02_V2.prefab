@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330818280}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.244, y: 2.64, z: 0.054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5330027842181399667}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1330818283
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -115,8 +115,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 3
+      scalar: 3
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -659,15 +659,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
+    type: 2
     angle: 38.92
     length: 0.3
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0.01}
-    m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.24660285, y: 0.22374949, z: 0.49492118}
+    m_Position: {x: 0.014688835, y: -0.100000024, z: 0.0020209625}
+    m_Rotation: {x: 270, y: -0, z: 0}
+    m_Scale: {x: 0.25460976, y: 0.25416526, z: 0.22198142}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -743,10 +743,10 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
-      value: 0.0001
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -971,12 +971,12 @@ ParticleSystem:
     m_BurstCount: 1
     m_Bursts:
     - serializedVersion: 2
-      time: 0
+      time: 3
       countCurve:
         serializedVersion: 2
         minMaxState: 3
         scalar: 80
-        minScalar: 50
+        minScalar: 65
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -3829,7 +3829,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
@@ -4844,13 +4844,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2301967968055915324}
-  m_LocalRotation: {x: -0.66223, y: -0, z: -0, w: 0.7493007}
-  m_LocalPosition: {x: 0.46999988, y: 0.978, z: -0.093}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.438, y: 0.878, z: -0.069}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5330027842181399667}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -82.94, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &5437519521200680051
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5478,15 +5478,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
+    type: 2
     angle: 25
     length: 0.1
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0.01}
+    m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.24660285, y: 0.22374949, z: 0.49492118}
+    m_Scale: {x: 0.3, y: 0.3, z: 0.3}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -5562,10 +5562,10 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
-      value: 0.01
+      value: 0.5
       mode: 0
       spread: 0
       speed:
@@ -5845,7 +5845,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 0
-      repeatInterval: 2
+      repeatInterval: 4
       probability: 1
   SizeModule:
     enabled: 1
@@ -8648,7 +8648,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
@@ -9664,7 +9664,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3516679611802302657}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.6, y: 1.676, z: -0.24}
+  m_LocalPosition: {x: -0.613, y: 1.646, z: -0.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5330027842181399667}
@@ -10297,15 +10297,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
+    type: 2
     angle: 25
     length: 0.1
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0.01}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.24660285, y: 0.22374949, z: 0.49492118}
+    m_Scale: {x: 0.47, y: 0.47, z: 0.46}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -10381,10 +10381,10 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
-      value: 0.01
+      value: 0.2
       mode: 0
       spread: 0
       speed:
@@ -10609,7 +10609,7 @@ ParticleSystem:
     m_BurstCount: 1
     m_Bursts:
     - serializedVersion: 2
-      time: 0
+      time: 2
       countCurve:
         serializedVersion: 2
         minMaxState: 3
@@ -13467,7 +13467,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
@@ -15170,15 +15170,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
+    type: 2
     angle: 25
     length: 0.1
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0.01}
+    m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.24660285, y: 0.22374949, z: 0.49492118}
+    m_Scale: {x: 0.3, y: 0.3, z: 0.35}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -15254,10 +15254,10 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
-      value: 0.01
+      value: 0.2
       mode: 0
       spread: 0
       speed:
@@ -15482,7 +15482,7 @@ ParticleSystem:
     m_BurstCount: 1
     m_Bursts:
     - serializedVersion: 2
-      time: 0
+      time: 1
       countCurve:
         serializedVersion: 2
         minMaxState: 3
@@ -15537,7 +15537,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 0
-      repeatInterval: 2
+      repeatInterval: 4
       probability: 1
   SizeModule:
     enabled: 1
@@ -18340,7 +18340,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
