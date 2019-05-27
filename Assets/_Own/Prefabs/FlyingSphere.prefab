@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1850085830539742749}
   - component: {fileID: 1850085830539742748}
   - component: {fileID: 1850085830539742751}
-  - component: {fileID: 5711976751208885524}
   - component: {fileID: 1555825271}
+  - component: {fileID: -2692466844947289575}
   - component: {fileID: 1850085830539742747}
   m_Layer: 15
   m_Name: FlyingSphere
@@ -94,7 +94,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!82 &5711976751208885524
+--- !u!54 &1555825271
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850085830539742750}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!82 &-2692466844947289575
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,11 +119,10 @@ AudioSource:
   m_GameObject: {fileID: 1850085830539742750}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -7105238820136719435, guid: 50c9892f864457d489704acd2015f17a,
-    type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_PlayOnAwake: 1
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -191,22 +206,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!54 &1555825271
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850085830539742750}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &1850085830539742747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,8 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularSpeed: 1
-  attractionRadius: 1
+  angularSpeed: 2
+  attractionRadius: 2
   targetSphereRadius: 0.5
   slowdownRadius: 4
   scaleTarget: 0.27
@@ -238,9 +237,9 @@ MonoBehaviour:
   vibrationDuration: 40
   frequency: 2
   strength: 100
-  grabAudio: {fileID: 8300000, guid: 72b1410c396e3664b8c6290762fc545f, type: 3}
-  movingSound: {fileID: 0}
   spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
+  grabAudioVolume: 0.5
+  playOnAwake: 0
   delayToDespawn: 25
   handsCollisionLayer:
     serializedVersion: 2
