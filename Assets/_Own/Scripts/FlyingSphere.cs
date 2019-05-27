@@ -144,7 +144,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (isFadingOut)
             return;
 
-        Assert.IsNotNull(sourceLightSection);
+        //Assert.IsNotNull(sourceLightSection);
         if (!sourceLightSection || reveal.lightSection != sourceLightSection)
             return;
 
