@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using VRTK;
 
 public class Follow : MonoBehaviour
 {
@@ -21,10 +20,6 @@ public class Follow : MonoBehaviour
             {
                 transform.position = new Vector3(target.position.x, target.position.y + yOffset, target.position.z);
             }
-        }
-        else
-        {
-            VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.NOT_DEFINED, "target"));
         }
     }
 }
