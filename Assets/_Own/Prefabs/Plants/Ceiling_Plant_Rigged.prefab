@@ -195,6 +195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9097549702012933783}
   - component: {fileID: 5052641181242925646}
+  - component: {fileID: 1703734203408309631}
   m_Layer: 0
   m_Name: Ceiling_Plant_Low1:polySurface1
   m_TagString: Untagged
@@ -276,6 +277,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.22424841, y: -0.020106643, z: -0.045878068}
     m_Extent: {x: 0.49355197, y: 0.61868024, z: 0.24574588}
   m_DirtyAABB: 0
+--- !u!64 &1703734203408309631
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488605724965652197}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 1157777878059105980, guid: 4272a4b6fa4c8204eb64215d19fffc54, type: 3}
 --- !u!1 &7179197588966108175
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +394,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5140537585149230670}
   - component: {fileID: 3016523838919381812}
-  - component: {fileID: 6744888060290844048}
   m_Layer: 0
   m_Name: Ceiling_Plant_Rigged
   m_TagString: Untagged
@@ -422,20 +436,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!64 &6744888060290844048
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8146310693881891933}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 0}
 --- !u!1 &8563432864579140431
 GameObject:
   m_ObjectHideFlags: 0
