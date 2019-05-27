@@ -97,7 +97,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -285,11 +285,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (88)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -344,6 +339,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (88)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -453,7 +453,7 @@ PrefabInstance:
     - target: {fileID: 3603065090788670444, guid: c1f8e1144aac66044ae74327634361b6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.1
+      value: 203
       objectReference: {fileID: 0}
     - target: {fileID: 3603065090788670444, guid: c1f8e1144aac66044ae74327634361b6,
         type: 3}
@@ -488,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 3603065090788670444, guid: c1f8e1144aac66044ae74327634361b6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3603065090788670444, guid: c1f8e1144aac66044ae74327634361b6,
         type: 3}
@@ -1575,11 +1575,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (90)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -1640,6 +1635,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.032223
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (90)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1 &92482605
@@ -1665,13 +1665,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92482605}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.899167, y: 1.5719242, z: -0.8032522}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.899167, y: 2.3986855, z: -0.8032532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1048415360}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1091424637}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &131707793
 PrefabInstance:
@@ -1680,11 +1680,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (108)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -1744,6 +1739,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (108)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -1836,7 +1836,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &199136336
 GameObject:
@@ -1861,8 +1861,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199136336}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.8183365, y: 1.1471825, z: 0.6825905}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.8183365, y: 1.9739437, z: 0.6825905}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 310839117}
@@ -1874,8 +1874,8 @@ Transform:
   - {fileID: 21804385}
   - {fileID: 1090935182}
   - {fileID: 978763797}
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 1091424637}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &199964841
 PrefabInstance:
@@ -1884,11 +1884,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (89)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -1948,6 +1943,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.032223
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (89)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -2026,6 +2026,97 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 203060051}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &223429764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223429768}
+  - component: {fileID: 223429767}
+  - component: {fileID: 223429766}
+  - component: {fileID: 223429765}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &223429765
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223429764}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &223429766
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223429764}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 545164b461f577a4abb3250c21ece2aa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &223429767
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223429764}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &223429768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223429764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.5, y: 0, z: -7.3}
+  m_LocalScale: {x: 117.581665, y: 1, z: 39.213825}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &242620300
 GameObject:
   m_ObjectHideFlags: 0
@@ -2124,11 +2215,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 199136337}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_rock_small_03
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2184,6 +2270,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_rock_small_03
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eeea29674ed5ad4fb5ad9cce05b61c7, type: 3}
 --- !u!4 &310839117 stripped
@@ -2199,11 +2290,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (94)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2264,6 +2350,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 28.634
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (94)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &367952431
@@ -2273,11 +2364,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (81)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2343,6 +2429,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -13.516001
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (81)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &446964796
@@ -2352,11 +2443,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (97)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2371,6 +2457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 29.950005
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (97)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -2547,15 +2638,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561107034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.899167, y: 1.5719242, z: -0.8032522}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.899167, y: 2.3986855, z: -0.8032532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2018336301}
   - {fileID: 1814019214}
   - {fileID: 708437024}
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1091424637}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &583039518
 PrefabInstance:
@@ -2564,11 +2655,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (96)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2598,6 +2684,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 5.48
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (96)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -2699,11 +2790,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (84)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2758,6 +2844,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (84)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -2859,11 +2950,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (114)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -2929,8 +3015,82 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.024184
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (114)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
+--- !u!1001 &704856510
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6495059742849087980, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_Name
+      value: ScrumCaveWall_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 86.03364
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816084790245018623, guid: 5f88d99ad41ef884a995a72bfa081115,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5f88d99ad41ef884a995a72bfa081115, type: 3}
 --- !u!1001 &708437023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2951,7 +3111,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 07a54e0a19f0254489350b1ff748c55a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.720635
+      value: -4.4
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 07a54e0a19f0254489350b1ff748c55a,
         type: 3}
@@ -3006,6 +3166,38 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 708437023}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &730704711
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 730704712}
+  m_Layer: 0
+  m_Name: Plants
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &730704712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730704711}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.93, y: 0.46, z: 1.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 156622667348352837}
+  - {fileID: 1099503623}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &805500716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3013,11 +3205,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (110)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3078,6 +3265,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.055000003
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (110)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &834319684
@@ -3087,11 +3279,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (107)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3151,6 +3338,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (107)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -3252,11 +3444,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (80)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3311,6 +3498,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (80)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -3396,11 +3588,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (103)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3421,6 +3608,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 20.18
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (103)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1048415359
@@ -3430,11 +3622,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 92482606}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3490,6 +3677,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!4 &1048415360 stripped
@@ -3505,11 +3697,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (100)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3545,6 +3732,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 8.91
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (100)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1067857061
@@ -3554,11 +3746,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (98)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3603,6 +3790,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.016343
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (98)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -3681,12 +3873,46 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1090935181}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1091424636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1091424637}
+  m_Layer: 0
+  m_Name: Old Blockouts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1091424637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091424636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2000310365}
+  - {fileID: 561107035}
+  - {fileID: 92482606}
+  - {fileID: 199136337}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1099503622
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 730704712}
     m_Modifications:
     - target: {fileID: 3585945658772467263, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
@@ -3696,7 +3922,7 @@ PrefabInstance:
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.49
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
@@ -3706,22 +3932,22 @@ PrefabInstance:
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
@@ -3731,7 +3957,7 @@ PrefabInstance:
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
         type: 3}
@@ -3751,6 +3977,12 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 4572741358722114055, guid: 744e7eb4de33cd3409ded42a8e23b870, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 744e7eb4de33cd3409ded42a8e23b870, type: 3}
+--- !u!4 &1099503623 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5330027842181399667, guid: 744e7eb4de33cd3409ded42a8e23b870,
+    type: 3}
+  m_PrefabInstance: {fileID: 1099503622}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1101038636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3758,11 +3990,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (113)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3828,6 +4055,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (113)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1152510311
@@ -3837,11 +4069,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (83)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3907,6 +4134,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (83)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1178247501
@@ -3916,11 +4148,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (86)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -3961,6 +4188,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.016447
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (86)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1187535628
@@ -3970,11 +4202,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (101)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4040,6 +4267,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (101)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1213984543
@@ -4049,11 +4281,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (111)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4119,6 +4346,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (111)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1214654922
@@ -4128,11 +4360,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (82)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4197,6 +4424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -101.41901
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (82)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -4282,11 +4514,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (105)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4331,6 +4558,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.031858
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (105)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -4416,11 +4648,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (112)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4485,6 +4712,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (112)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -4570,11 +4802,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (102)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4620,6 +4847,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.016343
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (102)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1405708862
@@ -4629,11 +4861,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (115)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4699,6 +4926,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.024184
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (115)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1420921282
@@ -4708,11 +4940,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (87)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4773,6 +5000,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 16.924002
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (87)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1451471565
@@ -4782,11 +5014,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (109)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4846,6 +5073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.032223
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (109)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -4947,11 +5179,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (93)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4996,6 +5223,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.031858
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (93)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -5097,11 +5329,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 199136337}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_rock_small_01
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8415f57578eb31f42804ce1130a3b71c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5156,6 +5383,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8415f57578eb31f42804ce1130a3b71c,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_rock_small_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8415f57578eb31f42804ce1130a3b71c, type: 3}
@@ -5260,7 +5492,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 8f78a2958da96ce46ae8435a83e22abc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.6451306
+      value: -3.1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8f78a2958da96ce46ae8435a83e22abc,
         type: 3}
@@ -5413,11 +5645,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (99)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5433,6 +5660,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 24.11
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (99)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1934468802
@@ -5442,11 +5674,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (91)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5511,6 +5738,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 89.99999
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (91)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -5612,11 +5844,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (95)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5662,6 +5889,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.026098
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (95)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &1988558464
@@ -5671,11 +5903,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (85)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5731,6 +5958,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (85)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1 &2000310364
@@ -5756,16 +5988,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000310364}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.46, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 19.46, y: 2.1000004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1780229527}
   - {fileID: 203060052}
   - {fileID: 1284667617}
   - {fileID: 1239321880}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 1091424637}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2000603734
 PrefabInstance:
@@ -5774,11 +6006,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (79)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5814,6 +6041,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 8.91
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (79)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &2004973124
@@ -5823,11 +6055,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (92)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5888,6 +6115,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -16.924
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (92)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &2007358805
@@ -5897,11 +6129,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (106)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5962,6 +6189,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (106)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
 --- !u!1001 &2018336300
@@ -5984,7 +6216,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: b037d7f1e6fcdbd49a2e9c56eb3a6152,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1719242
+      value: -2.8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b037d7f1e6fcdbd49a2e9c56eb3a6152,
         type: 3}
@@ -6046,11 +6278,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 73208920}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
-        type: 3}
-      propertyPath: m_Name
-      value: Scrum_toprock_big_01 (104)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7a348dee15767be4b93fb28baacd2adf,
         type: 3}
       propertyPath: m_RootOrder
@@ -6105,6 +6332,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.042338
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7a348dee15767be4b93fb28baacd2adf,
+        type: 3}
+      propertyPath: m_Name
+      value: Scrum_toprock_big_01 (104)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a348dee15767be4b93fb28baacd2adf, type: 3}
@@ -6188,7 +6420,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 730704712}
     m_Modifications:
     - target: {fileID: 8146310693881891933, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
@@ -6198,32 +6430,32 @@ PrefabInstance:
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.216
+      value: 0.4790001
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.432
+      value: 1.9850006
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15
+      value: 1.7000008
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
@@ -6233,7 +6465,7 @@ PrefabInstance:
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
         type: 3}
@@ -6253,3 +6485,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6744888060290844048, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7, type: 3}
+--- !u!4 &156622667348352837 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5140537585149230670, guid: e0d41e5b5b2b8fb43b7ca1dd885210c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 156622667348352836}
+  m_PrefabAsset: {fileID: 0}
