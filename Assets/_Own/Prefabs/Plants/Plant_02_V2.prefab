@@ -5562,8 +5562,8 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
       value: 0.5
       mode: 0
@@ -8648,7 +8648,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
@@ -10381,8 +10381,8 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
       value: 0.2
       mode: 0
@@ -13467,7 +13467,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
@@ -15254,8 +15254,8 @@ ParticleSystem:
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0.3
-    sphericalDirectionAmount: 0
-    randomPositionAmount: 0.2
+    sphericalDirectionAmount: 1
+    randomPositionAmount: 0
     radius:
       value: 0.2
       mode: 0
@@ -18340,7 +18340,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 0}
     randomDistribution: 0
