@@ -28076,7 +28076,15 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 19594665556494896, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+        type: 3}
+      propertyPath: activationButton
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 19594666589132802, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
+    - {fileID: 19594666589132803, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
+    - {fileID: 825365844, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
 --- !u!1001 &2170682733310004171
 PrefabInstance:
