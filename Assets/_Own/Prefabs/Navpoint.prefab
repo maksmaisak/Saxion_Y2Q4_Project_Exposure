@@ -329,7 +329,7 @@ GameObject:
   m_Layer: 0
   m_Name: Navpoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -361,6 +361,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8b735318351469db4f0b7bb72fd61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableTeleport: 0
+  targetListPolicy: {fileID: 0}
+  teleporter: {fileID: 0}
   onComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -370,7 +373,7 @@ MonoBehaviour:
   outerCircle: {fileID: 7878361255527723950}
   innerCircle: {fileID: 7878361255405363627}
   fillDuration: 1
-  lightSectionToTrack: {fileID: 0}
+  lightSectionToRevealWith: {fileID: 0}
 --- !u!65 &558030851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -394,5 +397,5 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

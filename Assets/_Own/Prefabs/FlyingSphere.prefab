@@ -122,7 +122,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -218,8 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularSpeed: 2
-  attractionRadius: 2
+  angularSpeed: 1
+  attractionRadius: 1
   targetSphereRadius: 0.5
   slowdownRadius: 4
   scaleTarget: 0.27

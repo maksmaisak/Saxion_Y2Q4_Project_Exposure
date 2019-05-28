@@ -10,7 +10,7 @@ public class ToggleHands : ToggleCustomHands
         state = false;
         ToggleVisibility();
 
-        // we toggle the visibility again with a small delay because the SDK_Setup is not loaded yet
+        // We toggle the visibility again with a small delay because the SDK_Setup is not loaded yet
         this.Delay(0.5f, () =>
         {
             state = true;
