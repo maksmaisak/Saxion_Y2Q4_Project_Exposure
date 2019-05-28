@@ -152,7 +152,7 @@ public class RadarTool : MonoBehaviour
             .Select((hit, i) => (hit, i))
             .Where(tuple => tuple.hit.collider)
             .Select(tuple => (tuple.hit, tuple.i, lightSection: dotsManager.GetSection(tuple.hit.collider)))
-            .Where(tuple => !tuple.lightSection || !tuple.lightSection.isRevealed)
+            .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
             .Select(tuple =>
             {
                 float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
