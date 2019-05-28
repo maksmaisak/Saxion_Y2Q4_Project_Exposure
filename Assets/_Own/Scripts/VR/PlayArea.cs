@@ -14,5 +14,7 @@ public class PlayArea : MonoBehaviour
         
         Assert.IsNotNull(playAreaTransform, "Play area transform not found!");
         transform.parent = playAreaTransform;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
     }
 }
