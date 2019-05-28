@@ -9,7 +9,6 @@ public class RadarController : VRTK_InteractableObject
 {
     [Header("Radar Controller")]
     [SerializeField] RadarTool radarTool;
-
     [SerializeField] float chargeUpDuration = 1.6f;
     
     [Header("Audio Settings")]
@@ -31,8 +30,7 @@ public class RadarController : VRTK_InteractableObject
         Assert.IsNotNull(chargeUpClip);
         Assert.IsNotNull(interruptClip);
 
-        yield return new WaitUntil(() =>
-                radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
+        yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)

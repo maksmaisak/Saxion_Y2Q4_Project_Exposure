@@ -17043,6 +17043,18 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1130112947 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 19594665248946525, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1619674579164575260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed2aa1a29b92ca4f84a26a5f6e9218b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1135211173
 GameObject:
   m_ObjectHideFlags: 0
@@ -19603,6 +19615,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
       objectReference: {fileID: 0}
+    - target: {fileID: 1095724823, guid: fbbf6863e4ff6fc4397586df02d24473, type: 3}
+      propertyPath: targetListPolicy
+      value: 
+      objectReference: {fileID: 1130112947}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbbf6863e4ff6fc4397586df02d24473, type: 3}
 --- !u!1001 &1340434273

@@ -10,7 +10,7 @@ public class FlyingSphereAudio : Singleton<FlyingSphereAudio>
 
     public AudioClip GetGrabAudioClip()
     {
-        if (grabAudioClips == null)
+        if (grabAudioClips == null || grabAudioClips.Length == 0)
             return null;
         
         AudioClip clip = grabAudioClips[currentClipIndex];
