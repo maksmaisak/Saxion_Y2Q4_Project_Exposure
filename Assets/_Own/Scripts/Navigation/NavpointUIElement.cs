@@ -119,6 +119,8 @@ public class NavpointUIElement : VRTK_DestinationMarker
             Assert.IsTrue(EnsureTeleporter());
             Transform tf = transform;
             teleporter.Teleport(tf, tf.position);
+
+            new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             
             onComplete?.Invoke();
             Destroy(gameObject);
