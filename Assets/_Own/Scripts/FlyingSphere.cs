@@ -10,33 +10,40 @@ using Random = UnityEngine.Random;
 
 public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    [Header("Movement Settings")] 
-    [SerializeField] float angularSpeed = 1.0f;
+    [Header("Movement Settings")] [SerializeField]
+    float angularSpeed = 1.0f;
+
     [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float targetSphereRadius = 0.25f;
-    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")]
-    [SerializeField] float slowdownRadius = 4.0f;
 
-    [Header("Scaling Settings")]
-    [SerializeField] float scaleTarget = 0.8f;
+    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")] [SerializeField]
+    float slowdownRadius = 4.0f;
+
+    [Header("Scaling Settings")] [SerializeField]
+    float scaleTarget = 0.8f;
+
     [SerializeField] float scaleDuration = 0.7f;
     [SerializeField] float scaleRandomMin = 0.4f;
 
-    [Header("Color Settings")]
-    [SerializeField] string albedoColorId = "_AlbedoColor_549AC39B";
+    [Header("Color Settings")] [SerializeField]
+    string albedoColorId = "_AlbedoColor_549AC39B";
+
     [SerializeField] string emissionColorId = "_EmissionColor_40E9251C";
     [SerializeField] List<Color> albedoColors = new List<Color>();
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
-    [Header("Vibration Settings")]
-    [SerializeField] int vibrationDuration = 40;
+    [Header("Vibration Settings")] [SerializeField]
+    int vibrationDuration = 40;
+
     [SerializeField] int frequency = 2;
     [SerializeField] int strength = 100;
 
-    [Header("Other Settings")]
-    [SerializeField] AudioClip grabAudio;
-    [SerializeField] AudioClip movingSound;
+    [Header("Audio Settings")]
     [SerializeField] AudioClip spawnAudio;
+    [SerializeField] [Range(0, 1)] float grabAudioVolume;
+    [SerializeField] bool playOnAwake = false;
+
+    [Header("Other Settings")] 
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
@@ -55,7 +62,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     public RadarHighlightLocation highlightLocation { get; set; }
 
     private static float lastTimeWasCaught;
-    
+
     public void Initialize(Vector3 target, float movementSpeed, LightSection sourceSection)
     {
         Assert.IsFalse(didStart, "Can't Initialize a wavesphere after it started moving.");
@@ -67,19 +74,19 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     protected override void Awake()
     {
         base.Awake();
-        
-        transform   = GetComponent<Transform>();
+
+        transform = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
-        
+
         targetTransforms.Add(Camera.main.gameObject.transform);
 
         if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
             return;
-            
+
         targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
         targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
     }
-    
+
     void Start()
     {
         didStart = true;
@@ -88,13 +95,12 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeScale();
         RandomizeSpeedAndDirection();
 
+        audioSource.playOnAwake = playOnAwake;
+
         audioSource.PlayOneShot(spawnAudio);
-
-        audioSource.clip = movingSound;
-        audioSource.loop = true;
-        audioSource.Play();
-
+        
         Destroy(gameObject, delayToDespawn);
+
     }
 
     void Update()
@@ -103,40 +109,42 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             return;
 
         transform.position += speed * Time.deltaTime * transform.forward;
-        
+
         AttractToHands();
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
-        
+
         DotsManager.instance.Highlight(highlightLocation);
 
         isFadingOut = true;
         //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
         lastTimeWasCaught = Time.time;
 
+        AudioClip grabAudioClip = FlyingSphereAudio.instance.GetGrabAudioClip();
+        audioSource.clip = grabAudioClip;
+        audioSource.volume = grabAudioVolume;
+        audioSource.Play();
+
         VibrateController(other);
 
-        audioSource.clip = grabAudio;
-        audioSource.Play();
-        
         transform.parent = other.transform;
-        
-        transform.DOKill();
-        
-        const float Duration = 0.2f;
 
-        transform.DOScale(0.0f, Duration)
+        transform.DOKill();
+
+        const float duration = 0.2f;
+
+        transform.DOScale(0.0f, duration)
             .SetEase(Ease.OutQuart);
-        
-        Vector3 otherPosition = other.transform.position;
-        transform.DOLookAt(otherPosition - transform.position, Duration)
+
+        var otherPosition = other.transform.position;
+        transform.DOLookAt(otherPosition - transform.position, duration)
             .SetEase(Ease.OutQuart);
-        
-        Destroy(gameObject, Mathf.Max(grabAudio.length / audioSource.pitch, Duration));
+
+        Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, duration));
     }
 
     public void On(OnRevealEvent reveal)
@@ -155,17 +163,17 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             .SetEase(Ease.InBack)
             .OnComplete(() => Destroy(gameObject));
     }
-    
+
     private void RandomizeSpeedAndDirection()
     {
-        float targetPositionRandomizationRadius = targetSphereRadius;
+        var targetPositionRandomizationRadius = targetSphereRadius;
 
-        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
-        float distance = Vector3.Distance(targetPosition, transform.position);
+        var targetPosition = targetCenter ?? Camera.main.transform.position;
+        var distance = Vector3.Distance(targetPosition, transform.position);
         if (distance < slowdownRadius)
         {
             float multiplier = Mathf.Max(distance / slowdownRadius, 0.01f);
-            
+
             speed *= multiplier;
             targetPositionRandomizationRadius *= multiplier;
         }
@@ -181,7 +189,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     {
         // Randomize scale over time
         float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
-        
+
         Transform tf = transform;
         tf.localScale = Vector3.zero;
         tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
@@ -204,12 +212,13 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     {
         if (targetTransforms.Count == 0)
             return;
-        
-        Transform targetTransform = targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
+
+        Transform targetTransform =
+            targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
         Vector3 targetDir = targetTransform.position - transform.position;
         if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
             return;
-        
+
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
     }
@@ -217,15 +226,15 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private void VibrateController(Collider other)
     {
         GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
-        if (!otherController) 
+        if (!otherController)
             return;
-        
+
         bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
 
         VRTK_ControllerReference controllerReference = isLeftHand
             ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
             : VRTK_DeviceFinder.GetControllerReferenceRightHand();
-        
+
         VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval: 0.02f);
     }
 }
