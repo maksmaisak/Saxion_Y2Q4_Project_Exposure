@@ -51,7 +51,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 114688
   numDotsToReveal: 20000
-  fadeInKeyCode: 49
   revealDuration: 4
+  onReveal:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  fadeInKeyCode: 49
   lights: []
   gameObjects: []
