@@ -394,6 +394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5140537585149230670}
   - component: {fileID: 3016523838919381812}
+  - component: {fileID: 7838592310192833678}
   m_Layer: 0
   m_Name: Ceiling_Plant_Rigged
   m_TagString: Untagged
@@ -425,7 +426,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8146310693881891933}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 6afa4a9035aa3bd4d892f28cf47fb377, type: 3}
   m_Controller: {fileID: 9100000, guid: 87026b6ee71f0344daa0896b8b614d82, type: 2}
   m_CullingMode: 1
@@ -436,6 +437,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7838592310192833678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146310693881891933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94584770ed5b9b24dad680b89993313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onReveal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3016523838919381812}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &8563432864579140431
 GameObject:
   m_ObjectHideFlags: 0
