@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using VRTK;
 
-public class NavpointUIElement : MonoBehaviour
+public class NavpointUIElement : VRTK_DestinationMarker
 {
+    [Header("Navpoint Settings")]
+    [SerializeField] VRTK_BasicTeleport teleporter;
     public UnityEvent onComplete;
 
     [SerializeField] CanvasGroup canvasGroup;
@@ -113,9 +116,25 @@ public class NavpointUIElement : MonoBehaviour
 
         sequence.OnComplete(() =>
         {
+            Assert.IsTrue(EnsureTeleporter());
+            Transform tf = transform;
+            teleporter.Teleport(tf, tf.position);
+            
             onComplete?.Invoke();
             Destroy(gameObject);
         });
+    }
+
+    private bool EnsureTeleporter()
+    {
+        if (teleporter)
+            return true;
+
+        if (VRTK_ObjectCache.registeredTeleporters.Count == 0)
+            return false;
+
+        teleporter = VRTK_ObjectCache.registeredTeleporters[0];
+        return true;
     }
 
     public void SetFilling(bool isFilling)

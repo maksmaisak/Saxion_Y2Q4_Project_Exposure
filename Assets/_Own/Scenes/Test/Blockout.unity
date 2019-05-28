@@ -18118,37 +18118,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7878361257375765436, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
+        type: 3}
+      propertyPath: enableTeleport
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555223313, guid: ff73d2c1cb1f34920883884fd8c2f5b6, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff73d2c1cb1f34920883884fd8c2f5b6, type: 3}
---- !u!1 &1195600785 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7878361257375765434, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1195600784}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1195600786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195600785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6512be739a547c4f8c3323a1bdb9708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableTeleport: 1
-  targetListPolicy: {fileID: 0}
-  defaultCursorObject: {fileID: 0}
-  hoverCursorObject: {fileID: 0}
-  lockedCursorObject: {fileID: 0}
-  destinationLocation: {fileID: 0}
-  snapToPoint: 1
-  hidePointerCursorOnHover: 1
-  hideDirectionIndicatorOnHover: 0
-  snapToRotation: 0
-  teleporter: {fileID: 0}
 --- !u!1001 &1234856049
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26892,6 +26872,11 @@ PrefabInstance:
       propertyPath: checkType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 19594665248946525, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+        type: 3}
+      propertyPath: identifiers.Array.data[0]
+      value: VRTK_DestinationMarker
+      objectReference: {fileID: 0}
     - target: {fileID: 4238285338348159878, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27275,6 +27260,16 @@ PrefabInstance:
     - target: {fileID: 19594667035381062, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19594665556494896, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+        type: 3}
+      propertyPath: enableTeleport
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19594666589132803, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+        type: 3}
+      propertyPath: enableTeleport
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1175389191, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
