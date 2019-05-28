@@ -2,7 +2,7 @@ using UnityEngine;
 using VRTK;
 using VRTK.UnityEventHelper;
 
-public class PointerEventListener : MonoBehaviour
+public class NavpointActivator : MonoBehaviour
 {
     [SerializeField] VRTK_DestinationMarker pointer;
     
@@ -13,7 +13,7 @@ public class PointerEventListener : MonoBehaviour
         if (pointer != null)
         {
             pointer.DestinationMarkerEnter += DestinationMarkerEnter;
-            pointer.DestinationMarkerExit += DestinationMarkerExit;
+            pointer.DestinationMarkerExit  += DestinationMarkerExit;
         }
         else
         {
@@ -26,7 +26,7 @@ public class PointerEventListener : MonoBehaviour
         if (pointer != null)
         {
             pointer.DestinationMarkerEnter -= DestinationMarkerEnter;
-            pointer.DestinationMarkerExit -= DestinationMarkerExit;
+            pointer.DestinationMarkerExit  -= DestinationMarkerExit;
         }
     }
 
