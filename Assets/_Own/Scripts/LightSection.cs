@@ -19,6 +19,7 @@ public class LightSection : MonoBehaviour
     private static readonly int ColorId    = Shader.PropertyToID("_BaseColor");
     private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
     private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
+    private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
 
     struct RendererData
     {
@@ -283,7 +284,7 @@ public class LightSection : MonoBehaviour
             if (oldBlend != newBlend)
             {
                 sequence.AppendCallback(() => material.SetInt(SrcBlendId, newBlend));
-                sequence.OnComplete(() => material.SetInt(SrcBlendId, oldBlend));
+                sequence.onComplete += () => material.SetInt(SrcBlendId, oldBlend);
             }
             else
             {
@@ -291,18 +292,31 @@ public class LightSection : MonoBehaviour
             }
         }
 
-        Color targetColor = material.GetColor(ColorId);
-        targetColor.a = targetAlpha;
-        material.SetColor(ColorId, Color.clear);
-        var tweenAlpha = DOTween.To(
-            () => material.GetColor(ColorId),
-            color => material.SetColor(ColorId, color),
-            targetColor,
-            revealDuration
-        ).SetTarget(material);
+        if (material.HasProperty(ColorId))
+        {
+            Color targetColor = material.GetColor(ColorId);
+            targetColor.a = targetAlpha;
+            material.SetColor(ColorId, Color.clear);
+            var tweenColor = DOTween.To(
+                () => material.GetColor(ColorId),
+                color => material.SetColor(ColorId, color),
+                targetColor,
+                revealDuration
+            ).SetTarget(material);
+            sequence.Append(tweenColor);
+        }
 
-        sequence.Append(tweenAlpha);
-        
+        if (material.HasProperty(EmissionColorId))
+        {
+            var tweenEmission = DOTween.To(
+                () => material.GetColor(EmissionColorId),
+                color => material.SetColor(EmissionColorId, color),
+                Color.black,
+                revealDuration
+            ).SetTarget(material).From();
+            sequence.Join(tweenEmission);
+        }
+
         return sequence;
     }
 }
