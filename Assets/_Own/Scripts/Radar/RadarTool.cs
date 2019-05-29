@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 using VRTK;
 using Random = UnityEngine.Random;
 
-public class RadarTool : MonoBehaviour
+public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     private const int MaxNumRaysPerAxis = 21;
 
@@ -49,8 +49,10 @@ public class RadarTool : MonoBehaviour
     private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
     private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         transform = GetComponent<Transform>();
         
         // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
@@ -66,8 +68,10 @@ public class RadarTool : MonoBehaviour
         hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+        
         if (commands.IsCreated)
             commands.Dispose();
         
@@ -82,6 +86,11 @@ public class RadarTool : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Space)) 
             Probe();
+    }
+
+    public void On(OnRevealEvent message)
+    {
+        StopAllCoroutines();
     }
     
     public void Probe()

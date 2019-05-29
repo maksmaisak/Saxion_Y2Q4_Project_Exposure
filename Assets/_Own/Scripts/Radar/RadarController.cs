@@ -85,7 +85,8 @@ public class RadarController : VRTK_InteractableObject
 
     private void PlayInterruptIfNeeded()
     {
-        if (Time.time - lastChargeUpStartedTime >= chargeUpDuration) 
+        float timeSinceChargeupStarted = Time.time - lastChargeUpStartedTime;
+        if (timeSinceChargeupStarted >= chargeUpDuration) 
             return;
         
         StopAllCoroutines();
