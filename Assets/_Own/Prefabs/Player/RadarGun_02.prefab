@@ -503,7 +503,7 @@ MonoBehaviour:
     type: 3}
   wavesphereTarget: {fileID: 0}
   baseDotConeAngle: 40
-  dotConeAngleFalloff: 0.04
+  dotConeAngleFalloff: 0.1
   dotConeAngleFalloffPower: 1
   maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 0
