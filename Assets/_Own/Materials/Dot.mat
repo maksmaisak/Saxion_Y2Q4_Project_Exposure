@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 0801321f41f1a426c8e984b91c978f74, type: 3}
   m_ShaderKeywords: _ALPHATEST_ON _COLORADDSUBDIFF_ON _EMISSION _RECEIVE_SHADOWS_OFF
   m_LightmapFlags: 2
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -55,7 +55,7 @@ Material:
     m_Floats:
     - Vector1_324C3AD2: 0.5
     - Vector1_A1B84C3E: 0.1
-    - Vector1_ADA3E76E: 0.2
+    - Vector1_ADA3E76E: 4
     - _AlphaClip: 1
     - _Blend: 0
     - _BlendOp: 0
