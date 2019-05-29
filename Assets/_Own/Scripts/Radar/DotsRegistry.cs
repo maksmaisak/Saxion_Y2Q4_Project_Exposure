@@ -76,7 +76,9 @@ public class DotsRegistry
 
     public void DrawDebugInfoInEditor()
     {
+    #if UNITY_EDITOR
         Handles.DrawWireCube(sceneBounds.center, sceneBounds.size);
+    #endif
     }
 
     private Vector3Int GetCellIndicesFor(Vector3 position)

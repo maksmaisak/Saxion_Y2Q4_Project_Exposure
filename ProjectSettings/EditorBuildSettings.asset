@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Own/Scenes/Test/TestDots_VR.unity
-    guid: 5cac31640a562294989cada6ebacd13a
+    path: Assets/_Own/Scenes/Test/Blockout.unity
+    guid: 617829b082950e74883779785cc47584
   m_configObjects: {}
