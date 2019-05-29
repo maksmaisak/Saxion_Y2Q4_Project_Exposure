@@ -34,6 +34,6 @@ public class RadarPointerController : MyBehaviour, IEventReceiver<OnRevealEvent>
         pointer.Toggle(isPointerOn);
         
         if (radarController)
-            radarController.enabled = !isPointerOn;
+            radarController.SetIsUsable(!isPointerOn);
     }
 }

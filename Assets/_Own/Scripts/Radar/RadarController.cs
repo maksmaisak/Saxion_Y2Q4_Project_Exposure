@@ -17,6 +17,8 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] AudioClip interruptClip;
     [SerializeField] float shootVolume = 0.8f;
     [SerializeField] float chargeUpVolume = 0.6f;
+
+    private bool canUse = true;
     
     private AudioSource audioSource;
 
@@ -33,9 +35,24 @@ public class RadarController : VRTK_InteractableObject
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
 
+    public void SetIsUsable(bool isUsable)
+    {
+        if (canUse && !isUsable)
+        {
+            StopAllCoroutines();
+            audioSource.Stop();
+            lastChargeUpStartedTime = 0.0f;
+        }
+        
+        canUse = isUsable;
+    }
+
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
     {
         base.StartUsing(currentUsingObject);
+
+        if (!canUse)
+            return;
 
         lastChargeUpStartedTime = Time.time;
 
@@ -58,6 +75,9 @@ public class RadarController : VRTK_InteractableObject
     public override void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
     {
         base.StopUsing(previousUsingObject, resetUsingObjectState);
+
+        if (!canUse)
+            return;
 
         if (Time.time - lastChargeUpStartedTime < chargeUpDuration)
         {
