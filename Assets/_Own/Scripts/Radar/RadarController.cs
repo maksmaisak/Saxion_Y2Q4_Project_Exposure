@@ -41,6 +41,7 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
             audioSource.Stop();
+            PlayInterruptIfNeeded();
             lastChargeUpStartedTime = 0.0f;
         }
         
@@ -79,15 +80,20 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        if (Time.time - lastChargeUpStartedTime < chargeUpDuration)
-        {
-            StopAllCoroutines();
+        PlayInterruptIfNeeded();
+    }
+
+    private void PlayInterruptIfNeeded()
+    {
+        if (Time.time - lastChargeUpStartedTime >= chargeUpDuration) 
+            return;
+        
+        StopAllCoroutines();
             
-            audioSource.Stop();
-            audioSource.clip = interruptClip;
-            audioSource.volume = chargeUpVolume;
-            audioSource.Play();
-        }
+        audioSource.Stop();
+        audioSource.clip = interruptClip;
+        audioSource.volume = chargeUpVolume;
+        audioSource.Play();
     }
 }
 
