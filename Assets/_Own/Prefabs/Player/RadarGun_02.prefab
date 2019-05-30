@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 249407927}
+  radarController: {fileID: 0}
 --- !u!114 &249407930
 MonoBehaviour:
   m_ObjectHideFlags: 0

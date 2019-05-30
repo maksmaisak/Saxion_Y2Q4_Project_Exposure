@@ -47,3 +47,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 10035
   maxDotSpawnDistance: 200
+  dotsAnimatorPrefab: {fileID: 7143588570264989009, guid: f424c019a2e4b4ef8a5de030c4b667fb,
+    type: 3}

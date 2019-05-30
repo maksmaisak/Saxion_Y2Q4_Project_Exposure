@@ -9,7 +9,7 @@ public static class EnumerableExtensions
         foreach (T item in items)
             action(item);
     }
-    
+
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
     {
         return source.Shuffle(new Random());

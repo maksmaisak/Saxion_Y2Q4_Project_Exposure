@@ -254,7 +254,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             
             if (highlightWithoutWavespheres)
             {
-                DotsManager.instance.Highlight(highlightLocation);
+                DotsManager.instance.Highlight(highlightLocation, originalRay.origin);
                 return;
             }
             
