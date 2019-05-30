@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2479731003896856648}
   - component: {fileID: 2479731003896856649}
   m_Layer: 0
-  m_Name: FlyingSphereAudio
+  m_Name: _FlyingSphereAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,3 +51,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 630e21228dd6cfd4dae716c9011549b3, type: 3}
   - {fileID: 8300000, guid: 4f99e4bf679e5324f87ca82875042741, type: 3}
   - {fileID: 8300000, guid: b331eac0fc2043141a5849a6fc4053eb, type: 3}
+  - {fileID: 8300000, guid: b331eac0fc2043141a5849a6fc4053eb, type: 3}
+  - {fileID: 8300000, guid: 4f99e4bf679e5324f87ca82875042741, type: 3}
+  - {fileID: 8300000, guid: 630e21228dd6cfd4dae716c9011549b3, type: 3}
+  - {fileID: 8300000, guid: c7f413a810242e84b9439e31c018cd21, type: 3}
+  - {fileID: 8300000, guid: 2ccfe82d7b17ec74492eba5ae5281219, type: 3}
+  - {fileID: 8300000, guid: bcba377b8dce3154cbe69ce39caf4687, type: 3}
+  - {fileID: 8300000, guid: 123db851e35d8584aa7dc8ac012238b0, type: 3}

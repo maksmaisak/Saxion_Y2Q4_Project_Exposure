@@ -16,7 +16,7 @@ public class DotsManager : Singleton<DotsManager>
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] float maxDotSpawnDistance = 200.0f;
-    [Space] 
+    [Space]
     [SerializeField] DotsAnimator dotsAnimatorPrefab;
     [SerializeField] int numAnimatorsToPreCreate = 8;
     
