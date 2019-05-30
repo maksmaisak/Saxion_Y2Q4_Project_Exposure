@@ -125,6 +125,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         lastTimeWasCaught = Time.time;
 
         AudioClip grabAudioClip = FlyingSphereAudio.instance.GetGrabAudioClip();
+        Assert.IsNotNull(grabAudioClip);
         audioSource.clip = grabAudioClip;
         audioSource.volume = grabAudioVolume;
         audioSource.Play();

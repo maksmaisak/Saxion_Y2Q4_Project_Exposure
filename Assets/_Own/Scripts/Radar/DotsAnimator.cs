@@ -16,6 +16,9 @@ public class DotsAnimator : MonoBehaviour
     [SerializeField] new ParticleSystem particleSystem;
 
     [SerializeField] List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    [SerializeField] List<Vector3> deltasBuffer    = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    [SerializeField] List<float> distancesBuffer   = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
+    [SerializeField] List<float> multipliersBuffer = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
     [SerializeField] NativeArray<Vector4> deltas;
 
     void Awake()
@@ -26,7 +29,7 @@ public class DotsAnimator : MonoBehaviour
         deltas = new NativeArray<Vector4>(DotsManager.MaxNumDotsPerHighlight, Allocator.Persistent);
     }
     
-    private void OnDestroy()
+    void OnDestroy()
     {
         if (deltas.IsCreated)
             deltas.Dispose();
@@ -42,8 +45,11 @@ public class DotsAnimator : MonoBehaviour
         
         public void ProcessParticleSystem(ParticleSystemJobData jobData)
         {
-            t += dt;
+            if (t > 1.0f)
+                return;
             
+            t += dt;
+
             var posX = jobData.positions.x;
             var posY = jobData.positions.y;
             var posZ = jobData.positions.z;
@@ -59,30 +65,20 @@ public class DotsAnimator : MonoBehaviour
             }
         }
     }
-
+    
     public void AnimateDots(IReadOnlyList<Vector3> positions, Vector3 origin, Action<DotsAnimator, IList<Vector3>> onDoneCallback)
     {
+        Assert.IsFalse(isBusy);
+        isBusy = true;
+
         int numDots = positions.Count;
-        if (numDots > DotsManager.MaxNumDotsPerHighlight)
-            Debug.Log("");
+        Assert.IsTrue(numDots <= DotsManager.MaxNumDotsPerHighlight, $"{numDots} > {DotsManager.MaxNumDotsPerHighlight}");
         
-        Assert.IsTrue(numDots <= DotsManager.MaxNumDotsPerHighlight, $"{positions.Count} > {DotsManager.MaxNumDotsPerHighlight}");
-        Assert.AreEqual(positionsBuffer.Count, 0);
+        Assert.AreEqual(positionsBuffer.Count, 0, "DotsAnimator.positionsBuffer is not empty!");
         positionsBuffer.AddRange(positions);
         
-        isBusy = true;
-        for (int i = 0; i < numDots; ++i)
-            deltas[i] = positionsBuffer[i] - origin;
+        FillDeltas(origin, numDots);
 
-        var distances = deltas.Take(positions.Count).Select(d => Mathf.Max(d.magnitude, float.Epsilon)).ToArray();
-        float longestDistance = distances.Max();
-        var multipliers = distances.Select(distance => longestDistance / distance).ToArray();
-        for (int i = 0; i < numDots; ++i)
-        {
-            Vector3 vector = deltas[i];
-            deltas[i] = new Vector4(vector.x, vector.y, vector.z, multipliers[i]);
-        }
-        
         particleSystem.Emit(numDots);
         particleSystem.SetJob(new MoveParticlesJob
         {
@@ -100,5 +96,24 @@ public class DotsAnimator : MonoBehaviour
             onDoneCallback?.Invoke(this, positionsBuffer);
             positionsBuffer.Clear();
         });
+    }
+
+    private void FillDeltas(Vector3 origin, int numDots)
+    {
+        deltasBuffer.Clear();
+        deltasBuffer.AddRange(positionsBuffer.Select(p => p - origin));
+
+        distancesBuffer.Clear();
+        distancesBuffer.AddRange(deltasBuffer.Select(d => Mathf.Max(d.magnitude, float.Epsilon)));
+        float longestDistance = distancesBuffer.Max();
+
+        multipliersBuffer.Clear();
+        multipliersBuffer.AddRange(distancesBuffer.Select(distance => longestDistance / distance));
+
+        for (int i = 0; i < numDots; ++i)
+        {
+            Vector3 delta = deltasBuffer[i];
+            deltas[i] = new Vector4(delta.x, delta.y, delta.z, multipliersBuffer[i]);
+        }
     }
 }
