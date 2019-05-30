@@ -118,7 +118,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
 
-        DotsManager.instance.Highlight(highlightLocation);
+        DotsManager.instance.Highlight(highlightLocation, transform.position);
 
         isFadingOut = true;
         //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);

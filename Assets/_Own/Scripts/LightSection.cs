@@ -110,27 +110,8 @@ public class LightSection : MonoBehaviour
         if (isRevealed)
             return;
         
+        dotsParticleSystem.AddParticles(positions);
         numDots += positions.Count;
-
-        int numParticlesAdded = positions.Count;
-        int oldNumParticles   = dotsParticleSystem.particleCount;
-        
-        // Emit the particles
-        dotsParticleSystem.Emit(numParticlesAdded);
-
-        // Read out into a buffer, set positions, write back in
-        var particleBuffer = new ParticleSystem.Particle[positions.Count];
-        dotsParticleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
-        for (int i = 0; i < numParticlesAdded; ++i)
-            particleBuffer[i].position = positions[i];
-        
-        dotsParticleSystem.SetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
-
-        if (!dotsParticleSystem.isPlaying)
-        {
-            // To make it recalculate the bounds used for culling
-            dotsParticleSystem.Simulate(0.01f, false, false, false);
-        }
     }
 
     [ContextMenu("Reveal")]
