@@ -11,24 +11,45 @@ using Random = UnityEngine.Random;
 /// A globally-accessible service for managing dot-based object highlighting.
 public class DotsManager : Singleton<DotsManager>
 {
+    public const int MaxNumDotsPerHighlight = 400;
+
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] float maxDotSpawnDistance = 200.0f;
     [Space] 
     [SerializeField] DotsAnimator dotsAnimatorPrefab;
     [SerializeField] int numAnimatorsToPreCreate = 8;
-
-    public const int MaxNumDotsPerHighlight = 400;
-
+    
     public DotsRegistry registry { get; private set; }
 
     private LightSection [] lightSections;
     private List<Vector3>[] positionsBuffers;
 
     private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
-
-    private Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
+    private readonly Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
     
+    private NativeArray<RaycastCommand> commands;
+    private NativeArray<RaycastHit>     hits;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        commands = new NativeArray<RaycastCommand>(MaxNumDotsPerHighlight, Allocator.Persistent);
+        hits     = new NativeArray<RaycastHit>    (MaxNumDotsPerHighlight, Allocator.Persistent);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        
+        if (commands.IsCreated)
+            commands.Dispose();
+        
+        if (hits.IsCreated)
+            hits.Dispose();
+    }
+
     void Start()
     {
         Physics.queriesHitTriggers = false;
@@ -65,53 +86,10 @@ public class DotsManager : Singleton<DotsManager>
     {
         //Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
       
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
-        float distanceFromOrigin = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
-        float displacementRadius = distanceFromOrigin * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
+        GenerateRaycastCommands(ref location, layerMask);
+        RaycastCommand.ScheduleBatch(commands, hits, 1).Complete();
+        FillPositionsBufferFromRaycastResults(ref location);
 
-        var results  = new NativeArray<RaycastHit>    (MaxNumDotsPerHighlight, Allocator.TempJob);
-        var commands = new NativeArray<RaycastCommand>(MaxNumDotsPerHighlight, Allocator.TempJob);
-
-        // Generate raycast commands
-        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
-        { 
-            Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
-            commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
-        }
-
-        // Execute the raycasts
-        JobHandle jobHandle = RaycastCommand.ScheduleBatch(commands, results, 1);
-        jobHandle.Complete();
-      
-        // Process raycast results
-        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
-        {
-            RaycastHit dotHit = results[i];
-            if (!dotHit.collider) // This only works as long as maxHits is one.
-                continue;
-         
-            Vector3 delta = dotHit.point - location.pointOnSurface;
-            float distanceAlongRay = Vector3.Dot(delta, location.originalRay.direction);
-            if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
-                continue;
-
-            //Debug.DrawLine(commands[i].from, dotHit.point, Color.cyan * 0.25f, 20.0f);
-
-            // TODO Doing a coroutine ends up being slow, find a way to emit all at the same time and have them fade in.
-            // Color over lifetime doesn't work because the particles have infinite lifetime. Store the time of emission in custom particle data?
-
-            if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
-            { 
-                //Debug.Log($"Collider {dotHit.collider} doesn't belong to any LightSection.");
-                continue;
-            }
-
-            if (lightSections[sectionIndex].isRevealed)
-                continue;
-
-            positionsBuffers[sectionIndex].Add(dotHit.point);
-        }
-        
         for (int i = 0; i < lightSections.Length; ++i)
         {
             List<Vector3> positionsBuffer = positionsBuffers[i];
@@ -128,9 +106,6 @@ public class DotsManager : Singleton<DotsManager>
             positionsBuffer.ForEach(registry.RegisterDot);
             positionsBuffer.Clear();
         }
-      
-        results.Dispose();
-        commands.Dispose();
     }
     
     public LightSection GetSection(Collider collider)
@@ -156,6 +131,45 @@ public class DotsManager : Singleton<DotsManager>
         registry?.DrawDebugInfoInEditor();
     }
     
+    private void GenerateRaycastCommands(ref RadarHighlightLocation location, LayerMask layerMask)
+    {
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
+        float distanceFromOrigin = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
+        float displacementRadius = distanceFromOrigin * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
+        
+        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
+        {
+            Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
+            commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
+        }
+    }
+    
+    private void FillPositionsBufferFromRaycastResults(ref RadarHighlightLocation location)
+    {
+        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
+        {
+            RaycastHit dotHit = hits[i];
+            if (!dotHit.collider) // This only works as long as maxHits is one.
+                continue;
+
+            Vector3 delta = dotHit.point - location.pointOnSurface;
+            
+            // The one below is actually correct, but this worked better, keeping it for now until (TODO) an angle-based solution is made.
+            float distanceAlongRay = Vector3.Dot(delta, location.originalRay.direction);
+            //float distanceAlongRay = Mathf.Abs(Vector3.Dot(delta, location.originalRay.direction));
+            if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
+                continue;
+
+            if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
+                continue;
+
+            if (lightSections[sectionIndex].isRevealed)
+                continue;
+
+            positionsBuffers[sectionIndex].Add(dotHit.point);
+        }
+    }
+
     private DotsAnimator GetFreeDotsAnimator()
     {
         if (freeDotsAnimators.Count > 0)

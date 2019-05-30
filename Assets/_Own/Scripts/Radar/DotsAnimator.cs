@@ -11,15 +11,18 @@ using UnityEngine.Experimental.ParticleSystemJobs;
 public class DotsAnimator : MonoBehaviour
 {
     public bool isBusy { get; private set; }
-
+    
     [SerializeField] float duration = 1.0f;
     [SerializeField] new ParticleSystem particleSystem;
 
-    [SerializeField] List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
-    [SerializeField] List<Vector3> deltasBuffer    = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
-    [SerializeField] List<float> distancesBuffer   = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
-    [SerializeField] List<float> multipliersBuffer = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
-    [SerializeField] NativeArray<Vector4> deltas;
+    private List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    private List<Vector3> deltasBuffer    = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    private List<float> distancesBuffer   = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
+    private List<float> multipliersBuffer = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
+    
+    /// xyz: vector from origin to the end
+    /// w: delta length relative to the longest delta (if half as long as the longest delta, then this is 0.5)
+    private NativeArray<Vector4> deltas;
 
     void Awake()
     {
@@ -59,6 +62,7 @@ public class DotsAnimator : MonoBehaviour
             {
                 Vector4 delta = deltas[i];
                 float tClamped = Mathf.Clamp01(t * delta.w);
+                
                 posX[i] = origin.x + delta.x * tClamped;
                 posY[i] = origin.y + delta.y * tClamped;
                 posZ[i] = origin.z + delta.z * tClamped;
