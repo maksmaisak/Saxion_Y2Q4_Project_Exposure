@@ -61,6 +61,7 @@ public class RadarController : VRTK_InteractableObject
 
         lastChargeUpStartedTime = Time.time;
 
+        Assert.IsNotNull(audioSource);
         audioSource.clip = chargeUpClip;
         audioSource.volume = chargeUpVolume;
         audioSource.Play();
@@ -95,6 +96,7 @@ public class RadarController : VRTK_InteractableObject
         
         StopAllCoroutines();
             
+        Assert.IsNotNull(audioSource);
         audioSource.Stop();
         audioSource.clip = interruptClip;
         audioSource.volume = chargeUpVolume;

@@ -20,15 +20,21 @@ public class TutorialDirector : MonoBehaviour
 
         yield return radarController.transform
             .DORotate(Vector3.up * 90.0f, 5.0f)
+            .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
-
-        radarTool.Probe();
-
+        
+        radarController.StartUsing();
+        yield return new WaitForSeconds(2.0f);
+        radarController.StopUsing();
+        
         yield return radarController.transform
             .DORotate(Vector3.up * -90.0f, 5.0f)
+            .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
-
-        radarTool.Probe();
+        
+        radarController.StartUsing();
+        yield return new WaitForSeconds(2.0f);
+        radarController.StopUsing();
 
         yield return radarController.transform
             .DORotate(Vector3.zero, 5.0f)
