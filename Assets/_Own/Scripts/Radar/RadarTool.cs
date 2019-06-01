@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
-using VRTK;
 using Random = UnityEngine.Random;
 
 public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
@@ -22,7 +20,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
     [SerializeField] float wavePulseSpeed    = 10.0f;
     [SerializeField] float wavePulseMaxRange = 20.0f;
-    [SerializeField] float sphereCastRadius = 0.2f;
+    [SerializeField] float sphereCastRadius  = 0.2f;
     
     [Header("Wavesphere settings")]
     [SerializeField] [Range(0.2f, 5.0f)]  float minDistanceBetweenSpawnedWavespheres = 2.0f;

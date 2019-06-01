@@ -136,16 +136,16 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         transform.DOKill();
 
-        const float duration = 0.2f;
+        const float Duration = 0.2f;
 
-        transform.DOScale(0.0f, duration)
+        transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
 
         var otherPosition = other.transform.position;
-        transform.DOLookAt(otherPosition - transform.position, duration)
+        transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
-        Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, duration));
+        Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
 
     public void On(OnRevealEvent reveal)
