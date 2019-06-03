@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] RadarController radarController;
+    [SerializeField] Transform rotateTransform;
     [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
@@ -21,8 +22,8 @@ public class TutorialDirector : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        yield return radarController.transform
-            .DORotate(Vector3.up * 90.0f, 5.0f)
+        yield return rotateTransform
+            .DORotate(Vector3.up * 60.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
@@ -32,9 +33,9 @@ public class TutorialDirector : MonoBehaviour
         radarController.StartUsing();
         yield return new WaitForSeconds(2.0f);
         radarController.StopUsing();
-        
-        yield return radarController.transform
-            .DORotate(Vector3.up * -90.0f, 5.0f)
+
+        yield return rotateTransform
+            .DORotate(Vector3.up * -60.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
@@ -42,17 +43,20 @@ public class TutorialDirector : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         radarController.StopUsing();
 
-        yield return radarController.transform
+        yield return rotateTransform
             .DORotate(Vector3.zero, 5.0f)
             .WaitForCompletion();
 
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
+        radarController.transform.parent = null;
+        Destroy(gameObject);
     }
 
     private void EnsureIsInitializedCorrectly()
     {
         Assert.IsNotNull(radarController);
+        Assert.IsNotNull(rotateTransform);
         radarTool = radarController.GetComponent<RadarTool>();
         Assert.IsNotNull(radarTool);
     }
