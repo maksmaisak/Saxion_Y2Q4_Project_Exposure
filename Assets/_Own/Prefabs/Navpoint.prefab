@@ -374,8 +374,9 @@ MonoBehaviour:
   outerCircle: {fileID: 7878361255527723950}
   innerCircle: {fileID: 7878361255405363627}
   fillDuration: 1
+  unFillDuration: 10
   lightSectionToRevealWith: {fileID: 0}
-  navPointAudio: {fileID: 8300000, guid: 4f99e4bf679e5324f87ca82875042741, type: 3}
+  navPointAudio: {fileID: 8300000, guid: 2d55cfc3f1680aa4695f45bdea83d39f, type: 3}
   teleportOnStart: 0
 --- !u!65 &558030851
 BoxCollider:
@@ -412,7 +413,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 2d55cfc3f1680aa4695f45bdea83d39f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

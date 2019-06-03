@@ -27,7 +27,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
-    
+
     private new Camera camera;
     private AudioSource audioSource;
 
@@ -108,10 +108,15 @@ public class NavpointUIElement : VRTK_DestinationMarker
         canvasGroup.DOKill();
         canvasGroup.DOFade(1.0f, 1.0f);
         transform.DOKill();
-        transform.DOPunchScale(Vector3.one * 0.4f, 1.0f, 2).SetLoops(-1,LoopType.Restart);
+        transform.DOPunchScale(Vector3.one * 0.4f, navPointAudio.length, 2).SetLoops(-1, LoopType.Restart);
 
-        audioSource.clip = navPointAudio;
-        audioSource.Play();
+        this.Delay(navPointAudio.length, () =>
+        {
+            audioSource.clip = navPointAudio;
+            audioSource.loop = true;
+            audioSource.Play();
+        });
+
     }
 
     private Sequence PlayDisappearEffect()
