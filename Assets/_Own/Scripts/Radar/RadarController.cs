@@ -110,8 +110,10 @@ public class RadarController : VRTK_InteractableObject
         FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
         
         yield return new WaitForSeconds(releaseDelay);
-        
-        FadeInAndPlay(releaseAudioSource, interruptClip, chargeUpVolume, fadeInDuration);
+
+        releaseAudioSource.volume = chargeUpVolume;
+        releaseAudioSource.clip = interruptClip;
+        releaseAudioSource.Play();
     }
 
     private void FadeInAndPlay(AudioSource source, AudioClip clip, float volume, float duration)
