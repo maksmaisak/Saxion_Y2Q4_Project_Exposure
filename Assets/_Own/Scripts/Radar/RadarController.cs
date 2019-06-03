@@ -9,29 +9,35 @@ public class RadarController : VRTK_InteractableObject
 {
     [Header("Radar Controller")] 
     [SerializeField] RadarTool radarTool;
-
     [SerializeField] float chargeUpDuration = 1.6f;
-
-    [Header("Audio Settings")] 
+    [SerializeField] float releaseDelay = 0.3f;
+    
+    [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
     [SerializeField] AudioClip chargeUpClip;
     [SerializeField] AudioClip interruptClip;
     [SerializeField] float shootVolume = 0.8f;
     [SerializeField] float chargeUpVolume = 0.6f;
+    [SerializeField] float fadeInDuration = 0.02f;
+    [SerializeField] float fadeOutDuration = 0.05f;
+    [SerializeField] AudioSource chargeUpAudioSource;
+    [SerializeField] AudioSource releaseAudioSource;
 
     private bool canUse = true;
 
-    private AudioSource audioSource;
-
-    private float lastChargeUpStartedTime;
+    private float lastChargeUpStartingTime;
+    private float lastReleaseStartingTime;
+    
+    private Coroutine interruptingSoundCoroutine;
+    private Coroutine fireRadarCoroutine;
 
     IEnumerator Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        
         Assert.IsNotNull(shootClip);
         Assert.IsNotNull(chargeUpClip);
         Assert.IsNotNull(interruptClip);
+        Assert.IsNotNull(releaseAudioSource);
+        Assert.IsNotNull(chargeUpAudioSource);
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
@@ -42,15 +48,13 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
 
-            if (audioSource)
-            {
-                audioSource.Stop();
-                PlayInterruptIfNeeded();
-            }
+            if (chargeUpAudioSource)
+                StartCoroutine(PlayInterrupt());
 
-            lastChargeUpStartedTime = 0.0f;
+            lastChargeUpStartingTime = 0.0f;
+            lastReleaseStartingTime = 0.0f;
         }
-        
+
         canUse = isUsable;
     }
 
@@ -61,19 +65,18 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        lastChargeUpStartedTime = Time.time;
+        float timeSinceReleaseStarted = Time.time - lastReleaseStartingTime;
+        if (timeSinceReleaseStarted <= releaseDelay && interruptingSoundCoroutine != null)
+            StopCoroutine(interruptingSoundCoroutine);
         
-        audioSource.clip = chargeUpClip;
-        audioSource.volume = chargeUpVolume;
-        audioSource.Play();
-        
+        lastChargeUpStartingTime = Time.time;
+
+        FadeInAndPlay(chargeUpAudioSource, chargeUpClip, chargeUpVolume, fadeInDuration);
+
         // Maybe use DOTween and instead of chargeUpDuration use clip.length (however this is easier to change)
-        this.Delay(chargeUpDuration, () =>
+        fireRadarCoroutine = this.Delay(chargeUpDuration, () =>
         {
-            audioSource.Stop();
-            audioSource.clip = shootClip;
-            audioSource.volume = shootVolume;
-            audioSource.Play(); 
+            FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
             
             radarTool.Probe();
             
@@ -88,22 +91,46 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        PlayInterruptIfNeeded();
+        StartPlayingInterruptIfNeeded();
     }
 
-    private void PlayInterruptIfNeeded()
+    private void StartPlayingInterruptIfNeeded()
     {
-        float timeSinceChargeupStarted = Time.time - lastChargeUpStartedTime;
+        float timeSinceChargeupStarted = Time.time - lastChargeUpStartingTime;
         if (timeSinceChargeupStarted >= chargeUpDuration)
             return;
-        
-        StopAllCoroutines();
 
-        audioSource.Stop();
-        audioSource.clip = interruptClip;
-        audioSource.volume = chargeUpVolume;
-        audioSource.Play();
+        lastReleaseStartingTime = Time.time;
+
+        interruptingSoundCoroutine = StartCoroutine(PlayInterrupt());
     }
+
+    private IEnumerator PlayInterrupt()
+    {
+        if (fireRadarCoroutine != null)
+            StopCoroutine(fireRadarCoroutine);
+
+        FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
+        
+        yield return new WaitForSeconds(releaseDelay);
+
+        releaseAudioSource.volume = chargeUpVolume;
+        releaseAudioSource.clip = interruptClip;
+        releaseAudioSource.Play();
+    }
+
+    private void FadeInAndPlay(AudioSource source, AudioClip clip, float volume, float duration)
+    {
+        source.DOFade(volume, duration).OnComplete(() =>
+        {
+            source.clip = clip;
+            source.Play();
+        });
+    }
+
+    private void FadeOutAndStop(AudioSource source, float newFadeOutDuration = 0.1f) =>
+        source.DOFade(0, newFadeOutDuration);
+
 
     public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
     {
