@@ -10,6 +10,7 @@ public class RadarController : VRTK_InteractableObject
     [Header("Radar Controller")]
     [SerializeField] RadarTool radarTool;
     [SerializeField] float chargeUpDuration = 1.6f;
+    [SerializeField] float releaseDelay = 0.3f;
     
     [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
@@ -22,7 +23,10 @@ public class RadarController : VRTK_InteractableObject
     
     private AudioSource audioSource;
 
-    private float lastChargeUpStartedTime;
+    private float lastChargeUpStartingTime;
+    private float lastReleaseStartingTime;
+
+    private Coroutine InterruptingSoundCoroutine;
 
     IEnumerator Start()
     {
@@ -46,7 +50,7 @@ public class RadarController : VRTK_InteractableObject
                 audioSource.Stop();
                 PlayInterruptIfNeeded();
             }
-            lastChargeUpStartedTime = 0.0f;
+            lastChargeUpStartingTime = 0.0f;
         }
         
         canUse = isUsable;
@@ -59,7 +63,11 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        lastChargeUpStartedTime = Time.time;
+        float timeSinceReleaseStarted = Time.time - lastReleaseStartingTime;
+        if (timeSinceReleaseStarted <= releaseDelay)
+            StopCoroutine(InterruptingSoundCoroutine);
+        
+        lastChargeUpStartingTime = Time.time;
 
         audioSource.clip = chargeUpClip;
         audioSource.volume = chargeUpVolume;
@@ -84,14 +92,18 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        PlayInterruptIfNeeded();
+        float timeSinceChargeupStarted = Time.time - lastChargeUpStartingTime;
+        if (timeSinceChargeupStarted >= chargeUpDuration)
+            return;
+
+        lastReleaseStartingTime = Time.time;
+        
+        InterruptingSoundCoroutine = StartCoroutine(PlayInterruptIfNeeded());
     }
 
-    private void PlayInterruptIfNeeded()
+    private IEnumerator PlayInterruptIfNeeded()
     {
-        float timeSinceChargeupStarted = Time.time - lastChargeUpStartedTime;
-        if (timeSinceChargeupStarted >= chargeUpDuration) 
-            return;
+        yield return new WaitForSeconds(releaseDelay);
         
         StopAllCoroutines();
             
