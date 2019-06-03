@@ -356,11 +356,11 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
   radarTool: {fileID: 2637540079176614605}
-  chargeUpDuration: 1.8
+  chargeUpDuration: 1.5
   releaseDelay: 0.25
-  shootClip: {fileID: 8300000, guid: 9717569c2721084468ad1dc28c5d599f, type: 3}
-  chargeUpClip: {fileID: 8300000, guid: 20cdf96a39634b94c80d9c7fc5e3a065, type: 3}
-  interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
+  shootClip: {fileID: 8300000, guid: 3adea41f583bc9f43b34bc36a2fa06df, type: 3}
+  chargeUpClip: {fileID: 8300000, guid: fb80fd5a60481184f879442fd3fca16d, type: 3}
+  interruptClip: {fileID: 8300000, guid: 8f377d6426b6e264888c4803e5809b3a, type: 3}
   shootVolume: 0.8
   chargeUpVolume: 0.6
   fadeInDuration: 0.02
@@ -624,6 +624,7 @@ GameObject:
   - component: {fileID: 3219673763055920295}
   - component: {fileID: 7497710046685406798}
   - component: {fileID: 213314739932267414}
+  - component: {fileID: 156809669811592040}
   m_Layer: 14
   m_Name: RadarGun 1
   m_TagString: Untagged
@@ -705,6 +706,20 @@ MeshCollider:
   m_CookingOptions: 14
   m_Mesh: {fileID: -6281526666680364863, guid: 5267d8b321fcacd439f6d4fa115c5ec8, type: 3}
 --- !u!64 &213314739932267414
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497710046685406797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6281526666680364863, guid: 5267d8b321fcacd439f6d4fa115c5ec8, type: 3}
+--- !u!64 &156809669811592040
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
