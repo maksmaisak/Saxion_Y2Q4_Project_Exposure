@@ -11,6 +11,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
+    [SerializeField] GameObject tutorialController;
 
     private RadarTool radarTool;
 
@@ -50,6 +51,9 @@ public class TutorialDirector : MonoBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.parent = null;
+        
+        tutorialController.SetActive(true);
+        
         Destroy(gameObject);
     }
 
