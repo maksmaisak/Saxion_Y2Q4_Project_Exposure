@@ -118,7 +118,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     public void Probe()
     {
         CreateWavePulse();
-        
+
         GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
         SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
         HandleSpherecastResults();

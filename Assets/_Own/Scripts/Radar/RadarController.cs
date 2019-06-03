@@ -7,19 +7,20 @@ using VRTK;
 
 public class RadarController : VRTK_InteractableObject
 {
-    [Header("Radar Controller")]
+    [Header("Radar Controller")] 
     [SerializeField] RadarTool radarTool;
+
     [SerializeField] float chargeUpDuration = 1.6f;
-    
-    [Header("Audio Settings")]
+
+    [Header("Audio Settings")] 
     [SerializeField] AudioClip shootClip;
     [SerializeField] AudioClip chargeUpClip;
     [SerializeField] AudioClip interruptClip;
     [SerializeField] float shootVolume = 0.8f;
     [SerializeField] float chargeUpVolume = 0.6f;
 
-    private bool canShoot = true;
-    
+    private bool canUse = true;
+
     private AudioSource audioSource;
 
     private float lastChargeUpStartedTime;
@@ -37,7 +38,7 @@ public class RadarController : VRTK_InteractableObject
 
     public void SetIsUsable(bool isUsable)
     {
-        if (canShoot && !isUsable)
+        if (canUse && !isUsable)
         {
             StopAllCoroutines();
 
@@ -46,22 +47,22 @@ public class RadarController : VRTK_InteractableObject
                 audioSource.Stop();
                 PlayInterruptIfNeeded();
             }
+
             lastChargeUpStartedTime = 0.0f;
         }
         
-        canShoot = isUsable;
+        canUse = isUsable;
     }
 
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
     {
         base.StartUsing(currentUsingObject);
 
-        if (!canShoot)
+        if (!canUse)
             return;
 
         lastChargeUpStartedTime = Time.time;
-
-        Assert.IsNotNull(audioSource);
+        
         audioSource.clip = chargeUpClip;
         audioSource.volume = chargeUpVolume;
         audioSource.Play();
@@ -75,6 +76,8 @@ public class RadarController : VRTK_InteractableObject
             audioSource.Play(); 
             
             radarTool.Probe();
+            
+            ControllersSettings.instance.DeleteGameObject();
         });
     }
 
@@ -82,7 +85,7 @@ public class RadarController : VRTK_InteractableObject
     {
         base.StopUsing(previousUsingObject, resetUsingObjectState);
 
-        if (!canShoot)
+        if (!canUse)
             return;
 
         PlayInterruptIfNeeded();
@@ -91,16 +94,22 @@ public class RadarController : VRTK_InteractableObject
     private void PlayInterruptIfNeeded()
     {
         float timeSinceChargeupStarted = Time.time - lastChargeUpStartedTime;
-        if (timeSinceChargeupStarted >= chargeUpDuration) 
+        if (timeSinceChargeupStarted >= chargeUpDuration)
             return;
         
         StopAllCoroutines();
-            
-        Assert.IsNotNull(audioSource);
+
         audioSource.Stop();
         audioSource.clip = interruptClip;
         audioSource.volume = chargeUpVolume;
         audioSource.Play();
+    }
+
+    public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
+    {
+        base.Grabbed(currentGrabbingObject);
+        
+        ControllersSettings.instance.ApplyHighlightToObject();
     }
 }
 
