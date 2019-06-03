@@ -21,10 +21,14 @@ public class NavpointUIElement : VRTK_DestinationMarker
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
     [SerializeField] LightSection lightSectionToRevealWith;
 
+    [Header("Audio Settings")] 
+    [SerializeField] AudioClip navPointAudio;
+
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
     
     private new Camera camera;
+    private AudioSource audioSource;
 
     enum State
     {
@@ -37,6 +41,8 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
     IEnumerator Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        
         canvasGroup = canvasGroup ? canvasGroup : GetComponentInChildren<CanvasGroup>();
         Assert.IsNotNull(canvasGroup);
         
@@ -101,7 +107,10 @@ public class NavpointUIElement : VRTK_DestinationMarker
         canvasGroup.DOKill();
         canvasGroup.DOFade(1.0f, 1.0f);
         transform.DOKill();
-        transform.DOPunchScale(Vector3.one * 1.1f, 1.0f, 2);
+        transform.DOPunchScale(Vector3.one * 1.1f, 1.0f, 2).SetLoops(-1,LoopType.Restart);
+
+        audioSource.clip = navPointAudio;
+        audioSource.Play();
     }
 
     private Sequence PlayDisappearEffect()
