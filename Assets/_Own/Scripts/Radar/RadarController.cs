@@ -18,6 +18,7 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] AudioClip interruptClip;
     [SerializeField] float shootVolume = 0.8f;
     [SerializeField] float chargeUpVolume = 0.6f;
+    [SerializeField] float interruptVolume = 0.35f;
     [SerializeField] float fadeInDuration = 0.02f;
     [SerializeField] float fadeOutDuration = 0.05f;
     [SerializeField] AudioSource chargeUpAudioSource;
@@ -114,7 +115,7 @@ public class RadarController : VRTK_InteractableObject
         
         yield return new WaitForSeconds(releaseDelay);
 
-        releaseAudioSource.volume = chargeUpVolume;
+        releaseAudioSource.volume = interruptVolume;
         releaseAudioSource.clip = interruptClip;
         releaseAudioSource.Play();
     }
