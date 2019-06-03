@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2692466844947289575}
   - component: {fileID: 1850085830539742747}
   m_Layer: 15
-  m_Name: FlyingSphere
+  m_Name: Wavesphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,13 +218,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6221fe00e0ba8479fc07398417517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularSpeed: 1
-  attractionRadius: 1
   targetSphereRadius: 0.5
+  attractionRadius: 1
+  attractionAngularSpeed: 1
   slowdownRadius: 4
-  scaleTarget: 0.27
   scaleDuration: 2
-  scaleRandomMin: 0.32
+  scaleMin: 0.0864
+  scaleMax: 0.27
   albedoColorId: _AlbedoColor_549AC39B
   emissionColorId: _EmissionColor_40E9251C
   albedoColors: []

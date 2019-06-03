@@ -4,37 +4,59 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
-using VRTK;
 using Random = UnityEngine.Random;
+
+[Serializable]
+public struct PulseSettings
+{
+    public static readonly PulseSettings Default = new PulseSettings
+    {
+        wavePulseAngleHorizontal = 40.0f,
+        wavePulseAngleVertical = 40.0f,
+        wavePulseSpeed = 10.0f,
+        wavePulseMaxRange = 35.0f,
+        sphereCastRadius = 0.05f,
+        
+        minDistanceBetweenSpawnedWavespheres = 2.0f,
+        maxNumWavespheresPerSecond = 2.0f,
+        wavesphereSpeedMin = 2.5f,
+        wavesphereSpeedMax = 4.5f,
+        baseDotConeAngle = 40.0f,
+        dotConeAngleFalloff = 0.1f,
+        dotConeAngleFalloffPower = 1.0f,
+        maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f
+    };
+    
+    [Header("Wave pulse settings")]
+    public GameObject wavePulsePrefab;
+    [Range(0.0f, 360.0f)] public float wavePulseAngleHorizontal;
+    [Range(0.0f, 360.0f)] public float wavePulseAngleVertical;
+    public float wavePulseSpeed   ;
+    public float wavePulseMaxRange;
+    public float sphereCastRadius ;
+
+    [Header("Wavesphere settings")] 
+    public float minDistanceBetweenSpawnedWavespheres;
+    public float maxNumWavespheresPerSecond;
+    public float wavesphereSpeedMin;
+    public float wavesphereSpeedMax;
+    public FlyingSphere wavespherePrefab;
+    public Transform    wavesphereTarget;
+    [Range(0.0f, 360.0f)] public float baseDotConeAngle;
+    [Range(0.01f, 1.0f)]  public float dotConeAngleFalloff;
+    [Range(0.1f , 5.0f)]  public float dotConeAngleFalloffPower;
+    public float maxDotDistanceFromSurfacePointAlongOriginalRay;
+}
 
 public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     private const int MaxNumRaysPerAxis = 21;
 
-    [Header("Wave pulse settings")]
-    [SerializeField] GameObject wavePulsePrefab;
-    [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleHorizontal = 90.0f;
-    [SerializeField] [Range(0.0f, 360.0f)] float wavePulseAngleVertical   = 90.0f;
-    [SerializeField] float wavePulseSpeed    = 10.0f;
-    [SerializeField] float wavePulseMaxRange = 20.0f;
-    [SerializeField] float sphereCastRadius = 0.2f;
-    
-    [Header("Wavesphere settings")]
-    [SerializeField] [Range(0.2f, 5.0f)]  float minDistanceBetweenSpawnedWavespheres = 2.0f;
-    [SerializeField] [Range(0.2f, 10.0f)] float maxNumWavespheresPerSecond = 2.0f;
-    [SerializeField] float wavesphereSpeedMin = 2.5f;
-    [SerializeField] float wavesphereSpeedMax = 4.5f;
-    [FormerlySerializedAs("flyingSpherePrefab")] [SerializeField] FlyingSphere wavespherePrefab;
-    [FormerlySerializedAs("flyingSphereTarget")] [SerializeField] Transform    wavesphereTarget;
-    [SerializeField] [Range(0.0f, 360.0f)] float baseDotConeAngle = 20.0f;
-    [SerializeField] [Range(0.01f, 1.0f)] float dotConeAngleFalloff = 0.02f;
-    [SerializeField] [Range(0.1f , 5.0f)] float dotConeAngleFalloffPower = 1.0f;
-    [SerializeField] float maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f;
+    [SerializeField] PulseSettings pulseSettings = PulseSettings.Default;
 
     [Header("Debug settings")] 
     [SerializeField] bool highlightWithoutWavespheres = false;
@@ -101,7 +123,11 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
         HandleSpherecastResults();
     }
-    
+
+    public PulseSettings GetPulseSettings() => pulseSettings;
+
+    public void SetPulseSettings(PulseSettings newPulseSettings) => pulseSettings = newPulseSettings;
+
     private void GenerateSpherecastCommands(LayerMask layerMask)
     {
         Vector3    origin   = transform.position;
@@ -125,14 +151,14 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
             commands[i] = new SpherecastCommand(
                 ray.origin,
-                sphereCastRadius,
+                pulseSettings.sphereCastRadius,
                 ray.direction,
-                wavePulseMaxRange,
+                pulseSettings.wavePulseMaxRange,
                 layerMask
             );
 
             if (drawSpherecastRays)
-                Debug.DrawRay(ray.origin, ray.direction * wavePulseMaxRange, Color.white * 0.1f, 10.0f, true);
+                Debug.DrawRay(ray.origin, ray.direction * pulseSettings.wavePulseMaxRange, Color.white * 0.1f, 10.0f, true);
         }
     }
 
@@ -164,7 +190,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
             .Select(tuple =>
             {
-                float speed = Random.Range(wavesphereSpeedMin, wavesphereSpeedMax);
+                float speed = Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
                 return new CandidateLocation
                 {
                     hitIndex = tuple.i,
@@ -183,8 +209,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         var usedCandidateIndices = new List<int>();
         
-        float minTimeDistanceBetweenWavespheres = 1.0f / maxNumWavespheresPerSecond;
-        float sqrMinDistance = minDistanceBetweenSpawnedWavespheres * minDistanceBetweenSpawnedWavespheres;
+        float minTimeDistanceBetweenWavespheres = 1.0f / pulseSettings.maxNumWavespheresPerSecond;
+        float sqrMinDistance = pulseSettings.minDistanceBetweenSpawnedWavespheres * pulseSettings.minDistanceBetweenSpawnedWavespheres;
         bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
         {
             Vector3 point = candidateLocations[candidateIndex].point;
@@ -218,36 +244,36 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private void CreateWavePulse()
     {
-        Assert.IsNotNull(wavePulsePrefab);
+        Assert.IsNotNull(pulseSettings.wavePulsePrefab);
         
-        GameObject pulse = Instantiate(wavePulsePrefab, transform.position, transform.rotation);
+        GameObject pulse = Instantiate(pulseSettings.wavePulsePrefab, transform.position, transform.rotation);
         
         Transform tf = pulse.transform;
         tf.localScale = Vector3.zero;
-        tf.DOScale(wavePulseMaxRange * 2.0f, wavePulseMaxRange / wavePulseSpeed)
+        tf.DOScale(pulseSettings.wavePulseMaxRange * 2.0f, pulseSettings.wavePulseMaxRange / pulseSettings.wavePulseSpeed)
             .SetEase(Ease.Linear)
             .OnComplete(() => Destroy(pulse));
         
         var material = pulse.GetComponent<Renderer>().material;
-        material.SetFloat(CosHalfHorizontalAngle, Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleHorizontal * 0.5f));
-        material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * wavePulseAngleVertical   * 0.5f));
+        material.SetFloat(CosHalfHorizontalAngle, Mathf.Cos(Mathf.Deg2Rad * pulseSettings.wavePulseAngleHorizontal * 0.5f));
+        material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * pulseSettings.wavePulseAngleVertical   * 0.5f));
     }
 
     private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed, LightSection lightSection)
     {
-        float dotConeAngle = baseDotConeAngle / Mathf.Pow(dotConeAngleFalloff * hit.distance + 1.0f, dotConeAngleFalloffPower);
+        float dotConeAngle = pulseSettings.baseDotConeAngle / Mathf.Pow(pulseSettings.dotConeAngleFalloff * hit.distance + 1.0f, pulseSettings.dotConeAngleFalloffPower);
 
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
             originalRay = originalRay,
             pointOnSurface = hit.point,
             dotEmissionConeAngle = dotConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRay = maxDotDistanceFromSurfacePointAlongOriginalRay
+            maxDotDistanceFromSurfacePointAlongOriginalRay = pulseSettings.maxDotDistanceFromSurfacePointAlongOriginalRay
         };
         
-        Assert.IsNotNull(wavespherePrefab);
+        Assert.IsNotNull(pulseSettings.wavespherePrefab);
         
-        this.Delay(hit.distance / wavePulseSpeed, () =>
+        this.Delay(hit.distance / pulseSettings.wavePulseSpeed, () =>
         {
             if (lightSection && lightSection.isRevealed)
                 return;
@@ -258,18 +284,18 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
                 return;
             }
             
-            wavesphereTarget = wavesphereTarget ? wavesphereTarget : Camera.main.transform;
+            pulseSettings.wavesphereTarget = pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform;
             
-            FlyingSphere flyingSphere = Instantiate(wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.Initialize(wavesphereTarget.position, speed, lightSection);
+            FlyingSphere flyingSphere = Instantiate(pulseSettings.wavespherePrefab, hit.point, Quaternion.identity);
+            flyingSphere.Initialize(pulseSettings.wavesphereTarget.position, speed, lightSection);
             flyingSphere.highlightLocation = highlightLocation;
         });
     }
     
     private Vector3 GetRayDirection(Vector2 normalizedPos)
     {
-        float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleHorizontal, wavePulseAngleHorizontal, normalizedPos.x);
-        float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-wavePulseAngleVertical  , wavePulseAngleVertical  , normalizedPos.y);
+        float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-pulseSettings.wavePulseAngleHorizontal, pulseSettings.wavePulseAngleHorizontal, normalizedPos.x);
+        float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-pulseSettings.wavePulseAngleVertical  , pulseSettings.wavePulseAngleVertical  , normalizedPos.y);
 
         float cos = Mathf.Cos(angleX);
         Vector3 direction = new Vector3(

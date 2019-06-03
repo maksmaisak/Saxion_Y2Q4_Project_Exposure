@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4846236843709294932}
   - component: {fileID: 249407931}
   - component: {fileID: 249407930}
-  m_Layer: 16
+  m_Layer: 14
   m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,11 +30,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 249407925}
   m_LocalRotation: {x: -0, y: -0, z: -0.000000059604645, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0.009, z: 0.015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3364184672998741126}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &249407927
 MonoBehaviour:
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 249407927}
-  radarController: {fileID: 0}
+  radarController: {fileID: 3484438141555027265}
 --- !u!114 &249407930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,8 +166,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 789619268}
-  m_Layer: 16
-  m_Name: RadarGunSnapToHand
+  m_Layer: 14
+  m_Name: RadarGunSnapHandleRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,13 +180,47 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 789619267}
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071069, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.0014, y: -0.009, z: -0.0102}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_Children: []
   m_Father: {fileID: 3364184672998741126}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!1 &538685223137187133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2123288396163906398}
+  m_Layer: 14
+  m_Name: Models
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2123288396163906398
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538685223137187133}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8777785330992179805}
+  - {fileID: 6855198105337926645}
+  - {fileID: 8927524324540860124}
+  - {fileID: 6743197634205947652}
+  m_Father: {fileID: 3364184672998741126}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &587511421780787193
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +232,7 @@ GameObject:
   - component: {fileID: 6743197634205947652}
   - component: {fileID: 5770247351973646594}
   - component: {fileID: 7760376142544588781}
-  m_Layer: 16
+  m_Layer: 14
   m_Name: TriggerWave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,11 +246,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 587511421780787193}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00000076186944, y: -0.004298069, z: -0.0042317566}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.00429807, z: -0.0042317566}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3364184672998741126}
+  m_Father: {fileID: 2123288396163906398}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5770247351973646594
@@ -276,9 +310,9 @@ GameObject:
   - component: {fileID: 9076446849714216651}
   - component: {fileID: 6793430955509049705}
   - component: {fileID: 3484438141555027265}
-  - component: {fileID: 2557969990361317376}
+  - component: {fileID: 7777793302259159975}
   - component: {fileID: 2637540079176614605}
-  m_Layer: 16
+  m_Layer: 14
   m_Name: RadarGun_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,13 +328,11 @@ Transform:
   m_GameObject: {fileID: 1798244645049837205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.241, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
-  - {fileID: 8777785330992179805}
-  - {fileID: 6855198105337926645}
-  - {fileID: 8927524324540860124}
-  - {fileID: 6743197634205947652}
+  - {fileID: 2123288396163906398}
   - {fileID: 789619268}
+  - {fileID: 8413013432155613494}
   - {fileID: 249407926}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -429,24 +461,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableWhenIdle: 1
-  allowedNearTouchControllers: 2
-  allowedTouchControllers: 2
+  disableWhenIdle: 0
+  allowedNearTouchControllers: 0
+  allowedTouchControllers: 0
   ignoredColliders: []
   isGrabbable: 1
   holdButtonToGrab: 0
   stayGrabbedOnTeleport: 1
   validDrop: 0
   grabOverrideButton: 0
-  allowedGrabControllers: 2
-  grabAttachMechanicScript: {fileID: 2557969990361317376}
+  allowedGrabControllers: 0
+  grabAttachMechanicScript: {fileID: 7777793302259159975}
   secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
   holdButtonToUse: 1
   useOnlyIfGrabbed: 1
   pointerActivatesUseAction: 0
   useOverrideButton: 0
-  allowedUseControllers: 2
+  allowedUseControllers: 0
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
@@ -457,7 +489,7 @@ MonoBehaviour:
   interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
   shootVolume: 0.8
   chargeUpVolume: 0.6
---- !u!114 &2557969990361317376
+--- !u!114 &7777793302259159975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -466,17 +498,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1798244645049837205}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5f23bc66786fec4aab4a54598345f81, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   precisionGrab: 0
   rightSnapHandle: {fileID: 789619268}
-  leftSnapHandle: {fileID: 789619268}
+  leftSnapHandle: {fileID: 8413013432155613494}
   throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  destroyImmediatelyOnThrow: 1
-  breakForce: 1500
 --- !u!114 &2637540079176614605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,24 +519,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
-    type: 3}
-  wavePulseAngleHorizontal: 40
-  wavePulseAngleVertical: 40
-  wavePulseSpeed: 10
-  wavePulseMaxRange: 35
-  sphereCastRadius: 0.05
-  minDistanceBetweenSpawnedWavespheres: 2
-  maxNumWavespheresPerSecond: 2
-  wavesphereSpeedMin: 2.5
-  wavesphereSpeedMax: 4.5
-  wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-    type: 3}
-  wavesphereTarget: {fileID: 0}
-  baseDotConeAngle: 40
-  dotConeAngleFalloff: 0.1
-  dotConeAngleFalloffPower: 1
-  maxDotDistanceFromSurfacePointAlongOriginalRay: 1
+  pulseSettings:
+    wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+      type: 3}
+    wavePulseAngleHorizontal: 40
+    wavePulseAngleVertical: 40
+    wavePulseSpeed: 10
+    wavePulseMaxRange: 35
+    sphereCastRadius: 0.05
+    minDistanceBetweenSpawnedWavespheres: 2
+    maxNumWavespheresPerSecond: 2
+    wavesphereSpeedMin: 2.5
+    wavesphereSpeedMax: 4.5
+    wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+      type: 3}
+    wavesphereTarget: {fileID: 0}
+    baseDotConeAngle: 40
+    dotConeAngleFalloff: 0.02
+    dotConeAngleFalloffPower: 1
+    maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 0
   drawSpherecastRays: 0
 --- !u!1 &7497710046685406797
@@ -520,7 +551,8 @@ GameObject:
   - component: {fileID: 6855198105337926645}
   - component: {fileID: 7594601236163530350}
   - component: {fileID: 3219673763055920295}
-  m_Layer: 16
+  - component: {fileID: 7497710046685406798}
+  m_Layer: 14
   m_Name: RadarGun 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -534,11 +566,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7497710046685406797}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.08819025, y: 0.17228958, z: 0.06020223}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.08819025, y: 0.1722896, z: 0.06020223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3364184672998741126}
+  m_Father: {fileID: 2123288396163906398}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7594601236163530350
@@ -586,6 +618,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &7497710046685406798
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497710046685406797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6281526666680364863, guid: 5267d8b321fcacd439f6d4fa115c5ec8, type: 3}
 --- !u!1 &8851053207268644104
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +643,7 @@ GameObject:
   - component: {fileID: 8777785330992179805}
   - component: {fileID: 6126041076033407614}
   - component: {fileID: 5002244484678312532}
-  m_Layer: 16
+  m_Layer: 14
   m_Name: LaserButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,11 +657,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8851053207268644104}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0000047295434, y: -0.004163753, z: -0.01259487}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.004163754, z: -0.01259487}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3364184672998741126}
+  m_Father: {fileID: 2123288396163906398}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6126041076033407614
@@ -663,6 +709,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &9026722926662425994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8413013432155613494}
+  m_Layer: 14
+  m_Name: RadarGunSnapHandleLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8413013432155613494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9026722926662425994}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.0014, y: -0.009, z: -0.0102}
+  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_Children: []
+  m_Father: {fileID: 3364184672998741126}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &9028225842776570015
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +750,7 @@ GameObject:
   - component: {fileID: 8927524324540860124}
   - component: {fileID: 622738004528034746}
   - component: {fileID: 3509932950128289493}
-  m_Layer: 16
+  m_Layer: 14
   m_Name: RadarSpinningThing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,11 +764,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9028225842776570015}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000009002837, y: 0.021187264, z: 0.005643821}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.021187264, z: 0.005643821}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3364184672998741126}
+  m_Father: {fileID: 2123288396163906398}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &622738004528034746
