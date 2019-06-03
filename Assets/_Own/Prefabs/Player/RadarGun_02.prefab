@@ -360,7 +360,7 @@ MonoBehaviour:
   releaseDelay: 0.25
   shootClip: {fileID: 8300000, guid: 3adea41f583bc9f43b34bc36a2fa06df, type: 3}
   chargeUpClip: {fileID: 8300000, guid: fb80fd5a60481184f879442fd3fca16d, type: 3}
-  interruptClip: {fileID: 8300000, guid: 8f377d6426b6e264888c4803e5809b3a, type: 3}
+  interruptClip: {fileID: 8300000, guid: f42b747a95f7e7b48a819de2e6251a7b, type: 3}
   shootVolume: 0.8
   chargeUpVolume: 0.6
   fadeInDuration: 0.02
