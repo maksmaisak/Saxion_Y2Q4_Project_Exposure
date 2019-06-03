@@ -11,10 +11,9 @@ using Random = UnityEngine.Random;
 public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [Header("Movement Settings")] 
-    [SerializeField] float angularSpeed = 1.0f;
-
-    [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float targetSphereRadius = 0.25f;
+    [SerializeField] float attractionRadius = 1.5f;
+    [SerializeField] float attractionAngularSpeed = 1.0f;
 
     [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")] 
     [SerializeField] float slowdownRadius = 4.0f;
@@ -80,7 +79,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
             return;
-
+        
         targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
         targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
     }
@@ -217,7 +216,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (targetDelta.sqrMagnitude > attractionRadius * attractionRadius)
             return;
 
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDelta.normalized, angularSpeed * Time.deltaTime, 0.0f);
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDelta.normalized, attractionAngularSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
     }
 
