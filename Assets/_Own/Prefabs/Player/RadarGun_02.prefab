@@ -274,8 +274,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3364184672998741126}
   - component: {fileID: 9076446849714216651}
-  - component: {fileID: 6793430955509049705}
   - component: {fileID: 3484438141555027265}
+  - component: {fileID: 6793430955509049705}
+  - component: {fileID: 7074801274048547317}
   - component: {fileID: 2557969990361317376}
   - component: {fileID: 2637540079176614605}
   m_Layer: 14
@@ -321,6 +322,51 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3484438141555027265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798244645049837205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableWhenIdle: 1
+  allowedNearTouchControllers: 2
+  allowedTouchControllers: 2
+  ignoredColliders: []
+  isGrabbable: 1
+  holdButtonToGrab: 0
+  stayGrabbedOnTeleport: 1
+  validDrop: 0
+  grabOverrideButton: 0
+  allowedGrabControllers: 2
+  grabAttachMechanicScript: {fileID: 2557969990361317376}
+  secondaryGrabActionScript: {fileID: 0}
+  isUsable: 1
+  holdButtonToUse: 1
+  useOnlyIfGrabbed: 1
+  pointerActivatesUseAction: 0
+  useOverrideButton: 0
+  allowedUseControllers: 2
+  objectHighlighter: {fileID: 0}
+  touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+  usingState: 0
+  radarTool: {fileID: 2637540079176614605}
+  chargeUpDuration: 1.8
+  releaseDelay: 0.25
+  shootClip: {fileID: 8300000, guid: 9717569c2721084468ad1dc28c5d599f, type: 3}
+  chargeUpClip: {fileID: 8300000, guid: 20cdf96a39634b94c80d9c7fc5e3a065, type: 3}
+  interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
+  shootVolume: 0.8
+  chargeUpVolume: 0.6
+  fadeInDuration: 0.02
+  fadeOutDuration: 0.05
+  chargeUpAudioSource: {fileID: 6793430955509049705}
+  releaseAudioSource: {fileID: 7074801274048547317}
 --- !u!82 &6793430955509049705
 AudioSource:
   m_ObjectHideFlags: 0
@@ -417,47 +463,102 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3484438141555027265
-MonoBehaviour:
+--- !u!82 &7074801274048547317
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798244645049837205}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disableWhenIdle: 1
-  allowedNearTouchControllers: 2
-  allowedTouchControllers: 2
-  ignoredColliders: []
-  isGrabbable: 1
-  holdButtonToGrab: 0
-  stayGrabbedOnTeleport: 1
-  validDrop: 0
-  grabOverrideButton: 0
-  allowedGrabControllers: 2
-  grabAttachMechanicScript: {fileID: 2557969990361317376}
-  secondaryGrabActionScript: {fileID: 0}
-  isUsable: 1
-  holdButtonToUse: 1
-  useOnlyIfGrabbed: 1
-  pointerActivatesUseAction: 0
-  useOverrideButton: 0
-  allowedUseControllers: 2
-  objectHighlighter: {fileID: 0}
-  touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  usingState: 0
-  radarTool: {fileID: 2637540079176614605}
-  chargeUpDuration: 1.8
-  releaseDelay: 0.25
-  shootClip: {fileID: 8300000, guid: 9717569c2721084468ad1dc28c5d599f, type: 3}
-  chargeUpClip: {fileID: 8300000, guid: 20cdf96a39634b94c80d9c7fc5e3a065, type: 3}
-  interruptClip: {fileID: 8300000, guid: 02c517fee778150499fc6cfe4439fdd7, type: 3}
-  shootVolume: 0.8
-  chargeUpVolume: 0.6
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.25
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0.1
+  MaxDistance: 10
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &2557969990361317376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,6 +623,7 @@ GameObject:
   - component: {fileID: 7594601236163530350}
   - component: {fileID: 3219673763055920295}
   - component: {fileID: 7497710046685406798}
+  - component: {fileID: 213314739932267414}
   m_Layer: 14
   m_Name: RadarGun 1
   m_TagString: Untagged
@@ -589,6 +691,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!64 &7497710046685406798
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497710046685406797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6281526666680364863, guid: 5267d8b321fcacd439f6d4fa115c5ec8, type: 3}
+--- !u!64 &213314739932267414
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
