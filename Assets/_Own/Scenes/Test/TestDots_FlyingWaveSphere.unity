@@ -2665,24 +2665,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
-    type: 3}
-  wavePulseAngleHorizontal: 90
-  wavePulseAngleVertical: 90
-  wavePulseSpeed: 10
-  wavePulseMaxRange: 20
-  sphereCastRadius: 0.2
-  minDistanceBetweenSpawnedWavespheres: 2
-  maxNumWavespheresPerSecond: 2
-  wavesphereSpeedMin: 3
-  wavesphereSpeedMax: 3
-  wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-    type: 3}
-  wavesphereTarget: {fileID: 0}
-  baseDotConeAngle: 20
-  dotConeAngleFalloff: 0.02
-  dotConeAngleFalloffPower: 1
-  maxDotDistanceFromSurfacePointAlongOriginalRay: 1
+  pulseSettings:
+    wavePulsePrefab: {fileID: 0}
+    wavePulseAngleHorizontal: 40
+    wavePulseAngleVertical: 40
+    wavePulseSpeed: 10
+    wavePulseMaxRange: 35
+    sphereCastRadius: 0.05
+    minDistanceBetweenSpawnedWavespheres: 2
+    maxNumWavespheresPerSecond: 2
+    wavesphereSpeedMin: 2.5
+    wavesphereSpeedMax: 4.5
+    wavespherePrefab: {fileID: 0}
+    wavesphereTarget: {fileID: 0}
+    baseDotConeAngle: 40
+    dotConeAngleFalloff: 0.02
+    dotConeAngleFalloffPower: 1
+    maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 1
   drawSpherecastRays: 0
 --- !u!1 &840676604
@@ -5446,24 +5445,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa8635bc7ced40f5a16773078537e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
-    type: 3}
-  wavePulseAngleHorizontal: 90
-  wavePulseAngleVertical: 90
-  wavePulseSpeed: 10
-  wavePulseMaxRange: 100
-  sphereCastRadius: 0.02
-  minDistanceBetweenSpawnedWavespheres: 2
-  maxNumWavespheresPerSecond: 3
-  wavesphereSpeedMin: 2.5
-  wavesphereSpeedMax: 4.5
-  wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-    type: 3}
-  wavesphereTarget: {fileID: 0}
-  baseDotConeAngle: 40
-  dotConeAngleFalloff: 0.04
-  dotConeAngleFalloffPower: 1
-  maxDotDistanceFromSurfacePointAlongOriginalRay: 1
+  pulseSettings:
+    wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
+      type: 3}
+    wavePulseAngleHorizontal: 40
+    wavePulseAngleVertical: 40
+    wavePulseSpeed: 10
+    wavePulseMaxRange: 35
+    sphereCastRadius: 0.05
+    minDistanceBetweenSpawnedWavespheres: 2
+    maxNumWavespheresPerSecond: 2
+    wavesphereSpeedMin: 2.5
+    wavesphereSpeedMax: 4.5
+    wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+      type: 3}
+    wavesphereTarget: {fileID: 0}
+    baseDotConeAngle: 40
+    dotConeAngleFalloff: 0.1
+    dotConeAngleFalloffPower: 1
+    maxDotDistanceFromSurfacePointAlongOriginalRay: 1
   highlightWithoutWavespheres: 0
   drawSpherecastRays: 0
 --- !u!135 &1687258589
