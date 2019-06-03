@@ -66,7 +66,7 @@ public class RadarController : VRTK_InteractableObject
             return;
 
         float timeSinceReleaseStarted = Time.time - lastReleaseStartingTime;
-        if (timeSinceReleaseStarted <= releaseDelay)
+        if (timeSinceReleaseStarted <= releaseDelay && interruptingSoundCoroutine != null)
             StopCoroutine(interruptingSoundCoroutine);
         
         lastChargeUpStartingTime = Time.time;
@@ -105,7 +105,8 @@ public class RadarController : VRTK_InteractableObject
 
     private IEnumerator PlayInterrupt()
     {
-        StopCoroutine(fireRadarCoroutine);
+        if (fireRadarCoroutine != null)
+            StopCoroutine(fireRadarCoroutine);
 
         FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
         
