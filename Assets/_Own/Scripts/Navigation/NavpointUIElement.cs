@@ -20,6 +20,9 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
     [SerializeField] LightSection lightSectionToRevealWith;
+
+    [Header("Debug")] 
+    [SerializeField] bool teleportOnStart = false;
     
     private new Camera camera;
 
@@ -49,6 +52,9 @@ public class NavpointUIElement : VRTK_DestinationMarker
         }
 
         yield return new WaitUntil(() => camera = Camera.main);
+
+        if (teleportOnStart)
+            PlayDisappearEffect().OnComplete(Teleport);
     }
     
     void Update()
@@ -67,9 +73,17 @@ public class NavpointUIElement : VRTK_DestinationMarker
                 float fill = Mathf.Clamp01(outerCircle.fillAmount + Time.deltaTime / fillDuration);
                 outerCircle.fillAmount = fill;
                 if (fill >= 1.0f)
-                    PlayEffect();
+                    PlayDisappearEffect().OnComplete(Teleport);
                 break;
         }
+    }
+    
+    public void SetFilling(bool isFilling)
+    {
+        if (state != State.Filling && state != State.Unfilling)
+            return;
+
+        state = isFilling ? State.Filling : State.Unfilling;
     }
 
     private void Hide()
@@ -90,7 +104,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
         transform.DOPunchScale(Vector3.one * 1.1f, 1.0f, 2);
     }
 
-    private void PlayEffect()
+    private Sequence PlayDisappearEffect()
     {
         state = State.PlayingEffect;
 
@@ -99,7 +113,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
         const float PartDuration = 0.4f;
 
-        var sequence = DOTween
+        return DOTween
             .Sequence()
 
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
@@ -113,18 +127,19 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
             .Append(outerCircle.rectTransform.DOScale(1.2f, PartDuration))
             .Join(outerCircle.DOFade(0.0f, PartDuration).SetEase(Ease.OutQuart));
+    }
 
-        sequence.OnComplete(() =>
-        {
-            Assert.IsTrue(EnsureTeleporter());
-            Transform tf = transform;
-            teleporter.Teleport(tf, tf.position);
+    [ContextMenu("Teleport")]
+    private void Teleport()
+    {
+        Assert.IsTrue(EnsureTeleporter());
+        Transform tf = transform;
+        teleporter.Teleport(tf, tf.position);
 
-            new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+        new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             
-            onComplete?.Invoke();
-            Destroy(gameObject);
-        });
+        onComplete?.Invoke();
+        Destroy(gameObject);
     }
 
     private bool EnsureTeleporter()
@@ -137,13 +152,5 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
         teleporter = VRTK_ObjectCache.registeredTeleporters[0];
         return true;
-    }
-
-    public void SetFilling(bool isFilling)
-    {
-        if (state != State.Filling && state != State.Unfilling)
-            return;
-
-        state = isFilling ? State.Filling : State.Unfilling;
     }
 }
