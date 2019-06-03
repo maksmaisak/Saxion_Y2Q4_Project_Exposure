@@ -7,6 +7,8 @@ using UnityEngine.Assertions;
 public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] RadarController radarController;
+    [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [SerializeField] float overrideWavesphereSpeed = 1.0f;
 
     private RadarTool radarTool;
 
@@ -22,6 +24,9 @@ public class TutorialDirector : MonoBehaviour
             .DORotate(Vector3.up * 90.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
+        
+        PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
+        radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
         
         radarController.StartUsing();
         yield return new WaitForSeconds(2.0f);
@@ -40,6 +45,7 @@ public class TutorialDirector : MonoBehaviour
             .DORotate(Vector3.zero, 5.0f)
             .WaitForCompletion();
 
+        radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
     }
 
@@ -48,5 +54,15 @@ public class TutorialDirector : MonoBehaviour
         Assert.IsNotNull(radarController);
         radarTool = radarController.GetComponent<RadarTool>();
         Assert.IsNotNull(radarTool);
+    }
+
+    private PulseSettings MakeOverridePulseSettings(PulseSettings settings)
+    {
+        if (overrideWavespherePrefab)
+            settings.wavespherePrefab = overrideWavespherePrefab;
+
+        settings.wavePulseSpeed = 1.0f;
+
+        return settings;
     }
 }
