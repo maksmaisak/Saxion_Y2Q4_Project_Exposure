@@ -27,6 +27,7 @@ public class RadarController : VRTK_InteractableObject
     private float lastReleaseStartingTime;
 
     private Coroutine InterruptingSoundCoroutine;
+    private Coroutine FireRadarCoroutine;
 
     IEnumerator Start()
     {
@@ -74,7 +75,7 @@ public class RadarController : VRTK_InteractableObject
         audioSource.Play();
         
         // Maybe use DOTween and instead of chargeUpDuration use clip.length (however this is easier to change)
-        this.Delay(chargeUpDuration, () =>
+        FireRadarCoroutine = this.Delay(chargeUpDuration, () =>
         {
             audioSource.Stop();
             audioSource.clip = shootClip;
@@ -103,10 +104,10 @@ public class RadarController : VRTK_InteractableObject
 
     private IEnumerator PlayInterruptIfNeeded()
     {
-        yield return new WaitForSeconds(releaseDelay);
+        StopCoroutine(FireRadarCoroutine);
         
-        StopAllCoroutines();
-            
+        yield return new WaitForSeconds(releaseDelay);
+
         audioSource.Stop();
         audioSource.clip = interruptClip;
         audioSource.volume = chargeUpVolume;
