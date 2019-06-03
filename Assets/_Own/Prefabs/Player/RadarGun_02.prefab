@@ -522,8 +522,8 @@ MonoBehaviour:
   pulseSettings:
     wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
       type: 3}
-    wavePulseAngleHorizontal: 40
-    wavePulseAngleVertical: 40
+    wavePulseAngleHorizontal: 80
+    wavePulseAngleVertical: 80
     wavePulseSpeed: 10
     wavePulseMaxRange: 35
     sphereCastRadius: 0.05
