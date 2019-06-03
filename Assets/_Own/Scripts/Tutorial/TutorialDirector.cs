@@ -8,6 +8,7 @@ public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] RadarController radarController;
     [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
 
     private RadarTool radarTool;
@@ -61,7 +62,8 @@ public class TutorialDirector : MonoBehaviour
         if (overrideWavespherePrefab)
             settings.wavespherePrefab = overrideWavespherePrefab;
 
-        settings.wavePulseSpeed = 1.0f;
+        settings.wavePulseSpeed = overridePulseSpeed;
+        settings.wavesphereSpeedMin = settings.wavesphereSpeedMax = overrideWavesphereSpeed;
 
         return settings;
     }

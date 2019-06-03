@@ -10,31 +10,29 @@ using Random = UnityEngine.Random;
 
 public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    [Header("Movement Settings")] [SerializeField]
-    float angularSpeed = 1.0f;
+    [Header("Movement Settings")] 
+    [SerializeField] float angularSpeed = 1.0f;
 
     [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float targetSphereRadius = 0.25f;
 
-    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")] [SerializeField]
-    float slowdownRadius = 4.0f;
+    [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")] 
+    [SerializeField] float slowdownRadius = 4.0f;
 
-    [Header("Scaling Settings")] [SerializeField]
-    float scaleTarget = 0.8f;
-
+    [Header("Scaling Settings")] 
     [SerializeField] float scaleDuration = 0.7f;
-    [SerializeField] float scaleRandomMin = 0.4f;
+    [SerializeField] float scaleMin = 0.0864f;
+    [SerializeField] float scaleMax = 0.27f;
 
-    [Header("Color Settings")] [SerializeField]
-    string albedoColorId = "_AlbedoColor_549AC39B";
+    [Header("Color Settings")] 
+    [SerializeField] string albedoColorId = "_AlbedoColor_549AC39B";
 
     [SerializeField] string emissionColorId = "_EmissionColor_40E9251C";
     [SerializeField] List<Color> albedoColors = new List<Color>();
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
-    [Header("Vibration Settings")] [SerializeField]
-    int vibrationDuration = 40;
-
+    [Header("Vibration Settings")] 
+    [SerializeField] int vibrationDuration = 40;
     [SerializeField] int frequency = 2;
     [SerializeField] int strength = 100;
 
@@ -185,14 +183,14 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
 
+    // Randomize scale over time
     private void RandomizeScale()
     {
-        // Randomize scale over time
-        float randomScale = scaleTarget * Mathf.Max(Random.value, scaleRandomMin);
+        float scale = Random.Range(scaleMin, scaleMax);
 
         Transform tf = transform;
         tf.localScale = Vector3.zero;
-        tf.DOScale(randomScale, scaleDuration).SetEase(Ease.OutQuart);
+        tf.DOScale(scale, scaleDuration).SetEase(Ease.OutQuart);
     }
 
     private void RandomizeColor()
@@ -213,13 +211,13 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (targetTransforms.Count == 0)
             return;
 
-        Transform targetTransform =
-            targetTransforms.ArgMin(x => (x.transform.position - transform.position).sqrMagnitude);
-        Vector3 targetDir = targetTransform.position - transform.position;
-        if (targetDir.sqrMagnitude > attractionRadius * attractionRadius)
+        Vector3 position = transform.position;
+        Transform targetTransform = targetTransforms.ArgMin(t => (t.position - position).sqrMagnitude);
+        Vector3 targetDelta = targetTransform.position - position;
+        if (targetDelta.sqrMagnitude > attractionRadius * attractionRadius)
             return;
 
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularSpeed * Time.deltaTime, 0.0f);
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDelta.normalized, angularSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
     }
 
