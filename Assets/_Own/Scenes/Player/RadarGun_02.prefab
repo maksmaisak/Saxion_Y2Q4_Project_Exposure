@@ -157,6 +157,9 @@ MonoBehaviour:
   maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
   customTracer: {fileID: 0}
   customCursor: {fileID: 0}
+  laserPointerCollisionLayer:
+    serializedVersion: 2
+    m_Bits: 131072
 --- !u!1 &789619267
 GameObject:
   m_ObjectHideFlags: 0
