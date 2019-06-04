@@ -7,7 +7,7 @@ Vector1_324C3AD2("Alpha Clipping Threshold", Range(0, 1)) = 0.1
 [HDR]Color_296807D0("Emission", Color) = (1,1,1,0)
 Vector1_A1B84C3E("Falloff Multiplier", Range(0, 10)) = 1
 Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
-Vector1_F01D274B("Falloff Speed", Float) = 0
+_ColorRollSpeed("Color Roll Speed", Float) = 0
 
     }
     SubShader
@@ -71,7 +71,7 @@ Vector1_F01D274B("Falloff Speed", Float) = 0
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
             float Vector1_ADA3E76E;
-            float Vector1_F01D274B;
+            float _ColorRollSpeed;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -131,6 +131,11 @@ Vector1_F01D274B("Falloff Speed", Float) = 0
             void Unity_Fraction_float(float In, out float Out)
             {
                 Out = frac(In);
+            }
+
+            void Unity_Absolute_float(float In, out float Out)
+            {
+                Out = abs(In);
             }
 
             void Unity_ColorspaceConversion_HSV_RGB_float(float3 In, out float3 Out)
@@ -201,17 +206,21 @@ Vector1_F01D274B("Falloff Speed", Float) = 0
                 Unity_Clamp_float(_Divide_E99BDECB_Out, 0, 1, _Clamp_704E249_Out);
                 float _OneMinus_F0841AD_Out;
                 Unity_OneMinus_float(_Clamp_704E249_Out, _OneMinus_F0841AD_Out);
+                float _Property_829EA36_Out = _ColorRollSpeed;
                 float _Multiply_BF203FD4_Out;
-                Unity_Multiply_float(_Time.y, 0.01, _Multiply_BF203FD4_Out);
+                Unity_Multiply_float(_Time.y, _Property_829EA36_Out, _Multiply_BF203FD4_Out);
 
                 float _Add_E12D217A_Out;
                 Unity_Add_float(_OneMinus_F0841AD_Out, _Multiply_BF203FD4_Out, _Add_E12D217A_Out);
                 float _Fraction_EAD9C2EC_Out;
                 Unity_Fraction_float(_Add_E12D217A_Out, _Fraction_EAD9C2EC_Out);
-                float _Multiply_E6658460_Out;
-                Unity_Multiply_float(_Fraction_EAD9C2EC_Out, 0.5, _Multiply_E6658460_Out);
-
-                float3 _Vector3_9720648F_Out = float3(_Multiply_E6658460_Out,1,1);
+                float _Subtract_58F02279_Out;
+                Unity_Subtract_float(_Fraction_EAD9C2EC_Out, 0.5, _Subtract_58F02279_Out);
+                float _Absolute_FE3DB02D_Out;
+                Unity_Absolute_float(_Subtract_58F02279_Out, _Absolute_FE3DB02D_Out);
+                float _Subtract_A8F93327_Out;
+                Unity_Subtract_float(0.5, _Absolute_FE3DB02D_Out, _Subtract_A8F93327_Out);
+                float3 _Vector3_9720648F_Out = float3(_Subtract_A8F93327_Out,1,1);
                 float3 _ColorspaceConversion_EC19C6C4_Out;
                 Unity_ColorspaceConversion_HSV_RGB_float(_Vector3_9720648F_Out, _ColorspaceConversion_EC19C6C4_Out);
                 float4 _UV_135E4AC0_Out = IN.uv0;
@@ -389,7 +398,7 @@ Vector1_F01D274B("Falloff Speed", Float) = 0
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
             float Vector1_ADA3E76E;
-            float Vector1_F01D274B;
+            float _ColorRollSpeed;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
@@ -596,7 +605,7 @@ Vector1_F01D274B("Falloff Speed", Float) = 0
             float4 Color_296807D0;
             float Vector1_A1B84C3E;
             float Vector1_ADA3E76E;
-            float Vector1_F01D274B;
+            float _ColorRollSpeed;
             CBUFFER_END
 
             TEXTURE2D(Texture2D_3F810299); SAMPLER(samplerTexture2D_3F810299); float4 Texture2D_3F810299_TexelSize;
