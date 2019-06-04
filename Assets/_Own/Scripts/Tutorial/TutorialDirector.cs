@@ -51,7 +51,7 @@ public class TutorialDirector : MonoBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.parent = null;
-        
+
         tutorialController.SetActive(true);
         
         Destroy(gameObject);

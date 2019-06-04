@@ -376,7 +376,7 @@ MonoBehaviour:
   fillDuration: 1
   unFillDuration: 10
   lightSectionToRevealWith: {fileID: 0}
-  navPointAudio: {fileID: 8300000, guid: 2d55cfc3f1680aa4695f45bdea83d39f, type: 3}
+  navPointAudio: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
   teleportOnStart: 0
 --- !u!65 &558030851
 BoxCollider:
@@ -413,7 +413,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 2d55cfc3f1680aa4695f45bdea83d39f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

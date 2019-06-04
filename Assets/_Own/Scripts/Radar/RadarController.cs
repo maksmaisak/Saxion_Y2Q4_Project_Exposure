@@ -93,9 +93,9 @@ public class RadarController : VRTK_InteractableObject
             FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
 
             radarTool.Probe();
-
-            ControllersSettings.instance.DeleteGameObject();
-
+            
+            TutorialController.instance?.DeleteGameObject();
+            
             if (isHandGrabbed)
                 isChargingUp = false;
         });
@@ -171,8 +171,8 @@ public class RadarController : VRTK_InteractableObject
     {
         base.Grabbed(currentGrabbingObject);
         
-        ControllersSettings.instance.ApplyHighlightToObject();
-
+        TutorialController.instance?.ApplyHighlightToObject();
+        
         isHandGrabbed = true;
     }
 }
