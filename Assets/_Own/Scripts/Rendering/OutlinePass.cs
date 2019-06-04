@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.LWRP;
 
@@ -9,20 +10,21 @@ public class OutlinePass : ScriptableRenderPass
     [SerializeField] Material outlineMaterial;
     
     private FilteringSettings outlineFilterSettings;
-    private readonly int OutlineColorId;
+    private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
+    private static readonly int ThicknessId = Shader.PropertyToID("_Thickness");
 
     public OutlinePass(Color outlineColor)
     {
-        outlineMaterial = CoreUtils.CreateEngineMaterial("Unlit/SimpleOutline");
-
-        OutlineColorId = Shader.PropertyToID("_OutlineColor");
+        renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+        
+        outlineMaterial = outlineMaterial ? outlineMaterial : CoreUtils.CreateEngineMaterial("Unlit/SimpleOutline");
+        Assert.IsNotNull(outlineMaterial);
         outlineMaterial.SetColor(OutlineColorId, outlineColor);
+        outlineMaterial.SetFloat(ThicknessId, 1.0f);
 
-        outlineFilterSettings = new FilteringSettings {
+        outlineFilterSettings = new FilteringSettings(null) {
             renderQueueRange = RenderQueueRange.opaque
         };
-
-        this.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
     }
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)

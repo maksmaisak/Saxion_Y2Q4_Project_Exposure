@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Custom Forward Renderer
   m_EditorClassIdentifier: 
   m_RendererFeatures:
-  - {fileID: 6423864320007940224}
+  - {fileID: 2687846689305794145}
   m_BlitShader: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
   m_CopyDepthShader: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
   m_ScreenSpaceShadowShader: {fileID: 4800000, guid: 0f854b35a0cf61a429bd5dcfea30eddd,
@@ -25,7 +25,7 @@ MonoBehaviour:
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6423864320007940224
+--- !u!114 &2687846689305794145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35,7 +35,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c96828912b9bf48fdbdd59b914d9c772, type: 3}
-  m_Name: OutlinePass
+  m_Name: NewMyRendererFeature
   m_EditorClassIdentifier: 
   pass:
     outlineMaterial: {fileID: 0}

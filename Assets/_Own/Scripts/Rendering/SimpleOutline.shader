@@ -35,7 +35,7 @@
             v2f vert (appdata v)
             {
                 v2f o;
-		        v.vertex.xyz += 0.2 * normalize(v.vertex.xyz);
+		        v.vertex.xyz += 0.02 * normalize(v.vertex.xyz);
 		        o.vertex = TransformObjectToHClip(v.vertex.xyz);        
                 return o;
             }
