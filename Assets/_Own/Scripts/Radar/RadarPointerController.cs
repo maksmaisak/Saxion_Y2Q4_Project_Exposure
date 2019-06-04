@@ -30,7 +30,7 @@ public class RadarPointerController : VRTK_StraightPointerRenderer
                     destinationHit.collider.gameObject.transform.position - actualContainer.transform.position);
             }
             else
-                actualContainer.transform.rotation = Quaternion.identity;
+                actualContainer.transform.localRotation = Quaternion.identity;
         }
     }
 }
