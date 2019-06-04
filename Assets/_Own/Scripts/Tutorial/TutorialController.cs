@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class ControllersSettings : Singleton<ControllersSettings>
+public class TutorialController : Singleton<TutorialController>
 {
     [SerializeField] private SkinnedMeshRenderer gripGameObject;
     [SerializeField] private SkinnedMeshRenderer triggerGameObject;
@@ -18,15 +18,15 @@ public class ControllersSettings : Singleton<ControllersSettings>
 
     public void ApplyHighlightToObject()
     {
-        
+        if (triggerGameObject == null || gripGameObject == null)
+            return;
+
         triggerGameObject.material = highlightMaterial;
         ChangeHighlightMaterial();
-        ActivateAnimation();
     }
 
     public void DeleteGameObject() => transform.DOScale(0,1).SetEase(Ease.InCirc).OnComplete(() => Destroy(gameObject));
 
     private void ChangeHighlightMaterial() => gripGameObject.material = baseMaterial;
 
-    private void ActivateAnimation() => GetComponent<Animator>().enabled = true;
 }

@@ -81,7 +81,7 @@ public class RadarController : VRTK_InteractableObject
             
             radarTool.Probe();
             
-            ControllersSettings.instance.DeleteGameObject();
+            TutorialController.instance?.DeleteGameObject();
         });
     }
 
@@ -137,7 +137,7 @@ public class RadarController : VRTK_InteractableObject
     {
         base.Grabbed(currentGrabbingObject);
         
-        ControllersSettings.instance.ApplyHighlightToObject();
+        TutorialController.instance?.ApplyHighlightToObject();
     }
 }
 
