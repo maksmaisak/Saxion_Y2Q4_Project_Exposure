@@ -391,7 +391,7 @@ MonoBehaviour:
   chargeUpDuration: 1.6
   releaseDelay: 0.05
   maxAngularSpeed: 2000
-  angularStepSpeed: 20
+  angularStepSpeed: 900
   spinningThingGameObject: {fileID: 9028225842776570015}
   shootClip: {fileID: 8300000, guid: 3adea41f583bc9f43b34bc36a2fa06df, type: 3}
   chargeUpClip: {fileID: 8300000, guid: fb80fd5a60481184f879442fd3fca16d, type: 3}

@@ -118,7 +118,10 @@ public class RadarController : VRTK_InteractableObject
     {
         base.Update();
 
-        spinningThingSpeed = Mathf.Clamp(isChargingUp ? spinningThingSpeed + angularStepSpeed : spinningThingSpeed - angularStepSpeed,
+        spinningThingSpeed = Mathf.Clamp(
+            isChargingUp
+                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
+                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
             0.0f, maxAngularSpeed);
         
         spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
