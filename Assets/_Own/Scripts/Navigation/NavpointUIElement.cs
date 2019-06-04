@@ -17,14 +17,19 @@ public class NavpointUIElement : VRTK_DestinationMarker
     [SerializeField] Image innerCircle;
     [Space] 
     [SerializeField] float fillDuration = 1.0f;
+    [SerializeField] float unFillDuration = 10.0f;
 
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
     [SerializeField] LightSection lightSectionToRevealWith;
 
+    [Header("Audio Settings")] 
+    [SerializeField] AudioClip navPointAudio;
+
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
-    
+
     private new Camera camera;
+    private AudioSource audioSource;
 
     enum State
     {
@@ -37,6 +42,8 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
     IEnumerator Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        
         canvasGroup = canvasGroup ? canvasGroup : GetComponentInChildren<CanvasGroup>();
         Assert.IsNotNull(canvasGroup);
         
@@ -67,7 +74,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
         switch (state)
         {
             case State.Unfilling:
-                outerCircle.fillAmount = Mathf.Clamp01(outerCircle.fillAmount - Time.deltaTime / fillDuration);
+                outerCircle.fillAmount = Mathf.Clamp01(outerCircle.fillAmount - Time.deltaTime / unFillDuration);
                 break;
             case State.Filling:
                 float fill = Mathf.Clamp01(outerCircle.fillAmount + Time.deltaTime / fillDuration);
@@ -101,7 +108,15 @@ public class NavpointUIElement : VRTK_DestinationMarker
         canvasGroup.DOKill();
         canvasGroup.DOFade(1.0f, 1.0f);
         transform.DOKill();
-        transform.DOPunchScale(Vector3.one * 1.1f, 1.0f, 2);
+        transform.DOPunchScale(Vector3.one * 0.4f, navPointAudio.length, 2).SetLoops(-1, LoopType.Restart);
+
+        this.Delay(navPointAudio.length, () =>
+        {
+            audioSource.clip = navPointAudio;
+            audioSource.loop = true;
+            audioSource.Play();
+        });
+
     }
 
     private Sequence PlayDisappearEffect()
