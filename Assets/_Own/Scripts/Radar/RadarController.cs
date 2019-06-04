@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Experimental.PlayerLoop;
 using VRTK;
 
 public class RadarController : VRTK_InteractableObject
@@ -11,6 +15,10 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] RadarTool radarTool;
     [SerializeField] float chargeUpDuration = 1.6f;
     [SerializeField] float releaseDelay = 0.3f;
+
+    [Header("Spinning Thing Settings")] 
+    [SerializeField] float maxAngularSpeed = 1500.0f;
+    [SerializeField] GameObject spinningThingGameObject;
     
     [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
@@ -25,12 +33,16 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] AudioSource releaseAudioSource;
 
     private bool canUse = true;
+    private bool isHandGrabbed;
 
+    private float spinningThingSpeed;
     private float lastChargeUpStartingTime;
     private float lastReleaseStartingTime;
     
     private Coroutine interruptingSoundCoroutine;
     private Coroutine fireRadarCoroutine;
+
+    private TweenerCore<float, float, FloatOptions> speedTween;
 
     IEnumerator Start()
     {
@@ -39,6 +51,7 @@ public class RadarController : VRTK_InteractableObject
         Assert.IsNotNull(interruptClip);
         Assert.IsNotNull(releaseAudioSource);
         Assert.IsNotNull(chargeUpAudioSource);
+        Assert.IsNotNull(spinningThingGameObject);
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
@@ -49,7 +62,7 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
 
-            if (chargeUpAudioSource)
+            if (releaseAudioSource)
                 StartCoroutine(PlayInterrupt());
 
             lastChargeUpStartingTime = 0.0f;
@@ -78,11 +91,17 @@ public class RadarController : VRTK_InteractableObject
         fireRadarCoroutine = this.Delay(chargeUpDuration, () =>
         {
             FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
-            
+
             radarTool.Probe();
-            
+
             ControllersSettings.instance.DeleteGameObject();
+
+            if(isHandGrabbed)
+                ChangeSpinningSpeed(0.0f, interruptClip.length, Ease.InQuart);
         });
+
+        if(isHandGrabbed)
+            ChangeSpinningSpeed(maxAngularSpeed, chargeUpDuration, Ease.OutQuart);
     }
 
     public override void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
@@ -95,15 +114,43 @@ public class RadarController : VRTK_InteractableObject
         StartPlayingInterruptIfNeeded();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+        
+        Debug.LogFormat("Speed is: {0}", spinningThingSpeed);
+    }
+
     private void StartPlayingInterruptIfNeeded()
     {
         float timeSinceChargeupStarted = Time.time - lastChargeUpStartingTime;
         if (timeSinceChargeupStarted >= chargeUpDuration)
             return;
-
+        
+        if(isHandGrabbed)
+            ChangeSpinningSpeed(0.0f, interruptClip.length, Ease.InQuart);
+        
         lastReleaseStartingTime = Time.time;
 
         interruptingSoundCoroutine = StartCoroutine(PlayInterrupt());
+    }
+
+    private void ChangeSpinningSpeed(float endValue, float duration, Ease ease)
+    {
+        // Kill the previous tween
+        transform.DOKill();
+
+        if (speedTween != null)
+            DOTween.Kill(speedTween);
+
+        speedTween = DOTween.To(
+            () => spinningThingSpeed,
+            x => spinningThingSpeed = x,
+            endValue,
+            duration
+        ).SetEase(ease);
     }
 
     private IEnumerator PlayInterrupt()
@@ -132,12 +179,13 @@ public class RadarController : VRTK_InteractableObject
     private void FadeOutAndStop(AudioSource source, float newFadeOutDuration = 0.1f) =>
         source.DOFade(0, newFadeOutDuration);
 
-
     public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
     {
         base.Grabbed(currentGrabbingObject);
         
         ControllersSettings.instance.ApplyHighlightToObject();
+
+        isHandGrabbed = true;
     }
 }
 
