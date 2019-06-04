@@ -107,16 +107,17 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
         canvasGroup.DOKill();
         canvasGroup.DOFade(1.0f, 1.0f);
+
         transform.DOKill();
-        transform.DOPunchScale(Vector3.one * 0.4f, navPointAudio.length, 2).SetLoops(-1, LoopType.Restart);
-
-        this.Delay(navPointAudio.length, () =>
-        {
-            audioSource.clip = navPointAudio;
-            audioSource.loop = true;
-            audioSource.Play();
-        });
-
+        DOTween.Sequence()
+            .AppendCallback(() => {
+                audioSource.clip = navPointAudio;
+                audioSource.loop = false;
+                audioSource.Play();
+            })
+            .Append(transform.DOPunchScale(Vector3.one * 0.4f, navPointAudio.length, 2))
+            .AppendInterval(2.0f)
+            .SetLoops(-1, LoopType.Restart);
     }
 
     private Sequence PlayDisappearEffect()
