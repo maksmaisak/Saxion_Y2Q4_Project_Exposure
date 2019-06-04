@@ -376,7 +376,10 @@ MonoBehaviour:
   fillDuration: 1
   unFillDuration: 10
   lightSectionToRevealWith: {fileID: 0}
-  navPointAudio: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
+  pulseSound: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
+  pulseDuration: 0.8
+  pulseInterval: 1
+  pulsePunchScale: 0.4
   teleportOnStart: 0
 --- !u!65 &558030851
 BoxCollider:

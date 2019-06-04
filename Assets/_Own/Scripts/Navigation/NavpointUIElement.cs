@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using VRTK;
 
 public class NavpointUIElement : VRTK_DestinationMarker
@@ -19,11 +20,17 @@ public class NavpointUIElement : VRTK_DestinationMarker
     [SerializeField] float fillDuration = 1.0f;
     [SerializeField] float unFillDuration = 10.0f;
 
+    [Header("Appear settings")]
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
     [SerializeField] LightSection lightSectionToRevealWith;
+    [SerializeField] float appearDelay = 5.0f;
 
-    [Header("Audio Settings")] 
-    [SerializeField] AudioClip navPointAudio;
+    [Header("Pulse Settings")] 
+    [FormerlySerializedAs("navPointAudio")]
+    [SerializeField] AudioClip pulseSound;
+    [SerializeField] float pulseDuration = 0.8f;
+    [SerializeField] float pulseInterval = 2.0f;
+    [SerializeField] float pulsePunchScale = 0.4f;
 
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
@@ -55,7 +62,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
         if (lightSectionToRevealWith && !lightSectionToRevealWith.isRevealed)
         {
             Hide();
-            lightSectionToRevealWith.onReveal.AddListener(() => this.Delay(5.0f, Show));
+            lightSectionToRevealWith.onReveal.AddListener(() => this.Delay(appearDelay, Show));
         }
 
         yield return new WaitUntil(() => camera = Camera.main);
@@ -111,12 +118,12 @@ public class NavpointUIElement : VRTK_DestinationMarker
         transform.DOKill();
         DOTween.Sequence()
             .AppendCallback(() => {
-                audioSource.clip = navPointAudio;
+                audioSource.clip = pulseSound;
                 audioSource.loop = false;
                 audioSource.Play();
             })
-            .Append(transform.DOPunchScale(Vector3.one * 0.4f, navPointAudio.length, 2))
-            .AppendInterval(2.0f)
+            .Append(transform.DOPunchScale(Vector3.one * pulsePunchScale, pulseDuration, 2))
+            .AppendInterval(pulseInterval)
             .SetLoops(-1, LoopType.Restart);
     }
 
