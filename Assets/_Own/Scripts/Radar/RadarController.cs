@@ -62,9 +62,9 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
 
-            if (releaseAudioSource)
-                StartCoroutine(PlayInterrupt());
-
+            if(isChargingUp)
+                StartPlayingInterruptIfNeeded();
+            
             lastChargeUpStartingTime = 0.0f;
             lastReleaseStartingTime = 0.0f;
         }
