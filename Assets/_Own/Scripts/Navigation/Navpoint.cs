@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -7,18 +8,21 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using VRTK;
 
-public class NavpointUIElement : VRTK_DestinationMarker
+public class Navpoint : VRTK_DestinationMarker
 {
     [Header("Navpoint Settings")]
     [SerializeField] VRTK_BasicTeleport teleporter;
-    public UnityEvent onComplete;
-
+    [SerializeField] Transform rotateToFacePlayerTransform;
+    [SerializeField] Transform teleportToTransform;
+    [Space]
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] Image outerCircle;
     [SerializeField] Image innerCircle;
     [Space] 
     [SerializeField] float fillDuration = 1.0f;
     [SerializeField] float unFillDuration = 10.0f;
+    [Space]
+    [FormerlySerializedAs("onComplete")] public UnityEvent onTeleport;
 
     [Header("Appear settings")]
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
@@ -50,6 +54,9 @@ public class NavpointUIElement : VRTK_DestinationMarker
     IEnumerator Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        rotateToFacePlayerTransform = rotateToFacePlayerTransform ? rotateToFacePlayerTransform : transform;
+        teleportToTransform = teleportToTransform ? teleportToTransform : transform;
         
         canvasGroup = canvasGroup ? canvasGroup : GetComponentInChildren<CanvasGroup>();
         Assert.IsNotNull(canvasGroup);
@@ -73,11 +80,6 @@ public class NavpointUIElement : VRTK_DestinationMarker
     
     void Update()
     {
-        if (!camera)
-            return;
-        
-        transform.rotation = Quaternion.LookRotation(transform.position - camera.transform.position);
-        
         switch (state)
         {
             case State.Unfilling:
@@ -91,7 +93,15 @@ public class NavpointUIElement : VRTK_DestinationMarker
                 break;
         }
     }
-    
+
+    void LateUpdate()
+    {
+        if (!camera)
+            return;
+        
+        rotateToFacePlayerTransform.rotation = Quaternion.LookRotation(rotateToFacePlayerTransform.position - camera.transform.position);
+    }
+
     public void SetFilling(bool isFilling)
     {
         if (state != State.Filling && state != State.Unfilling)
@@ -117,6 +127,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
         transform.DOKill();
         DOTween.Sequence()
+            .SetTarget(this)
             .AppendCallback(() => {
                 audioSource.clip = pulseSound;
                 audioSource.loop = false;
@@ -133,6 +144,7 @@ public class NavpointUIElement : VRTK_DestinationMarker
 
         outerCircle.DOKill();
         innerCircle.DOKill();
+        this.DOKill();
 
         const float PartDuration = 0.4f;
 
@@ -156,12 +168,11 @@ public class NavpointUIElement : VRTK_DestinationMarker
     private void Teleport()
     {
         Assert.IsTrue(EnsureTeleporter());
-        Transform tf = transform;
-        teleporter.Teleport(tf, tf.position);
+        teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
 
         new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
-            
-        onComplete?.Invoke();
+        onTeleport?.Invoke();
+        
         Destroy(gameObject);
     }
 

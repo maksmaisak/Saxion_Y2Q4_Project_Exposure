@@ -1,6 +1,6 @@
  public class OnTeleportEvent : BroadcastEvent<OnTeleportEvent>
  {
-     public readonly NavpointUIElement navpoint;
+     public readonly Navpoint navpoint;
 
-     public OnTeleportEvent(NavpointUIElement navpoint) => this.navpoint = navpoint;
+     public OnTeleportEvent(Navpoint navpoint) => this.navpoint = navpoint;
  }
