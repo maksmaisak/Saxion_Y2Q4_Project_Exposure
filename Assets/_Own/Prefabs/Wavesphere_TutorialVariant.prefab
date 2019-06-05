@@ -12,45 +12,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wavesphere_TutorialVariant
       objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: targetSphereRadius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: scaleMin
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: scaleMax
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: attractionRadius
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.468
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
@@ -65,7 +45,7 @@ PrefabInstance:
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70710677
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
@@ -75,7 +55,7 @@ PrefabInstance:
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 90.00001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
@@ -86,6 +66,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478903362873746546, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: pulsePunchScale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478903362873746546, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: pulseElasticity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6718b7e95c304134a9ce291972c7fb79, type: 3}
