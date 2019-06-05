@@ -55,7 +55,7 @@ Material:
     m_Floats:
     - Vector1_324C3AD2: 0.5
     - Vector1_A1B84C3E: 0.1
-    - Vector1_ADA3E76E: 4
+    - Vector1_ADA3E76E: 0
     - Vector1_F01D274B: 0
     - _AlphaClip: 1
     - _Blend: 0
@@ -65,7 +65,7 @@ Material:
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
     - _ColorMode: 1
-    - _ColorRollSpeed: -0.25
+    - _ColorRollSpeed: -0.0625
     - _Cull: 2
     - _Cutoff: 0.5
     - _DistortionBlend: 0.5
