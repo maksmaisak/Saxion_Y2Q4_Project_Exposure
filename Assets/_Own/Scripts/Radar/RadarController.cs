@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -87,6 +87,9 @@ public class RadarController : VRTK_InteractableObject
 
         FadeInAndPlay(chargeUpAudioSource, chargeUpClip, chargeUpVolume, fadeInDuration);
 
+        if(fireRadarCoroutine != null)
+            StopCoroutine(fireRadarCoroutine);
+        
         // Maybe use DOTween and instead of chargeUpDuration use clip.length (however this is easier to change)
         fireRadarCoroutine = this.Delay(chargeUpDuration, () =>
         {
@@ -140,8 +143,7 @@ public class RadarController : VRTK_InteractableObject
 
     private IEnumerator PlayInterrupt()
     {
-        if (fireRadarCoroutine != null)
-            StopCoroutine(fireRadarCoroutine);
+        StopAllCoroutines();
 
         FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
         
