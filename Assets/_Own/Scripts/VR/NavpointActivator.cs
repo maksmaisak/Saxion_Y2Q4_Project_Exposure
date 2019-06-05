@@ -32,7 +32,7 @@ public class NavpointActivator : MonoBehaviour
 
     private void DestinationMarkerEnter(object sender, DestinationMarkerEventArgs e)
     {
-        foreach (NavpointUIElement navpoint in e.target.GetComponentsInParent<NavpointUIElement>())
+        foreach (Navpoint navpoint in e.target.GetComponentsInParent<Navpoint>())
         {
             navpoint.SetFilling(true);
         }
@@ -40,7 +40,7 @@ public class NavpointActivator : MonoBehaviour
 
     private void DestinationMarkerExit(object sender, DestinationMarkerEventArgs e)
     {
-        foreach (NavpointUIElement navpoint in e.target.GetComponentsInParent<NavpointUIElement>())
+        foreach (Navpoint navpoint in e.target.GetComponentsInParent<Navpoint>())
         {
             navpoint.SetFilling(false);
         }
