@@ -262,7 +262,6 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed, LightSection lightSection)
     {
         float dotConeAngle = pulseSettings.baseDotConeAngle / Mathf.Pow(pulseSettings.dotConeAngleFalloff * hit.distance + 1.0f, pulseSettings.dotConeAngleFalloffPower);
-
         RadarHighlightLocation highlightLocation = new RadarHighlightLocation
         {
             originalRay = originalRay,
@@ -271,8 +270,10 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             maxDotDistanceFromSurfacePointAlongOriginalRay = pulseSettings.maxDotDistanceFromSurfacePointAlongOriginalRay
         };
         
-        Assert.IsNotNull(pulseSettings.wavespherePrefab);
-        
+        FlyingSphere prefab = pulseSettings.wavespherePrefab;
+        Assert.IsNotNull(prefab);
+        Vector3 targetPosition = (pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform).position;
+
         this.Delay(hit.distance / pulseSettings.wavePulseSpeed, () =>
         {
             if (lightSection && lightSection.isRevealed)
@@ -284,10 +285,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
                 return;
             }
             
-            pulseSettings.wavesphereTarget = pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform;
-            
-            FlyingSphere flyingSphere = Instantiate(pulseSettings.wavespherePrefab, hit.point, Quaternion.identity);
-            flyingSphere.Initialize(pulseSettings.wavesphereTarget.position, speed, lightSection);
+            FlyingSphere flyingSphere = Instantiate(prefab, hit.point, Quaternion.identity);
+            flyingSphere.Initialize(targetPosition, speed, lightSection);
             flyingSphere.highlightLocation = highlightLocation;
         });
     }
