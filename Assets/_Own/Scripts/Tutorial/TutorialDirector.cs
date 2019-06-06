@@ -14,8 +14,18 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] GameObject tutorialController;
 
     private RadarTool radarTool;
+    private bool isTutorialRunning;
 
-    IEnumerator Start()
+    public void StartTutorial()
+    {
+        if (isTutorialRunning) 
+            return;
+        
+        isTutorialRunning = true;
+        StartCoroutine(StartTutorialCoroutine());
+    }
+
+    IEnumerator StartTutorialCoroutine()
     {
         EnsureIsInitializedCorrectly();
 
