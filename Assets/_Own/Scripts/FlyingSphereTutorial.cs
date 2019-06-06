@@ -74,6 +74,6 @@ public class FlyingSphereTutorial : MonoBehaviour
     private bool IsVisibleToCamera()
     {
         Vector3 viewportPos = camera.WorldToViewportPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
-        return viewportPos.z > 0 && visibleViewportRect.Contains(viewportPos);
+        return viewportPos.z > 0.0f && visibleViewportRect.Contains(viewportPos);
     }
 }
