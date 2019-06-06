@@ -7,7 +7,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -54,20 +54,23 @@ public struct PulseSettings
 
 public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    private const int MaxNumRaysPerAxis = 21;
-
     [SerializeField] PulseSettings pulseSettings = PulseSettings.Default;
+    
+    [Serializable]
+    public class OnSpawnedWavesphereHandler : UnityEvent<RadarTool, FlyingSphere> {}
+    public OnSpawnedWavesphereHandler onSpawnedWavesphere;
 
     [Header("Debug settings")] 
     [SerializeField] bool highlightWithoutWavespheres = false;
     [SerializeField] bool drawSpherecastRays          = false;
-
+    
     private new Transform transform;
     
     private (int indexX, int indexY)[] rayIndices;
     private NativeArray<SpherecastCommand> commands;
     private NativeArray<RaycastHit>        hits;
     
+    private const int MaxNumRaysPerAxis = 21;
     private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
     private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
 
@@ -273,7 +276,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         FlyingSphere prefab = pulseSettings.wavespherePrefab;
         Assert.IsNotNull(prefab);
         Vector3 targetPosition = (pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform).position;
-
+        
         this.Delay(hit.distance / pulseSettings.wavePulseSpeed, () =>
         {
             if (lightSection && lightSection.isRevealed)
@@ -288,6 +291,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             FlyingSphere flyingSphere = Instantiate(prefab, hit.point, Quaternion.identity);
             flyingSphere.Initialize(targetPosition, speed, lightSection);
             flyingSphere.highlightLocation = highlightLocation;
+            
+            onSpawnedWavesphere?.Invoke(this, flyingSphere);
         });
     }
     

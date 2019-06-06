@@ -35,6 +35,23 @@ public class TutorialDirector : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         radarController.StopUsing();
 
+        int numWavespheresLeftToCatch = 0;
+        bool anyWavespheresSpawned = false;
+        void WavesphereSpawnedHandler(RadarTool sender, FlyingSphere flyingSphere)
+        {
+            anyWavespheresSpawned = true;
+            numWavespheresLeftToCatch += 1;
+            
+            flyingSphere.onCaught.AddListener(() => numWavespheresLeftToCatch -= 1);
+        }
+        radarTool.onSpawnedWavesphere.AddListener(WavesphereSpawnedHandler);
+
+        yield return new WaitUntil(() =>
+        {
+            Assert.IsTrue(numWavespheresLeftToCatch >= 0);
+            return anyWavespheresSpawned && numWavespheresLeftToCatch == 0;
+        });
+
         yield return rotateTransform
             .DORotate(Vector3.up * -60.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
