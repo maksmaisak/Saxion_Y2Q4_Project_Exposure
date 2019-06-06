@@ -13,7 +13,9 @@ public class TutorialButtonController : MonoBehaviour
     
     private TutorialDirector tutorialDirector;
     
-    private void Start()
+    private bool wasPressed;
+    
+    void Start()
     {
         tutorialDirector = GetComponent<TutorialDirector>();
         handTransform
@@ -22,14 +24,27 @@ public class TutorialButtonController : MonoBehaviour
             .SetLoops(-1, LoopType.Restart);
     }
 
-    protected virtual void OnEnable()
+    void Update()
     {
-        controllable = (controllable == null ? GetComponent<VRTK_BaseControllable>() : controllable);
-        controllable.MaxLimitReached += MaxLimitReached;
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Press();
+        }
     }
 
-    protected virtual void MaxLimitReached(object sender, ControllableEventArgs e)
+    private void OnEnable()
     {
+        controllable = (controllable == null ? GetComponent<VRTK_BaseControllable>() : controllable);
+        controllable.MaxLimitReached += (sender, args) => Press();
+    }
+
+    private void Press()
+    {
+        if (wasPressed)
+            return;
+
+        wasPressed = true;
+        
         handTransform.DOKill(true);
         handTransform.DOScale(0, timeToDisapear).SetEase(Ease.InBack).OnComplete(() => Destroy(handTransform.gameObject));
 
