@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using VRTK;
 using Random = UnityEngine.Random;
 
@@ -43,6 +44,8 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [Header("Other Settings")] 
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
+
+    public UnityEvent onCaught = new UnityEvent();
 
     private new Transform transform;
     private AudioSource audioSource;
@@ -97,7 +100,6 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         audioSource.PlayOneShot(spawnAudio);
         
         Destroy(gameObject, delayToDespawn);
-
     }
 
     void Update()
@@ -116,7 +118,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             return;
 
         DotsManager.instance.Highlight(highlightLocation, transform.position);
-
+        
         isFadingOut = true;
         //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
         lastTimeWasCaught = Time.time;
@@ -130,14 +132,13 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         VibrateController(other);
 
         transform.parent = other.transform;
+        
+        onCaught?.Invoke();
 
         transform.DOKill();
-
         const float Duration = 0.2f;
-
         transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-
         var otherPosition = other.transform.position;
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
@@ -188,6 +189,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         float scale = Random.Range(scaleMin, scaleMax);
 
         Transform tf = transform;
+        tf.DOKill();
         tf.localScale = Vector3.zero;
         tf.DOScale(scale, scaleDuration).SetEase(Ease.OutQuart);
     }
