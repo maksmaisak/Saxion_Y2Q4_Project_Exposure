@@ -34,23 +34,7 @@ public class TutorialDirector : MonoBehaviour
         radarController.StartUsing();
         yield return new WaitForSeconds(2.0f);
         radarController.StopUsing();
-
-        int numWavespheresLeftToCatch = 0;
-        bool anyWavespheresSpawned = false;
-        void WavesphereSpawnedHandler(RadarTool sender, FlyingSphere flyingSphere)
-        {
-            anyWavespheresSpawned = true;
-            numWavespheresLeftToCatch += 1;
-            
-            flyingSphere.onCaught.AddListener(() => numWavespheresLeftToCatch -= 1);
-        }
-        radarTool.onSpawnedWavesphere.AddListener(WavesphereSpawnedHandler);
-
-        yield return new WaitUntil(() =>
-        {
-            Assert.IsTrue(numWavespheresLeftToCatch >= 0);
-            return anyWavespheresSpawned && numWavespheresLeftToCatch == 0;
-        });
+        yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         yield return rotateTransform
             .DORotate(Vector3.up * -60.0f, 5.0f)
@@ -60,6 +44,7 @@ public class TutorialDirector : MonoBehaviour
         radarController.StartUsing();
         yield return new WaitForSeconds(2.0f);
         radarController.StopUsing();
+        yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         yield return rotateTransform
             .DORotate(Vector3.zero, 5.0f)
@@ -91,5 +76,30 @@ public class TutorialDirector : MonoBehaviour
         settings.wavesphereSpeedMin = settings.wavesphereSpeedMax = overrideWavesphereSpeed;
 
         return settings;
+    }
+
+    // TODO BUG: if all currently existing wavespheres are caught, even if the wave is still going and will spawn more, this ends.
+    private CustomYieldInstruction WaitUntilAllSpawnedWavespheresAreCaught()
+    {
+        int numWavespheresLeftToCatch = 0;
+        bool anyWavespheresSpawned = false;
+        void WavesphereSpawnedHandler(RadarTool sender, FlyingSphere flyingSphere)
+        {
+            anyWavespheresSpawned = true;
+            numWavespheresLeftToCatch += 1;
+            
+            flyingSphere.onCaught.AddListener(() => numWavespheresLeftToCatch -= 1);
+        }
+        radarTool.onSpawnedWavesphere.AddListener(WavesphereSpawnedHandler);
+
+        return new WaitUntil(() => 
+        {
+            Assert.IsTrue(numWavespheresLeftToCatch >= 0);
+            if (!anyWavespheresSpawned || numWavespheresLeftToCatch > 0)
+                return false;
+
+            radarTool.onSpawnedWavesphere.RemoveListener(WavesphereSpawnedHandler);
+            return true;
+        });
     }
 }
