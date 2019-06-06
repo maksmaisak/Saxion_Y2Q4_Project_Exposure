@@ -52,18 +52,17 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private new Transform transform;
     private AudioSource audioSource;
-
     private float speed = 1.0f;
     private Vector3? targetCenter;
     private LightSection sourceLightSection;
-
     private bool didStart;
     private bool isFadingOut;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
     public RadarHighlightLocation highlightLocation { get; set; }
-
+    public float speedMultiplier { get; set; } = 1.0f;
+    
     private static float lastTimeWasCaught;
 
     public void Initialize(Vector3 target, float movementSpeed, LightSection sourceSection)
@@ -111,7 +110,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (isFadingOut)
             return;
 
-        transform.position += speed * Time.deltaTime * transform.forward;
+        transform.position += speed * speedMultiplier * Time.deltaTime * transform.forward;
 
         AttractToHands();
     }
