@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -36,13 +36,14 @@ public class RadarController : VRTK_InteractableObject
     private bool canUse = true;
     private bool isHandGrabbed;
     private bool isChargingUp;
+    private bool forceCharged;
 
     private float spinningThingSpeed;
     private float lastChargeUpStartingTime;
     private float lastReleaseStartingTime;
+    private float chargingUpDiff;
     
     private Coroutine interruptingSoundCoroutine;
-    private Coroutine fireRadarCoroutine;
 
     IEnumerator Start()
     {
@@ -67,6 +68,7 @@ public class RadarController : VRTK_InteractableObject
             
             lastChargeUpStartingTime = 0.0f;
             lastReleaseStartingTime = 0.0f;
+            chargingUpDiff = 0.0f;
         }
 
         canUse = isUsable;
@@ -87,21 +89,10 @@ public class RadarController : VRTK_InteractableObject
 
         FadeInAndPlay(chargeUpAudioSource, chargeUpClip, chargeUpVolume, fadeInDuration);
 
-        // Maybe use DOTween and instead of chargeUpDuration use clip.length (however this is easier to change)
-        fireRadarCoroutine = this.Delay(chargeUpDuration, () =>
-        {
-            FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
-
-            radarTool.Probe();
-            
-            TutorialController.instance?.DeleteGameObject();
-            
-            if (isHandGrabbed)
-                isChargingUp = false;
-        });
-
         if (isHandGrabbed)
             isChargingUp = true;
+        else
+            forceCharged = true;
     }
 
     public override void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
@@ -125,6 +116,35 @@ public class RadarController : VRTK_InteractableObject
             0.0f, maxAngularSpeed);
         
         spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+
+        ChargeUp();
+    }
+
+    private void ChargeUp()
+    {
+        if (isChargingUp || forceCharged)
+        {
+            chargingUpDiff += Time.deltaTime;
+
+            if (chargingUpDiff >= chargeUpDuration)
+            {
+                FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
+
+                radarTool.Probe();
+
+                TutorialController.instance?.DeleteGameObject();
+
+                if (isHandGrabbed)
+                    isChargingUp = false;
+
+                if (forceCharged)
+                    forceCharged = false;
+
+                chargingUpDiff = 0;
+            }
+        }
+        else
+            chargingUpDiff = 0;
     }
 
     private void StartPlayingInterruptIfNeeded()
@@ -140,8 +160,8 @@ public class RadarController : VRTK_InteractableObject
 
     private IEnumerator PlayInterrupt()
     {
-        if (fireRadarCoroutine != null)
-            StopCoroutine(fireRadarCoroutine);
+        if (forceCharged)
+            forceCharged = false;
 
         FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
         
