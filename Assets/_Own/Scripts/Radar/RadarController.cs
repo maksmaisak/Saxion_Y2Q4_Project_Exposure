@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -56,6 +56,8 @@ public class RadarController : VRTK_InteractableObject
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
+
+    public float GetChargeupDuration() => chargeUpDuration;
 
     public void SetIsUsable(bool isUsable)
     {

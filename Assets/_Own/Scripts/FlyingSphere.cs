@@ -42,6 +42,9 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] bool playOnAwake = false;
 
     [Header("Other Settings")] 
+    [Tooltip("If set, the sphere will move in a way that makes sure it gets caught no matter what.")]
+    [SerializeField] bool mustGetCaught;
+    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
     [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
@@ -99,7 +102,8 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         audioSource.PlayOneShot(spawnAudio);
         
-        Destroy(gameObject, delayToDespawn);
+        if (!mustGetCaught)
+            Destroy(gameObject, delayToDespawn);
     }
 
     void Update()
@@ -215,8 +219,10 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         Vector3 position = transform.position;
         Transform targetTransform = targetTransforms.ArgMin(t => (t.position - position).sqrMagnitude);
         Vector3 targetDelta = targetTransform.position - position;
-        if (targetDelta.sqrMagnitude > attractionRadius * attractionRadius)
-            return;
+        
+        if (!mustGetCaught)
+            if (targetDelta.sqrMagnitude > attractionRadius * attractionRadius)
+                return;
 
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDelta.normalized, attractionAngularSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
