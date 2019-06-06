@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1782878270237328695}
   - component: {fileID: 8436944653489439432}
   - component: {fileID: 7279588793669607820}
+  - component: {fileID: 9121826917189300000}
   m_Layer: 0
   m_Name: Firefly 1
   m_TagString: Untagged
@@ -77,6 +78,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &9121826917189300000
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139135589907237477}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6228920830194966054, guid: 610288b76115fa643b3deacfcddedb34, type: 3}
 --- !u!1 &155392221614177445
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +505,7 @@ GameObject:
   - component: {fileID: 6253411292172729876}
   - component: {fileID: 3893290927475630927}
   - component: {fileID: 5920445699255929305}
+  - component: {fileID: 5584076990640637391}
   m_Layer: 0
   m_Name: Wing2
   m_TagString: Untagged
@@ -556,6 +572,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &5584076990640637391
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2376472025677181860}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -7371983002982548177, guid: 610288b76115fa643b3deacfcddedb34, type: 3}
 --- !u!1 &2734643181322988724
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1423487671494393663}
   - component: {fileID: 2826476059977421229}
+  - component: {fileID: 3977530654806129537}
   m_Layer: 0
   m_Name: Antenna1
   m_TagString: Untagged
@@ -643,6 +674,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00058272935, y: 0.003816031, z: 0.0016053651}
     m_Extent: {x: 0.0008747801, y: 0.0041165585, z: 0.0020463737}
   m_DirtyAABB: 0
+--- !u!64 &3977530654806129537
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2734643181322988724}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
 --- !u!1 &2759350413450115115
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,7 +1018,7 @@ Animator:
   m_GameObject: {fileID: 4842904207444412239}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 610288b76115fa643b3deacfcddedb34, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 48a4beb001ad07d45b2a210c93c71646, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1362,6 +1407,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3340050520123332132}
   - component: {fileID: 1162356329897237087}
+  - component: {fileID: 8388817690264029967}
   m_Layer: 0
   m_Name: Antenna2
   m_TagString: Untagged
@@ -1439,6 +1485,20 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0026489, y: 0.0030199895, z: 0.000491696}
     m_Extent: {x: 0.0029429954, y: 0.003413626, z: 0.0008051346}
   m_DirtyAABB: 0
+--- !u!64 &8388817690264029967
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6614435253067092014}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
 --- !u!1 &7076845484249499614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1635,7 @@ GameObject:
   - component: {fileID: 3330761971745641956}
   - component: {fileID: 8392884775618475814}
   - component: {fileID: 5219418970344139090}
+  - component: {fileID: 4747956509047316810}
   m_Layer: 0
   m_Name: Wing1
   m_TagString: Untagged
@@ -1641,6 +1702,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &4747956509047316810
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7195736131569677946}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -1012395410306439865, guid: 610288b76115fa643b3deacfcddedb34, type: 3}
 --- !u!1 &7266102484386948022
 GameObject:
   m_ObjectHideFlags: 0
