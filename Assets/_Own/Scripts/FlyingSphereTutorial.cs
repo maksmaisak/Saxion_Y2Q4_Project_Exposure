@@ -12,7 +12,7 @@ public class FlyingSphereTutorial : MonoBehaviour
     [SerializeField] float pulsePunchScale = 0.1f;
     [SerializeField] float pulseDuration   = 1.0f;
     [SerializeField] float pulseInterval   = 0.3f;
-    [SerializeField] int   pulseElasticity = 1;
+    [SerializeField] int   pulseVibrato = 1;
 
     private Sequence pulseSequence;
     
@@ -22,7 +22,7 @@ public class FlyingSphereTutorial : MonoBehaviour
 
         yield return new WaitForSeconds(pulseDelay);
         
-        pulseSequence = PlaySequence();
+        pulseSequence = PlayPulseSequence();
 
         var sphere = GetComponent<FlyingSphere>();
         if (sphere)
@@ -31,23 +31,24 @@ public class FlyingSphereTutorial : MonoBehaviour
             {
                 pulseSequence?.Kill();
                 pulseSequence = null;
+
+                if (audioSourceSecondary && audioSourceSecondary.isPlaying)
+                    audioSourceSecondary.DOFade(0.0f, 0.5f);
             });
         }
     }
 
-    private Sequence PlaySequence()
+    private Sequence PlayPulseSequence()
     {
-        Debug.Log(this + " started playing sequence.");
         transform.DOKill();
         return DOTween.Sequence()
-            .AppendCallback(() => Debug.Log(this + "started loop"))
             .AppendCallback(() =>
             {
                 audioSourceSecondary.clip = pulseSound;
                 audioSourceSecondary.loop = false;
                 audioSourceSecondary.Play();
             })
-            .Append(transform.DOPunchScale(Vector3.one * pulsePunchScale, pulseDuration, pulseElasticity))
+            .Append(transform.DOPunchScale(Vector3.one * pulsePunchScale, pulseDuration, pulseVibrato))
             .AppendInterval(pulseInterval)
             .SetLoops(-1, LoopType.Restart);
     }
