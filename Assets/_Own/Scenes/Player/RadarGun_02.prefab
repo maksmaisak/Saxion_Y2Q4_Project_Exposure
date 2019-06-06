@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 249407926}
   - component: {fileID: 249407927}
-  - component: {fileID: 249407929}
   - component: {fileID: 249407928}
   - component: {fileID: 4846236843709294932}
   - component: {fileID: 249407931}
   - component: {fileID: 249407930}
+  - component: {fileID: 3253500789757494577}
   m_Layer: 14
   m_Name: Pointer
   m_TagString: Untagged
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 0
   targetListPolicy: {fileID: 0}
-  pointerRenderer: {fileID: 249407929}
+  pointerRenderer: {fileID: 0}
   activationButton: 0
   holdButtonToActivate: 1
   activateOnEnable: 0
@@ -66,38 +66,6 @@ MonoBehaviour:
   interactUse: {fileID: 0}
   customOrigin: {fileID: 0}
   controller: {fileID: 0}
---- !u!114 &249407929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 249407925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fc65878c7102524bb8c2bcfbefff497, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playareaCursor: {fileID: 0}
-  directionIndicator: {fileID: 0}
-  customRaycast: {fileID: 249407928}
-  pointerOriginSmoothingSettings:
-    smoothsPosition: 0
-    maxAllowedPerFrameDistanceDifference: 0.003
-    smoothsRotation: 0
-    maxAllowedPerFrameAngleDifference: 1.5
-  validCollisionColor: {r: 0, g: 0.85490197, b: 1, a: 1}
-  invalidCollisionColor: {r: 1, g: 0, b: 0, a: 1}
-  tracerVisibility: 0
-  cursorVisibility: 0
-  maximumLength: 100
-  scaleFactor: 0.002
-  cursorScaleMultiplier: 25
-  cursorMatchTargetRotation: 0
-  cursorDistanceRescale: 0
-  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
-  customTracer: {fileID: 0}
-  customCursor: {fileID: 0}
 --- !u!114 &249407928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +125,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointer: {fileID: 249407927}
+--- !u!114 &3253500789757494577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249407925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28c97e0a15cdb94fb795670b2048c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playareaCursor: {fileID: 0}
+  directionIndicator: {fileID: 0}
+  customRaycast: {fileID: 249407928}
+  pointerOriginSmoothingSettings:
+    smoothsPosition: 0
+    maxAllowedPerFrameDistanceDifference: 0.003
+    smoothsRotation: 0
+    maxAllowedPerFrameAngleDifference: 1.5
+  validCollisionColor: {r: 0, g: 0.85490197, b: 1, a: 1}
+  invalidCollisionColor: {r: 1, g: 0, b: 0, a: 1}
+  tracerVisibility: 0
+  cursorVisibility: 0
+  maximumLength: 100
+  scaleFactor: 0.002
+  cursorScaleMultiplier: 25
+  cursorMatchTargetRotation: 0
+  cursorDistanceRescale: 0
+  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
+  customTracer: {fileID: 0}
+  customCursor: {fileID: 0}
 --- !u!1 &789619267
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +963,32 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
+      propertyPath: m_Name
+      value: RightControllerPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
@@ -973,8 +998,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
@@ -989,16 +1039,6 @@ PrefabInstance:
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7002482318367828729, guid: ec5de0296be555a42a438c09e36e06ea,
