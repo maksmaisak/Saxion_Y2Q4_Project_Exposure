@@ -30,9 +30,9 @@ public class TutorialDirector : MonoBehaviour
         
         PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
         radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
-        
+
         radarController.StartUsing();
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
         radarController.StopUsing();
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
@@ -42,7 +42,7 @@ public class TutorialDirector : MonoBehaviour
             .WaitForCompletion();
         
         radarController.StartUsing();
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
         radarController.StopUsing();
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
@@ -77,7 +77,7 @@ public class TutorialDirector : MonoBehaviour
 
         return settings;
     }
-
+    
     // TODO BUG: if all currently existing wavespheres are caught, even if the wave is still going and will spawn more, this ends.
     private CustomYieldInstruction WaitUntilAllSpawnedWavespheresAreCaught()
     {
