@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8b735318351469db4f0b7bb72fd61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableTeleport: 0
+  enableTeleport: 1
   targetListPolicy: {fileID: 0}
   teleporter: {fileID: 0}
   rotateToFacePlayerTransform: {fileID: 7009811172140803082}
@@ -415,6 +415,8 @@ MonoBehaviour:
   pulseDuration: 0.8
   pulseInterval: 1
   pulsePunchScale: 0.4
+  teleportAudioSource: {fileID: 0}
+  teleportClip: {fileID: 8300000, guid: eb233f207486aa943b93cb6c4ac22a91, type: 3}
   teleportOnStart: 0
 --- !u!65 &558030851
 BoxCollider:
