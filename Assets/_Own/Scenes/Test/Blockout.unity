@@ -1418,6 +1418,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tutorial
       objectReference: {fileID: 0}
+    - target: {fileID: 5807397314262494638, guid: 6d7732be77df24dcba07b96a1dbb7670,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5807397314262494637, guid: 6d7732be77df24dcba07b96a1dbb7670,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7084,6 +7089,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2133262983}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7138,11 +7148,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
       objectReference: {fileID: 0}
     - target: {fileID: 7002482317312170629, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
@@ -16967,6 +16972,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987451688}
   m_Mesh: {fileID: 1245671152}
+--- !u!82 &992365063 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1826476740, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1619674579164575260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1014280306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8835723872331443393, guid: be0df1412ae3a7641a3d7b9505aaf039,
@@ -19208,6 +19219,11 @@ PrefabInstance:
       propertyPath: lightSectionToRevealWith
       value: 
       objectReference: {fileID: 32478136}
+    - target: {fileID: 7878361257375765436, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
+        type: 3}
+      propertyPath: teleportAudioSource
+      value: 
+      objectReference: {fileID: 992365063}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff73d2c1cb1f34920883884fd8c2f5b6, type: 3}
 --- !u!1001 &1234856049
@@ -28160,7 +28176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2133262983
 Transform:
   m_ObjectHideFlags: 0

@@ -36,6 +36,11 @@ public class Navpoint : VRTK_DestinationMarker
     [SerializeField] float pulseInterval = 2.0f;
     [SerializeField] float pulsePunchScale = 0.4f;
 
+    [Header("Teleport Audio")]
+    [Tooltip("The audio source is situated inside the VR_Setup")]
+    [SerializeField] AudioSource teleportAudioSource;
+    [FormerlySerializedAs("teleportAudio")] [SerializeField] AudioClip   teleportClip;
+
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
 
@@ -167,13 +172,19 @@ public class Navpoint : VRTK_DestinationMarker
     [ContextMenu("Teleport")]
     private void Teleport()
     {
-        Assert.IsTrue(EnsureTeleporter());
-        teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
+        if(teleportAudioSource != null)
+            teleportAudioSource.PlayOneShot(teleportClip);
 
-        new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
-        onTeleport?.Invoke();
-        
-        Destroy(gameObject);
+        this.Delay(0.1f, () =>
+        {
+            Assert.IsTrue(EnsureTeleporter());
+            teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
+
+            new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+            onTeleport?.Invoke();
+
+            Destroy(gameObject);
+        });
     }
 
     private bool EnsureTeleporter()
