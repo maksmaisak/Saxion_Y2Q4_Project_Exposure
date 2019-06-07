@@ -30,6 +30,9 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] AudioSource chargeUpAudioSource;
     [SerializeField] AudioSource releaseAudioSource;
 
+    [Header("Particle Settings")]
+    [SerializeField] ParticleSystem particleSystem;
+
     private bool canUse = true;
     private bool isHandGrabbed;
     private bool isChargingUp;
@@ -141,6 +144,8 @@ public class RadarController : VRTK_InteractableObject
 
                 chargingUpDiff = 0;
             }
+
+            particleSystem.Emit(1);
         }
         else
             chargingUpDiff = 0;
