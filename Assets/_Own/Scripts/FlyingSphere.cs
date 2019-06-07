@@ -145,7 +145,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
-        buzzAudioSource?.DOFade(0.0f, 0.1f);
+        FadeOutAudio();
         
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
@@ -164,6 +164,8 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             .DOScale(0.0f, 0.5f)
             .SetEase(Ease.InBack)
             .OnComplete(() => Destroy(gameObject));
+
+        FadeOutAudio();
     }
 
     private void RandomizeSpeedAndDirection()
@@ -235,12 +237,26 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             return;
 
         bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
-
         VRTK_ControllerReference controllerReference = isLeftHand
             ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
             : VRTK_DeviceFinder.GetControllerReferenceRightHand();
 
         VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval: 0.02f);
+    }
+
+    private void FadeOutAudio()
+    {
+        if (audioSource)
+        {
+            audioSource.DOKill();
+            audioSource.DOFade(0.0f, 0.1f);
+        }
+
+        if (buzzAudioSource)
+        {
+            buzzAudioSource.DOKill();
+            buzzAudioSource.DOFade(0.0f, 0.1f);
+        }
     }
 }
         
