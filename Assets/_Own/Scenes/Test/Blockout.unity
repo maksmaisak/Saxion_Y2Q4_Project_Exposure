@@ -7164,6 +7164,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.0079
       objectReference: {fileID: 0}
+    - target: {fileID: 4848013130956785387, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5dd95555cd1964874893bf3c7155b4b1, type: 2}
     - target: {fileID: 2462423416795286634, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: ShapeModule.angle
