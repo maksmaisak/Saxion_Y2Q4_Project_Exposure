@@ -246,12 +246,6 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private void FadeOutAudio()
     {
-        if (audioSource)
-        {
-            audioSource.DOKill();
-            audioSource.DOFade(0.0f, 0.1f);
-        }
-
         if (buzzAudioSource)
         {
             buzzAudioSource.DOKill();
