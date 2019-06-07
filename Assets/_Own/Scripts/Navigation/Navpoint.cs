@@ -172,7 +172,8 @@ public class Navpoint : VRTK_DestinationMarker
     [ContextMenu("Teleport")]
     private void Teleport()
     {
-        teleportAudioSource.PlayOneShot(teleportClip);
+        if(teleportAudioSource != null)
+            teleportAudioSource.PlayOneShot(teleportClip);
 
         this.Delay(0.1f, () =>
         {
