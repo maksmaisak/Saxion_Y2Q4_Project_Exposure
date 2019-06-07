@@ -4049,7 +4049,6 @@ GameObject:
   - component: {fileID: 19594666070048075}
   - component: {fileID: 19594666070048078}
   - component: {fileID: 19594666070048073}
-  - component: {fileID: 19594666070048072}
   - component: {fileID: 685493363}
   m_Layer: 14
   m_Name: CenterEyeAnchor
@@ -4123,19 +4122,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!135 &19594666070048072
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 19594666070048074}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.165
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &685493363
 MonoBehaviour:
   m_ObjectHideFlags: 0
