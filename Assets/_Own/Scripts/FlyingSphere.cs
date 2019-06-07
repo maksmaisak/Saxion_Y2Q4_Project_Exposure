@@ -81,8 +81,6 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
 
-        targetTransforms.Add(Camera.main.gameObject.transform);
-
         if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
             return;
         
