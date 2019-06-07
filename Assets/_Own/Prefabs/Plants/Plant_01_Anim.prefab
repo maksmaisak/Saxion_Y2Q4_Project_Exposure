@@ -235,7 +235,7 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 14
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: -316046109595110636, guid: fd6077a981b07e743967c71a9ed35895, type: 3}
 --- !u!1 &4163710307970668835
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4726300162540336721}
   - component: {fileID: 3394925998377196331}
+  - component: {fileID: 6040209077976925478}
   m_Layer: 0
   m_Name: Plant_01_Anim
   m_TagString: Untagged
@@ -660,6 +661,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6040209077976925478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632390223956837442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94584770ed5b9b24dad680b89993313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onReveal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3394925998377196331}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &8801637119549672436
 GameObject:
   m_ObjectHideFlags: 0
