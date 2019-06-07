@@ -104,6 +104,7 @@ public class DotsManager : Singleton<DotsManager>
             });
             
             positionsBuffer.ForEach(registry.RegisterDot);
+            new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             positionsBuffer.Clear();
         }
     }
