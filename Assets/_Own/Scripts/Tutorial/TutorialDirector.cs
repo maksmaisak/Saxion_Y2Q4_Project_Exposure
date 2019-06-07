@@ -66,7 +66,7 @@ public class TutorialDirector : MonoBehaviour
 
         tutorialController.SetActive(true);
         
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     private void EnsureIsInitializedCorrectly()

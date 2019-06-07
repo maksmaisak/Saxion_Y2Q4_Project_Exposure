@@ -14,7 +14,7 @@ public class TutorialController : Singleton<TutorialController>
     private void Start()
     {
         transform.DOScale(0.3f, 1).SetEase(Ease.OutCirc);
-        transform.DORotate(new Vector3(0,360,0), 10,RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+        transform.DORotate(new Vector3(0, 360, 0), 10, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
     }
 
     public void ApplyHighlightToObject()
