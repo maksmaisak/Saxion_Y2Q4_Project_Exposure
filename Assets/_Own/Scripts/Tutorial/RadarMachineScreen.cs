@@ -1,21 +1,38 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 public class RadarMachineScreen : MyBehaviour, IEventReceiver<OnHighlightEvent>
 {
+    [Header("Dots settings")]
     [SerializeField] Transform dotsTransform;
     [SerializeField] new ParticleSystem particleSystem;
     [Space]
     [SerializeField] Vector2 positionMultipliers = new Vector2(0.05f, 0.05f);
     [SerializeField] Rect cullRect = new Rect(-0.23f, -0.23f, 0.46f, 0.46f);
     [SerializeField] RangeFloat cullRangeVertical = new RangeFloat(-1.0f, 1.0f);
+    [Header("Radar gun direction settings")] 
+    [SerializeField] Transform radarGunTransform;
+    [SerializeField] Transform directionVisualizer;
 
     void Start()
     {
         dotsTransform = dotsTransform ? dotsTransform : transform;
         particleSystem = particleSystem ? particleSystem : GetComponentInChildren<ParticleSystem>();
         Assert.IsNotNull(particleSystem);
+        
+        if (directionVisualizer && !radarGunTransform)
+            directionVisualizer.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (!directionVisualizer || !radarGunTransform)
+            return;
+
+        float angle = radarGunTransform.rotation.eulerAngles.y;
+        directionVisualizer.localRotation = Quaternion.Euler(0.0f, 0.0f, -angle);
     }
     
     public void On(OnHighlightEvent message)
