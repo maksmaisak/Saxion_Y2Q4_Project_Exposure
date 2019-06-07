@@ -34,7 +34,7 @@ public class TutorialDirector : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         yield return rotateTransform
-            .DORotate(Vector3.up * 60.0f, 5.0f)
+            .DORotate(Vector3.up * 90.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
@@ -47,7 +47,7 @@ public class TutorialDirector : MonoBehaviour
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         yield return rotateTransform
-            .DORotate(Vector3.up * -60.0f, 5.0f)
+            .DORotate(Vector3.up * -90.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
