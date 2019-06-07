@@ -40,6 +40,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] AudioClip spawnAudio;
     [SerializeField] [Range(0, 1)] float grabAudioVolume;
     [SerializeField] bool playOnAwake = false;
+    [SerializeField] AudioSource buzzAudioSource;
 
     [Header("Other Settings")] 
     [Tooltip("If set, the sphere will move in a way that makes sure it gets caught no matter what.")]
@@ -124,7 +125,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         DotsManager.instance.Highlight(highlightLocation, transform.position);
         
         isFadingOut = true;
-        //Debug.Log("Seconds since previous wavesphere caught:" + Time.time - lastTimeWasCaught);
+
         lastTimeWasCaught = Time.time;
 
         AudioClip grabAudioClip = FlyingSphereAudio.instance.GetGrabAudioClip();
@@ -147,6 +148,8 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
+        buzzAudioSource?.DOFade(0.0f, 0.1f);
+        
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
 

@@ -241,6 +241,7 @@ MonoBehaviour:
   spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
   grabAudioVolume: 0.01
   playOnAwake: 0
+  buzzAudioSource: {fileID: 2681657970494475077}
   mustGetCaught: 0
   delayToDespawn: 25
   handsCollisionLayer:
