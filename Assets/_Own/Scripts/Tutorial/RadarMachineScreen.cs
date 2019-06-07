@@ -6,7 +6,8 @@ public class RadarMachineScreen : MyBehaviour, IEventReceiver<OnHighlightEvent>
 {
     [SerializeField] Transform dotsTransform;
     [SerializeField] new ParticleSystem particleSystem;
-    [Space] 
+    [Space]
+    [SerializeField] Vector2 positionMultipliers = new Vector2(0.05f, 0.05f);
     [SerializeField] Rect cullRect = new Rect(-0.23f, -0.23f, 0.46f, 0.46f);
     [SerializeField] RangeFloat cullRangeVertical = new RangeFloat(-1.0f, 1.0f);
 
@@ -35,11 +36,11 @@ public class RadarMachineScreen : MyBehaviour, IEventReceiver<OnHighlightEvent>
 
         Vector3 right   = Vector3.right;
         Vector3 forward = Vector3.forward;
-        Vector3 up = Vector3.up;
+        Vector3 up      = Vector3.up;
 
         return new Vector3(
-            Vector3.Dot(relativePosition, right  ) * 0.05f,
-            Vector3.Dot(relativePosition, forward) * 0.05f,
+            Vector3.Dot(relativePosition, right  ) * positionMultipliers.x,
+            Vector3.Dot(relativePosition, forward) * positionMultipliers.y,
             Vector3.Dot(relativePosition, up     )
         );
     }
