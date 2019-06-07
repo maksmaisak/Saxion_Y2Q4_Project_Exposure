@@ -85,7 +85,7 @@ public class DotsManager : Singleton<DotsManager>
     public void Highlight(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
         //Debug.DrawLine(location.originalRay.origin, location.pointOnSurface, Color.green, 20.0f);
-      
+        
         GenerateRaycastCommands(ref location, layerMask);
         RaycastCommand.ScheduleBatch(commands, hits, 1).Complete();
         FillPositionsBufferFromRaycastResults(ref location);
@@ -99,7 +99,7 @@ public class DotsManager : Singleton<DotsManager>
             var section = lightSections[i];
             GetFreeDotsAnimator().AnimateDots(positionsBuffer, dotsOrigin, (animator, positions) =>
             {
-                section.AddDots(positions);
+                section.AddDots(positions); 
                 freeDotsAnimators.Push(animator);
             });
             

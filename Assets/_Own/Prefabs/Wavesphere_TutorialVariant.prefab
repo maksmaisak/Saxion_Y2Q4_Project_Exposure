@@ -109,12 +109,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSourceSecondary: {fileID: 1068040685903780439}
-  pulseSound: {fileID: 8300000, guid: 2d55cfc3f1680aa4695f45bdea83d39f, type: 3}
+  pulseSound: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
   pulseDelay: 2
-  pulsePunchScale: 0.1
   pulseDuration: 1
   pulseInterval: 0.3
+  pulsePunchScale: 0.1
   pulseVibrato: 1
+  visibleViewportRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1001 &4743065505703638956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,6 +128,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: m_Name
+      value: Wavesphere_TutorialVariant
+      objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: targetSphereRadius
@@ -146,11 +157,6 @@ PrefabInstance:
         type: 3}
       propertyPath: mustGetCaught
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: m_Name
-      value: Wavesphere_TutorialVariant
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}

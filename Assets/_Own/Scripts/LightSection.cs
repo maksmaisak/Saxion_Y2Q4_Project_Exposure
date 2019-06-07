@@ -105,6 +105,8 @@ public class LightSection : MonoBehaviour
 
     public List<GameObject> GetGameObjects() => gameObjects;
 
+    public float GetRevealProgress() => Mathf.Clamp01((float)numDots / numDotsToReveal);
+    
     public void AddDots(IList<Vector3> positions)
     {
         if (isRevealed)
