@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
     [SerializeField] Image indicator;
+    [SerializeField] float maxProgressPerSecond = 1.0f;
 
     private LightSection currentSection;
 
@@ -21,7 +22,23 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
 
     void Update()
     {
-        indicator.fillAmount = currentSection.GetRevealProgress();
+        if (!currentSection)
+        {
+            indicator.fillAmount = 0.0f;
+            return;
+        }
+
+        if (currentSection.isRevealed)
+        {
+            indicator.fillAmount = 1.0f;
+            return;
+        }
+        
+        indicator.fillAmount = Mathf.MoveTowards(
+            indicator.fillAmount, 
+            currentSection.GetRevealProgress(), 
+            maxProgressPerSecond * Time.deltaTime
+        );
     }
 
     public void On(OnTeleportEvent message)
@@ -30,6 +47,7 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
         Assert.IsNotNull(section);
         
         currentSection = section;
+        indicator.fillAmount = section.GetRevealProgress();
     }
 
     private LightSection GetFirstSection()
