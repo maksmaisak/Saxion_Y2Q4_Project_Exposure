@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1434458365702413756}
   - component: {fileID: 6776349514175140706}
+  - component: {fileID: 1623647416188650221}
   m_Layer: 0
   m_Name: Plant_1
   m_TagString: Untagged
@@ -221,6 +222,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.08030635, y: 0.51542073, z: -0.02164039}
     m_Extent: {x: 0.7618913, y: 0.7786793, z: 0.3352901}
   m_DirtyAABB: 0
+--- !u!64 &1623647416188650221
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3815979830939664500}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
 --- !u!1 &4163710307970668835
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +649,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8632390223956837442}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: fd6077a981b07e743967c71a9ed35895, type: 3}
   m_Controller: {fileID: 9100000, guid: 9b53e26a436c6e34badfe358ecf27810, type: 2}
   m_CullingMode: 1
