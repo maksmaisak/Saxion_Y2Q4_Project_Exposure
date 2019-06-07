@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9163843596387108521}
   - component: {fileID: 177757555054574751}
   - component: {fileID: 5857789925425971302}
+  - component: {fileID: 8137671605637043963}
   m_Layer: 0
   m_Name: Scrum_rock_01
   m_TagString: Untagged
@@ -77,3 +78,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8137671605637043963
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5293940585763353786}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 2972203162410815317, guid: 61676ebc5d3811f4eaa4a02f388ab99e, type: 3}
