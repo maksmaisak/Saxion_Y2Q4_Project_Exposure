@@ -6,13 +6,18 @@ using UnityEngine.Assertions;
 
 public class TutorialDirector : MonoBehaviour
 {
+    [SerializeField] float delayBeforeStart = 2.0f;
+    [Space]
     [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
+    [Space]
     [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
-    [SerializeField] GameObject tutorialController;
-    [SerializeField] float dishHolderAnimationDuration = 2.2f;
+    [Space]
+    [SerializeField] TutorialMachineOpen opening;
+    [SerializeField] float controllerTutorialAppearDelay = 0.7f;
+    [SerializeField] GameObject controllerTutorial;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -23,10 +28,10 @@ public class TutorialDirector : MonoBehaviour
             return;
         
         isTutorialRunning = true;
-        StartCoroutine(StartTutorialCoroutine());
+        StartCoroutine(TutorialCoroutine());
     }
 
-    IEnumerator StartTutorialCoroutine()
+    IEnumerator TutorialCoroutine()
     {
         EnsureIsInitializedCorrectly();
 
@@ -34,42 +39,47 @@ public class TutorialDirector : MonoBehaviour
         PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
         radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(delayBeforeStart);
 
+        // Turn right
         yield return rotateTransform
             .DORotate(Vector3.up * 90.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
+        // Pulse
         radarController.StartUsing();
         yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
         radarController.StopUsing();
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
+        // Turn left
         yield return rotateTransform
             .DORotate(Vector3.up * -90.0f, 5.0f)
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
+        // Pulse
         radarController.StartUsing();
         yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
         radarController.StopUsing();
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
+        // Turn forward
         yield return rotateTransform
             .DORotate(Vector3.zero, 5.0f)
             .WaitForCompletion();
 
-        new OnTutorialEndEvent().PostEvent();
-
-        // Wait another 2 seconds for animation to finish before un-parenting
-        yield return new WaitForSeconds(dishHolderAnimationDuration);
+        // Open
+        yield return opening.Open().WaitForCompletion();
         
+        // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-
-        tutorialController.SetActive(true);
+        
+        yield return new WaitForSeconds(controllerTutorialAppearDelay);
+        controllerTutorial.SetActive(true);
 
         //Destroy(gameObject);
     }

@@ -131,7 +131,8 @@ public class RadarController : VRTK_InteractableObject
 
                 radarTool.Probe();
 
-                TutorialController.instance?.DeleteGameObject();
+                if (ControllerTutorial.exists)
+                    ControllerTutorial.instance.Remove();
 
                 if (isHandGrabbed)
                     isChargingUp = false;
@@ -190,7 +191,8 @@ public class RadarController : VRTK_InteractableObject
     {
         base.Grabbed(currentGrabbingObject);
         
-        TutorialController.instance?.ApplyHighlightToObject();
+        if (ControllerTutorial.exists) 
+            ControllerTutorial.instance.HighlightTrigger();
         
         isHandGrabbed = true;
     }
