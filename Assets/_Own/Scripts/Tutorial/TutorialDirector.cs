@@ -31,6 +31,8 @@ public class TutorialDirector : MonoBehaviour
         EnsureIsInitializedCorrectly();
 
         radarController.isGrabbable = false;
+        PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
+        radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
 
         yield return new WaitForSeconds(2.0f);
 
@@ -39,9 +41,6 @@ public class TutorialDirector : MonoBehaviour
             .SetEase(Ease.InOutQuad)
             .WaitForCompletion();
         
-        PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
-        radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
-
         radarController.StartUsing();
         yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
         radarController.StopUsing();
