@@ -12,6 +12,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
     [SerializeField] GameObject tutorialController;
+    [SerializeField] float dishHolderAnimationDuration = 2.2f;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -60,12 +61,17 @@ public class TutorialDirector : MonoBehaviour
             .DORotate(Vector3.zero, 5.0f)
             .WaitForCompletion();
 
+        new OnTutorialEndEvent().PostEvent();
+
+        // Wait another 2 seconds for animation to finish before un-parenting
+        yield return new WaitForSeconds(dishHolderAnimationDuration);
+        
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
-        radarController.transform.parent = null;
-        
+        radarController.transform.SetParent(null, true);
+
         tutorialController.SetActive(true);
-        
+
         //Destroy(gameObject);
     }
 

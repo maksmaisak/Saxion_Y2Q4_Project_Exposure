@@ -6091,6 +6091,7 @@ GameObject:
   - component: {fileID: 5685913847607690329}
   - component: {fileID: 8118233451975785734}
   - component: {fileID: 3549822237504270194}
+  - component: {fileID: 5199513244990896247}
   m_Layer: 0
   m_Name: DishHolder1
   m_TagString: Untagged
@@ -6159,6 +6160,25 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!95 &5199513244990896247
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418626504888665989}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7125711042fcdf94c9586bd275fb5ae4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3207737997057539471
 GameObject:
   m_ObjectHideFlags: 0
@@ -6507,6 +6527,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5662344087870142097}
+  - component: {fileID: 688565476447781233}
+  - component: {fileID: 4946982372315862504}
   m_Layer: 0
   m_Name: RotatingPart
   m_TagString: Untagged
@@ -6530,6 +6552,40 @@ Transform:
   m_Father: {fileID: 1912658964647015358}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!95 &688565476447781233
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5662344087870142096}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dcd61b79439ac7a4481bafb23c7b33ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4946982372315862504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5662344087870142096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55d74db44b03a54b8089369505cfb10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftCabinet: {fileID: 3579704264010427623}
+  rightCabinet: {fileID: 4181378196685708198}
+  radarGun: {fileID: 6944025670273831673}
 --- !u!1 &5807397314262494638
 GameObject:
   m_ObjectHideFlags: 0
@@ -6586,6 +6642,7 @@ MonoBehaviour:
   overridePulseSpeed: 1
   overrideWavesphereSpeed: 1
   tutorialController: {fileID: 4178366872538170070}
+  dishHolderAnimationDuration: 3
 --- !u!114 &779227063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7002,6 +7059,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5662344087870142097}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7057,11 +7119,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
-      objectReference: {fileID: 0}
     - target: {fileID: 1128102575238559743, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_RootOrder
@@ -7075,7 +7132,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8694910964969780332}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6944025670273831673}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
@@ -7084,6 +7141,12 @@ MonoBehaviour:
 --- !u!4 &6198496074467598570 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
+    type: 3}
+  m_PrefabInstance: {fileID: 8694910964969780332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6944025670273831673 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
     type: 3}
   m_PrefabInstance: {fileID: 8694910964969780332}
   m_PrefabAsset: {fileID: 0}

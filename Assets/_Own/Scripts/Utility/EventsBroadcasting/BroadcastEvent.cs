@@ -3,7 +3,6 @@ using UnityEngine.Assertions;
 
 public interface IBroadcastEvent
 {
-    void PostEvent();
     void DeliverEvent();
     MessageDeliveryType deliveryType { get; }
 }
