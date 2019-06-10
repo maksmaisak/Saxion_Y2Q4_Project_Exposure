@@ -633,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 8632390223956837442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.0989625, y: 0.5, z: 4.677519}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5857894, y: 2.5857875, z: 2.5857894}
   m_Children:
   - {fileID: 5473908331088835040}
   - {fileID: 4221459425851239843}
@@ -689,6 +689,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  delay: 1
 --- !u!1 &8801637119549672436
 GameObject:
   m_ObjectHideFlags: 0
