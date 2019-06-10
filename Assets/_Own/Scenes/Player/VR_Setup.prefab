@@ -499,7 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blinkToColor: {r: 0, g: 0, b: 0, a: 1}
-  blinkTransitionSpeed: 0.6
+  blinkTransitionSpeed: 0.3
   distanceBlinkDelay: 1
   headsetPositionCompensation: 0
   targetListPolicy: {fileID: 19594665248946525}
