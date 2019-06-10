@@ -6388,56 +6388,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2771117131919699493, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2833473656371170615, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3768222059698360987, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.0706212
-      objectReference: {fileID: 0}
-    - target: {fileID: 3768222059698360987, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.6509434
-      objectReference: {fileID: 0}
-    - target: {fileID: 3768222059698360987, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.0859913
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178366872538170070, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialRightController
-      objectReference: {fileID: 0}
-    - target: {fileID: 94881614877023428, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8059141536591252199, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1503460398152954305, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.5019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 3380015476766386456, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d7732be77df24dcba07b96a1dbb7670, type: 3}
 --- !u!114 &844067859 stripped
@@ -30389,11 +30339,6 @@ PrefabInstance:
     - target: {fileID: 19594667035381062, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19594665471619881, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: grabOverrides.indexOverride
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

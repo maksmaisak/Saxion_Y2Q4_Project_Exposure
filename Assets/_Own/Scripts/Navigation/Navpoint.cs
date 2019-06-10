@@ -22,7 +22,7 @@ public class Navpoint : VRTK_DestinationMarker
     [SerializeField] float fillDuration = 1.0f;
     [SerializeField] float unFillDuration = 10.0f;
     [Space]
-    [FormerlySerializedAs("onComplete")] public UnityEvent onTeleport;
+    public UnityEvent onTeleport;
 
     [Header("Appear settings")]
     [Tooltip("The navpoint will only show up after this section is revealed. Defaults to the section it's parented to. If none, the navpoint is always visible.")]
@@ -30,7 +30,6 @@ public class Navpoint : VRTK_DestinationMarker
     [SerializeField] float appearDelay = 5.0f;
 
     [Header("Pulse Settings")] 
-    [FormerlySerializedAs("navPointAudio")]
     [SerializeField] AudioClip pulseSound;
     [SerializeField] float pulseDuration = 0.8f;
     [SerializeField] float pulseInterval = 2.0f;
@@ -39,7 +38,7 @@ public class Navpoint : VRTK_DestinationMarker
     [Header("Teleport Audio")]
     [Tooltip("The audio source is situated inside the VR_Setup")]
     [SerializeField] AudioSource teleportAudioSource;
-    [FormerlySerializedAs("teleportAudio")] [SerializeField] AudioClip   teleportClip;
+    [SerializeField] AudioClip   teleportClip;
 
     [Header("Debug")] 
     [SerializeField] bool teleportOnStart = false;
@@ -120,6 +119,8 @@ public class Navpoint : VRTK_DestinationMarker
         GetComponentsInChildren<Collider>().Each(c => c.enabled = false);
         canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.0f;
+
+        this.DOKill(complete: true);
     }
     
     private void Show()
@@ -172,18 +173,20 @@ public class Navpoint : VRTK_DestinationMarker
     [ContextMenu("Teleport")]
     private void Teleport()
     {
-        if(teleportAudioSource != null)
+        if (teleportAudioSource != null)
             teleportAudioSource.PlayOneShot(teleportClip);
 
-        this.Delay(0.1f, () =>
+        Assert.IsTrue(EnsureTeleporter());
+        VRTK_SDK_Bridge.HeadsetFade(teleporter.blinkToColor, teleporter.blinkTransitionSpeed);
+        
+        this.Delay(teleporter.blinkTransitionSpeed, () =>
         {
-            Assert.IsTrue(EnsureTeleporter());
             teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
 
             new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             onTeleport?.Invoke();
 
-            Destroy(gameObject);
+            Hide();
         });
     }
 
