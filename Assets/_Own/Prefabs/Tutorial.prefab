@@ -6619,6 +6619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5045d3a9bee4e80a9457c042456c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayBeforeStart: 2
   radarController: {fileID: 5256177348563802413}
   rotateTransform: {fileID: 5662344087870142097}
   overrideWavespherePrefab: {fileID: 6376555769719011767, guid: 8de53bace70574f7aa681f287bfd2245,
@@ -6632,7 +6633,7 @@ MonoBehaviour:
     openCabinetDuration: 1.5
     slideOutDuration: 1.5
     slideOutZOffset: 0.3
-  waitAfterOpen: 0.7
+  controllerTutorialAppearDelay: 0.7
   controllerTutorial: {fileID: 4178366872538170070}
 --- !u!114 &779227063
 MonoBehaviour:
@@ -6968,6 +6969,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PushDownButton
       objectReference: {fileID: 0}
+    - target: {fileID: 128091148435443907, guid: 43012c1a486f66545ad519c4260a33ba,
+        type: 3}
+      propertyPath: stayPressed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 128091148868383096, guid: 43012c1a486f66545ad519c4260a33ba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7050,6 +7056,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5662344087870142097}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7105,20 +7116,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+    - target: {fileID: 7474490846141848723, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1128102575238559743, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_RootOrder
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7474490846141848723, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6190a9bc8421454c9e194018e6faa34, type: 3}

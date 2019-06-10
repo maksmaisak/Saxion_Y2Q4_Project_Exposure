@@ -1,4 +1,8 @@
-﻿namespace VRTK
+﻿using System;
+using UnityEngine.Rendering;
+using UnityEngine.Experimental.Rendering;
+
+namespace VRTK
 {
     using UnityEngine;
 
@@ -36,6 +40,19 @@
         {
             fadeMaterial = new Material(Shader.Find("Unlit/TransparentColor"));
             instance = this;
+            
+            // Added this to make it work with LWRP, which doesn't support OnPostRender
+            RenderPipelineManager.endFrameRendering += RenderPipelineManagerOnEndFrameRendering;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            RenderPipelineManager.endFrameRendering -= RenderPipelineManagerOnEndFrameRendering;
+        }
+
+        private void RenderPipelineManagerOnEndFrameRendering(ScriptableRenderContext arg1, Camera[] arg2)
+        {
+            OnPostRender();
         }
 
         protected virtual void OnPostRender()
