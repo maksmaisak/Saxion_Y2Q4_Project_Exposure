@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -21,16 +22,17 @@ public class SteeringManager : MonoBehaviour
     [SerializeField] float collisionAvoidanceRange      = 2.0f;
     
     [Header("Flocking settings")]
-    [SerializeField] float separationFactor   = 1.0f;
-    [SerializeField] float separationDistance = 5.0f;
-    
+    [SerializeField] float separationFactor = 1.0f;
+    [SerializeField] float cohesionFactor   = 1.0f;
+    [SerializeField] float alignmentFactor  = 1.0f;
+    [SerializeField] float neighborhoodDistance = 2.0f;
+
     [Header("Wander settings")]
     [SerializeField] float circleRadius   = 2.0f;
     [SerializeField] float circleDistance = 2.0f;
     [SerializeField] float wanderAngle    = 20.0f;
 
     private Vector3 displacement;
-    private float initialSteeringForce;
     private Vector3 steering = Vector3.zero;
 
     private Vector3 previousVelocity;
@@ -40,8 +42,6 @@ public class SteeringManager : MonoBehaviour
 
     void Start()
     {
-        initialSteeringForce = maxSteeringForce;
-        
         rigidbody = rigidbody ? rigidbody : GetComponentInChildren<Rigidbody>();
         Assert.IsNotNull(rigidbody);
         
@@ -88,12 +88,12 @@ public class SteeringManager : MonoBehaviour
         return this;
     }
 
-    public SteeringManager FlockingSeparation(IEnumerable<SteeringManager> others)
+    public SteeringManager Flock(IList<SteeringManager> others)
     {
-        steering += DoFlockingSeparation(others);
+        steering += DoFlock(others);
         return this;
     }
-
+    
     public SteeringManager CompensateExternalForces()
     {
         steering += DoCompensateExternalForces();
@@ -139,9 +139,9 @@ public class SteeringManager : MonoBehaviour
         return this;
     }
 
-    public float GetInitalSteeringForce()
+    private Vector3 DoAlignVelocity(Vector3 desiredVelocity)
     {
-        return initialSteeringForce;
+        return Vector3.ClampMagnitude(desiredVelocity - rigidbody.velocity, maxSteeringForce);
     }
 
     private Vector3 DoSeek(Vector3 target, float slowingRadius = 0f)
@@ -175,30 +175,49 @@ public class SteeringManager : MonoBehaviour
         return force;
     }
 
-    private Vector3 DoFlockingSeparation(IEnumerable<SteeringManager> others)
+    private Vector3 DoFlock(IList<SteeringManager> others)
     {
-        Vector3 totalForce = Vector3.zero;
-        float sqrSeparationDistance = separationDistance * separationDistance;
+        Vector3 separationForce = Vector3.zero;
+        Vector3 cohesionForce   = Vector3.zero;
+        Vector3 alignmentForce  = Vector3.zero;
 
+        Vector3 ownPosition = rigidbody.position;
+        
+        int numNeighbours = 0;
+        Vector3 sumNeighborPositions = Vector3.zero;
+        Vector3 sumOtherVelocity     = Vector3.zero;
+        float sqrNeighborhoodDistance = neighborhoodDistance * neighborhoodDistance;
         foreach (SteeringManager other in others)
         {
-            if (this == other) continue;
+            if (this == other) 
+                continue;
 
-            Vector3 position = transform.position;
-            Vector3 otherPosition = other.transform.position;
+            numNeighbours += 1;
 
-            Vector3 delta = position - otherPosition;
-            if (delta.sqrMagnitude <= sqrSeparationDistance)
-            {
-                totalForce += position - otherPosition;
-            }
+            Vector3 otherPosition = other.rigidbody.position;
+            Vector3 delta = ownPosition - otherPosition;
+            float sqrDistance = delta.sqrMagnitude;
+            if (delta.sqrMagnitude > sqrNeighborhoodDistance)
+                continue;
+            
+            sumNeighborPositions += otherPosition;
+            sumOtherVelocity     += other.rigidbody.velocity;
+            separationForce      += delta / sqrDistance;
         }
 
-        totalForce *= separationFactor;
+        if (numNeighbours > 1)
+        {
+            float multiplier = 1.0f / numNeighbours;
+            cohesionForce  = DoSeek         (sumNeighborPositions * multiplier);
+            alignmentForce = DoAlignVelocity(sumOtherVelocity     * multiplier);
+        }
 
-        return totalForce;
+        return
+            separationForce * separationFactor +
+            cohesionForce   * cohesionFactor   +
+            alignmentForce  * alignmentFactor;
     }
-
+    
     private Vector3 DoObstaclesAvoidance()
     {
         Vector3 force = Vector3.zero;
