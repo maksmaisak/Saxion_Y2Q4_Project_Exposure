@@ -27,6 +27,10 @@ public class ControllerTutorial : Singleton<ControllerTutorial>
             .DORotate(new Vector3(0, 360, 0), rotationDuration, RotateMode.LocalAxisAdd)
             .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
+
+        var radarController = FindObjectOfType<RadarController>();
+        if (radarController && radarController.IsGrabbed())
+            HighlightTrigger();
     }
 
     public void HighlightTrigger()
