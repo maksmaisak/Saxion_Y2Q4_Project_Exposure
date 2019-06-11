@@ -42,6 +42,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  delay: 1
 --- !u!1 &6758652275172656963
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +197,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3196405047599072054}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
+        type: 3}
+      propertyPath: m_Name
+      value: Container_Plant_Animated
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -251,11 +257,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
-        type: 3}
-      propertyPath: m_Name
-      value: Container_Plant_Animated
-      objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -263,14 +264,14 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a23d4d540927c4345a979ffb52ef2cc0, type: 2}
     - target: {fileID: -6057140222963153312, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a75b408ca92d7b54499c3470ea32156b, type: 2}
-    - target: {fileID: -6057140222963153312, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
-        type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: fe9bfd150ac7ded4baa1aafd2fa592ff,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a75b408ca92d7b54499c3470ea32156b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe9bfd150ac7ded4baa1aafd2fa592ff, type: 3}
 --- !u!1 &2841791106186458659 stripped

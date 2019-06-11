@@ -3,14 +3,13 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(FlyingSphere))]
 public class FlyingSphereTutorial : MonoBehaviour
 {
     [SerializeField] AudioSource audioSourceSecondary;
     [SerializeField] AudioClip pulseSound;
-    [SerializeField] float pulseDelay = 2.0f;
+    [SerializeField] float pulseDelay      = 2.0f;
     [SerializeField] float pulseDuration   = 1.0f;
     [SerializeField] float pulseInterval   = 0.3f;
     [SerializeField] float pulsePunchScale = 0.1f;
@@ -21,7 +20,7 @@ public class FlyingSphereTutorial : MonoBehaviour
     private new Camera camera;
     private FlyingSphere wavesphere;
     private Sequence pulseSequence;
-
+    
     IEnumerator Start()
     {
         audioSourceSecondary = audioSourceSecondary ? audioSourceSecondary : GetComponent<AudioSource>();
@@ -32,8 +31,8 @@ public class FlyingSphereTutorial : MonoBehaviour
         yield return new WaitUntil(() => camera = Camera.main);
         
         yield return new WaitForSeconds(pulseDelay);
-        
-        pulseSequence = PlayPulseSequence();
+
+        StartCoroutine(PulseCoroutine());
         
         wavesphere.onCaught.AddListener(() =>
         {
@@ -50,14 +49,18 @@ public class FlyingSphereTutorial : MonoBehaviour
         if (!camera)
             return;
         
-        bool isVisible = IsVisibleToCamera();
-        wavesphere.speedMultiplier = Mathf.MoveTowards(wavesphere.speedMultiplier, isVisible ? 1.0f : 0.0f, Time.deltaTime);
+        wavesphere.speedMultiplier = Mathf.MoveTowards(
+            wavesphere.speedMultiplier, 
+            IsVisibleToCamera() ? 1.0f : 0.0f, 
+            Time.deltaTime
+        );
     }
 
-    private Sequence PlayPulseSequence()
+    private IEnumerator PulseCoroutine()
     {
         transform.DOKill();
-        return DOTween.Sequence()
+
+        pulseSequence = DOTween.Sequence()
             .AppendCallback(() =>
             {
                 if (!audioSourceSecondary)
@@ -68,7 +71,18 @@ public class FlyingSphereTutorial : MonoBehaviour
             })
             .Append(transform.DOPunchScale(Vector3.one * pulsePunchScale, pulseDuration, pulseVibrato))
             .AppendInterval(pulseInterval)
-            .SetLoops(-1, LoopType.Restart);
+            .SetAutoKill(false)
+            .Pause();
+        
+        while (pulseSequence != null)
+        {
+            yield return new WaitUntil(() => !IsVisibleToCamera());
+
+            if (pulseSequence == null)
+                break;
+            pulseSequence.Restart();
+            yield return pulseSequence.WaitForCompletion();
+        }
     }
 
     private bool IsVisibleToCamera()
