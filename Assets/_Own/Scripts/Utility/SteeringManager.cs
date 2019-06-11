@@ -17,7 +17,7 @@ public class SteeringManager : MonoBehaviour
     [SerializeField] float maxRotationDegreesPerSecond = 180.0f;
     [SerializeField] new Rigidbody rigidbody;
 
-    [Header("Collision avoidance settings")]
+    [Header("Collision Avoidance settings")]
     [SerializeField] float collisionAvoidanceMultiplier = 20.0f;
     [SerializeField] float collisionAvoidanceRange      = 2.0f;
     
@@ -108,7 +108,7 @@ public class SteeringManager : MonoBehaviour
     
     public SteeringManager LookWhereGoing()
     {
-        if (rigidbody.velocity.sqrMagnitude <= float.Epsilon)
+        if (rigidbody.velocity.sqrMagnitude > 0.0f)
             SmoothRotateTowards(Quaternion.LookRotation(rigidbody.velocity));
         
         return this;
@@ -183,7 +183,7 @@ public class SteeringManager : MonoBehaviour
 
         Vector3 ownPosition = rigidbody.position;
         
-        int numNeighbours = 0;
+        int numNeighbors = 0;
         Vector3 sumNeighborPositions = Vector3.zero;
         Vector3 sumOtherVelocity     = Vector3.zero;
         float sqrNeighborhoodDistance = neighborhoodDistance * neighborhoodDistance;
@@ -191,25 +191,25 @@ public class SteeringManager : MonoBehaviour
         {
             if (this == other) 
                 continue;
-
-            numNeighbours += 1;
-
+            
             Vector3 otherPosition = other.rigidbody.position;
             Vector3 delta = ownPosition - otherPosition;
             float sqrDistance = delta.sqrMagnitude;
-            if (delta.sqrMagnitude > sqrNeighborhoodDistance)
+            if (sqrDistance > sqrNeighborhoodDistance)
                 continue;
+            
+            numNeighbors += 1;
             
             sumNeighborPositions += otherPosition;
             sumOtherVelocity     += other.rigidbody.velocity;
-            separationForce      += delta / sqrDistance;
+            separationForce      += delta / (sqrDistance + float.Epsilon);
         }
 
-        if (numNeighbours > 1)
+        if (numNeighbors > 0)
         {
-            float multiplier = 1.0f / numNeighbours;
+            float multiplier = 1.0f / numNeighbors;
             cohesionForce  = DoSeek         (sumNeighborPositions * multiplier);
-            alignmentForce = DoAlignVelocity(sumOtherVelocity     * multiplier);
+            alignmentForce = DoAlignVelocity(sumOtherVelocity.normalized);
         }
 
         return

@@ -1,23 +1,33 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class Swarm : MonoBehaviour
 {
-	[SerializeField] GameObject flyPrefab;
-	[SerializeField] Transform goal;
-	[SerializeField] GameObject objectToAvoid;
-
-	public static GameObject sObjectToAvoid;
+	[SerializeField] Firefly fireflyPrefab;
+	[SerializeField] Transform flockingCenterTransform;
+    [SerializeField] int numFireflies = 10;
     
-    private const int NumFlies = 20;
-	public static readonly GameObject[] AllFlies = new GameObject[NumFlies];
-	public static Vector3 GoalPos = Vector3.zero;
-	
+	public readonly List<Firefly> fireflies = new List<Firefly>();
+    public readonly List<SteeringManager> steeringManagers = new List<SteeringManager>();
+
+    public Vector3 flockingCenter => flockingCenterTransform.position;
+
     void OnEnable()
-	{
-		sObjectToAvoid = objectToAvoid;
+    {
+        Vector3 origin = flockingCenterTransform.position;
         
-        GoalPos = goal.position;
-        for (var i = 0; i < NumFlies; i++) 
-            AllFlies[i] = Instantiate(flyPrefab, GoalPos, Quaternion.identity, transform);
+        for (var i = 0; i < numFireflies; i++)
+        {
+            Firefly firefly = Instantiate(
+                fireflyPrefab, 
+                origin + Random.insideUnitSphere, Quaternion.identity, transform
+            ).SetSwarm(this);
+            
+            fireflies.Add(firefly);
+            steeringManagers.Add(firefly.GetComponentInChildren<SteeringManager>());
+        }
     }
 }

@@ -6102,12 +6102,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 3392963882469577802, guid: 1dc00f1c1cc211149952b0c7a398826a, type: 3}
---- !u!1 &654361175 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7151718803797673846, guid: 744e7eb4de33cd3409ded42a8e23b870,
-    type: 3}
-  m_PrefabInstance: {fileID: 1683522173}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &670566037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20494,11 +20488,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4385865853419931237, guid: 2c527eef2e19daa47b26dfb793419491,
+    - target: {fileID: 5841692292811928029, guid: 2c527eef2e19daa47b26dfb793419491,
         type: 3}
-      propertyPath: objectToAvoid
-      value: 
-      objectReference: {fileID: 654361175}
+      propertyPath: m_Name
+      value: FlockingCenter
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c527eef2e19daa47b26dfb793419491, type: 3}
 --- !u!1 &1204726391 stripped

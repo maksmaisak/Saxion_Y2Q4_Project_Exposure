@@ -44,10 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7849353fa8d53da46a1cc305e6a67459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyPrefab: {fileID: 4842904207444412239, guid: 9a5a75aec89755d4796682399b0008c0,
+  fireflyPrefab: {fileID: -4531617943888117284, guid: 9a5a75aec89755d4796682399b0008c0,
     type: 3}
-  goal: {fileID: 5841692292811928026}
-  objectToAvoid: {fileID: 0}
+  flockingCenter: {fileID: 5841692292811928026}
 --- !u!1 &5841692292811928029
 GameObject:
   m_ObjectHideFlags: 0
