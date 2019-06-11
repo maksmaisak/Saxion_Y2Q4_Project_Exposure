@@ -46,7 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireflyPrefab: {fileID: -4531617943888117284, guid: 9a5a75aec89755d4796682399b0008c0,
     type: 3}
-  flockingCenter: {fileID: 5841692292811928026}
+  flockingCenterTransform: {fileID: 5841692292811928026}
+  numFireflies: 10
 --- !u!1 &5841692292811928029
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5841692292811928026}
   m_Layer: 0
-  m_Name: ObjectToFollow
+  m_Name: FlockingCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
