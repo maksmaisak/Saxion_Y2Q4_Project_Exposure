@@ -979,6 +979,7 @@ GameObject:
   - component: {fileID: 8461747406817391964}
   - component: {fileID: 2009777163237742630}
   - component: {fileID: 861850432048152333}
+  - component: {fileID: -4531617943888117284}
   m_Layer: 0
   m_Name: Firefly_01
   m_TagString: Untagged
@@ -995,7 +996,7 @@ Transform:
   m_GameObject: {fileID: 4842904207444412239}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 2848134316429374026}
   - {fileID: 4392295765450336070}
@@ -1017,7 +1018,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4842904207444412239}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 610288b76115fa643b3deacfcddedb34, type: 3}
   m_Controller: {fileID: 9100000, guid: 48a4beb001ad07d45b2a210c93c71646, type: 2}
   m_CullingMode: 1
@@ -1056,6 +1057,26 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  delay: 1
+--- !u!114 &-4531617943888117284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842904207444412239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bc47162015bc0f4686f4c7eed66d7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angularSpeed: 5
+  neighborDistance: 2
+  collisionDistance: 1
+  startingSpeed: 0.5
+  maxSpeed: 1
+  sGoalSeeking: 1
+  sAvoidance: 2
 --- !u!1 &4960004960365010282
 GameObject:
   m_ObjectHideFlags: 0

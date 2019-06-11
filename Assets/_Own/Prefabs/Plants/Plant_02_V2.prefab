@@ -14511,6 +14511,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  delay: 1
 --- !u!1 &5236575477937584245
 GameObject:
   m_ObjectHideFlags: 0
