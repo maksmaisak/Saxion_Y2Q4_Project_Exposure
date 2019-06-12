@@ -115,6 +115,7 @@ MonoBehaviour:
   pulseInterval: 0.3
   pulsePunchScale: 0.1
   pulseVibrato: 1
+  stoppingDistance: 2.25
   visibleViewportRect:
     serializedVersion: 2
     x: 0
