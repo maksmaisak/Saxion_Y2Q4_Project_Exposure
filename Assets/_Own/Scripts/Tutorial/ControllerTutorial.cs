@@ -20,7 +20,7 @@ public class ControllerTutorial : Singleton<ControllerTutorial>
         Assert.IsNotNull(highlightMaterial);
         
         transform
-            .DOScale(0.3f, 1.0f)
+            .DOScale(0.2f, 1.0f)
             .SetEase(Ease.OutCirc);
         
         transform
