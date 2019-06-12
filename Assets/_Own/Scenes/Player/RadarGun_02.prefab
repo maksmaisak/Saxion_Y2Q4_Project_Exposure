@@ -150,11 +150,11 @@ MonoBehaviour:
   tracerVisibility: 0
   cursorVisibility: 0
   maximumLength: 100
-  scaleFactor: 0.002
+  scaleFactor: 0.005
   cursorScaleMultiplier: 25
   cursorMatchTargetRotation: 0
-  cursorDistanceRescale: 0
-  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
+  cursorDistanceRescale: 1
+  maximumCursorScale: {x: 0.2, y: 0.2, z: 0.2}
   customTracer: {fileID: 0}
   customCursor: {fileID: 0}
 --- !u!1 &789619267

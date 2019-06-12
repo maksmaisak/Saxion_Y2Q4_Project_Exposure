@@ -19,8 +19,12 @@ public class HandTutorial : Singleton<HandTutorial>
     }
 
 
-    public void Remove() => transform
-     .DOScale(0.0f, 1.0f)
-     .SetEase(Ease.InBack)
-     .OnComplete(() => Destroy(gameObject));
+    public void Remove()
+    {
+        transform.DOKill();
+        transform
+            .DOScale(0.0f, 1.0f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() => Destroy(gameObject));
+    }
 }
