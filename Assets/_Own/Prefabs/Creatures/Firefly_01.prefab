@@ -1029,7 +1029,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steeringManager: {fileID: -7531877530698936278}
-  maxDistanceFromFlockingCenter: 1
+  flockingRadiusInner: 4
+  flockingRadiusOuter: 4.5
 --- !u!114 &-7531877530698936278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,11 +1048,15 @@ MonoBehaviour:
   maxRotationDegreesPerSecond: 180
   rigidbody: {fileID: 452814886753331854}
   collisionAvoidanceMultiplier: 20
-  collisionAvoidanceRange: 2
+  collisionAvoidanceRadius: 0.5
+  collisionAvoidanceRange: 1
+  collisionAvoidanceLayerMask:
+    serializedVersion: 2
+    m_Bits: 90419
   separationFactor: 1
   cohesionFactor: 0.5
-  alignmentFactor: 1
-  neighborhoodDistance: 0.5
+  alignmentFactor: 0.5
+  neighborhoodDistance: 1
   circleRadius: 2
   circleDistance: 2
   wanderAngle: 20

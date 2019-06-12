@@ -19,7 +19,9 @@ public class SteeringManager : MonoBehaviour
 
     [Header("Collision Avoidance settings")]
     [SerializeField] float collisionAvoidanceMultiplier = 20.0f;
+    [SerializeField] float collisionAvoidanceRadius     = 0.5f;
     [SerializeField] float collisionAvoidanceRange      = 2.0f;
+    [SerializeField] LayerMask collisionAvoidanceLayerMask = Physics.DefaultRaycastLayers;
     
     [Header("Flocking settings")]
     [SerializeField] float separationFactor = 1.0f;
@@ -138,6 +140,17 @@ public class SteeringManager : MonoBehaviour
         steering += DoWander();
         return this;
     }
+    
+    public SteeringManager StayInSphere(Vector3 center, float radiusInner, float radiusOuter)
+    {
+        float distanceFromCenterSqr = (center - rigidbody.position).sqrMagnitude;
+        if (distanceFromCenterSqr < radiusInner * radiusInner)
+            return this;
+
+        float distanceFromCenter = Mathf.Sqrt(distanceFromCenterSqr);
+        steering += Mathf.InverseLerp(radiusInner, radiusOuter, distanceFromCenter) * DoSeek(center);
+        return this;
+    }
 
     private Vector3 DoAlignVelocity(Vector3 desiredVelocity)
     {
@@ -213,46 +226,53 @@ public class SteeringManager : MonoBehaviour
         }
 
         return
-            separationForce * separationFactor +
-            cohesionForce   * cohesionFactor   +
-            alignmentForce  * alignmentFactor;
+            separationForce.normalized * separationFactor +
+            cohesionForce  .normalized * cohesionFactor   +
+            alignmentForce .normalized * alignmentFactor;
     }
     
     private Vector3 DoObstaclesAvoidance()
     {
         Vector3 force = Vector3.zero;
 
-        if (Physics.SphereCast(transform.position, 2, rigidbody.velocity.normalized, out RaycastHit hit, 0.2f))
+        Vector3 origin = rigidbody.position;
+        Vector3 forward = rigidbody.velocity.normalized;
+        Vector3 right = Vector3.Cross(forward, Vector3.up);
+        Vector3 left = -right;
+        
+        if (Physics.SphereCast(origin, collisionAvoidanceRadius, forward, out RaycastHit hit, collisionAvoidanceRange, collisionAvoidanceLayerMask))
         {
-            if (hit.transform != this.transform && !hit.transform.CompareTag("Player"))
+            if (hit.transform != this.transform)
             {
                 force += collisionAvoidanceMultiplier * hit.normal;
             }
         }
 
-        if (Physics.SphereCast(transform.position, 0.25f, rigidbody.velocity.normalized, out RaycastHit hitForward, collisionAvoidanceRange))
+        /*
+        if (Physics.SphereCast(origin, 0.25f, forward, out RaycastHit hitForward, collisionAvoidanceRange, collisionAvoidanceLayerMask))
         {
-            if (hitForward.transform != this.transform && !hitForward.transform.CompareTag("Player"))
+            if (hitForward.transform != this.transform)
             {
                 force += collisionAvoidanceMultiplier * hitForward.normal;
             }
-        }
+        }*/
 
-        if (Physics.SphereCast(transform.position, 0.25f, this.transform.right, out RaycastHit hitRight, collisionAvoidanceRange))
+        /*
+        if (Physics.SphereCast(origin, 0.25f, right, out RaycastHit hitRight, collisionAvoidanceRange, collisionAvoidanceLayerMask))
         {
-            if (hitRight.transform != this.transform && !hitRight.transform.CompareTag("Player"))
+            if (hitRight.transform != this.transform)
             {
                 force += collisionAvoidanceMultiplier * hitRight.normal;
             }
         }
 
-        if (Physics.SphereCast(transform.position, 0.25f, -this.transform.right, out RaycastHit hitLeft, collisionAvoidanceRange))
+        if (Physics.SphereCast(origin, 0.25f, left, out RaycastHit hitLeft, collisionAvoidanceRange, collisionAvoidanceLayerMask))
         {
-            if (hitLeft.transform != this.transform && !hitLeft.transform.CompareTag("Player"))
+            if (hitLeft.transform != this.transform)
             {
                 force += collisionAvoidanceMultiplier * hitLeft.normal;
             }
-        }
+        }*/
 
         return force;
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Swarm : MonoBehaviour
@@ -15,17 +14,16 @@ public class Swarm : MonoBehaviour
 
     public Vector3 flockingCenter => flockingCenterTransform.position;
 
-    void OnEnable()
+    void Awake()
     {
         Vector3 origin = flockingCenterTransform.position;
-        
-        for (var i = 0; i < numFireflies; i++)
+        for (int i = 0; i < numFireflies; ++i)
         {
             Firefly firefly = Instantiate(
                 fireflyPrefab, 
                 origin + Random.insideUnitSphere, Quaternion.identity, transform
             ).SetSwarm(this);
-            
+
             fireflies.Add(firefly);
             steeringManagers.Add(firefly.GetComponentInChildren<SteeringManager>());
         }

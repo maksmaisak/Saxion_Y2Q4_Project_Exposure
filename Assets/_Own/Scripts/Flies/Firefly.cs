@@ -6,7 +6,8 @@ using UnityEngine.Assertions;
 public class Firefly : MonoBehaviour 
 {
     [SerializeField] SteeringManager steeringManager;
-    [SerializeField] float maxDistanceFromFlockingCenter = 1.0f;
+    [SerializeField] float flockingRadiusInner = 0.8f;
+    [SerializeField] float flockingRadiusOuter = 1.0f;
     private Swarm swarm;
 
     void Start()
@@ -22,10 +23,9 @@ public class Firefly : MonoBehaviour
 
         steeringManager
             .Flock(swarm.steeringManagers)
+            .AvoidObstacles()
+            .StayInSphere(swarm.flockingCenter, flockingRadiusInner, flockingRadiusOuter)
             .LookWhereGoing();
-
-        if ((swarm.flockingCenter - transform.position).sqrMagnitude > maxDistanceFromFlockingCenter * maxDistanceFromFlockingCenter)
-            steeringManager.Seek(swarm.flockingCenter);
     }
     
     public Firefly SetSwarm(Swarm newSwarm)
