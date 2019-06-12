@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
+    [SerializeField] float rotatingDuration = 4.235f;
     [Space]
     [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
@@ -19,9 +20,23 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] GameObject controllerTutorial;
 
+    [Header("Audio Settings")] 
+    [SerializeField] AudioClip engineStartUpClip;
+    [SerializeField] AudioClip engineRunClip;
+    [SerializeField] AudioClip engineSlowDownClip;
+    [SerializeField] AudioSource rotatingPartAudioSource;
+
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
+    private void Start()
+    {
+        Assert.IsNotNull(engineStartUpClip);
+        Assert.IsNotNull(engineRunClip);
+        Assert.IsNotNull(engineSlowDownClip);
+        Assert.IsNotNull(rotatingPartAudioSource);
+    }
+    
     public void StartTutorial()
     {
         if (isTutorialRunning) 
@@ -41,12 +56,10 @@ public class TutorialDirector : MonoBehaviour
 
         yield return new WaitForSeconds(delayBeforeStart);
 
-        // Turn right
-        yield return rotateTransform
-            .DORotate(Vector3.up * 90.0f, 5.0f)
-            .SetEase(Ease.InOutQuad)
+        // Turn Right and Play Sound
+        yield return RotateAndPlaySoundSequence(Vector3.up * 90.0f, rotatingDuration)
             .WaitForCompletion();
-        
+
         // Pulse
         radarController.StartUsing();
         yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
@@ -54,9 +67,7 @@ public class TutorialDirector : MonoBehaviour
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         // Turn left
-        yield return rotateTransform
-            .DORotate(Vector3.up * -90.0f, 5.0f)
-            .SetEase(Ease.InOutQuad)
+        yield return RotateAndPlaySoundSequence(Vector3.up * -90.0f, rotatingDuration)
             .WaitForCompletion();
         
         // Pulse
@@ -66,8 +77,7 @@ public class TutorialDirector : MonoBehaviour
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         // Turn forward
-        yield return rotateTransform
-            .DORotate(Vector3.zero, 5.0f)
+        yield return RotateAndPlaySoundSequence(Vector3.forward, rotatingDuration)
             .WaitForCompletion();
 
         // Open
@@ -82,6 +92,31 @@ public class TutorialDirector : MonoBehaviour
         controllerTutorial.SetActive(true);
 
         //Destroy(gameObject);
+    }
+
+    private Sequence RotateAndPlaySoundSequence(Vector3 rotateTo, float tweenDuration)
+    {
+        var audioSequence = DOTween.Sequence();
+        audioSequence.AppendCallback(() =>
+            {
+                rotatingPartAudioSource.clip = engineStartUpClip;
+                rotatingPartAudioSource.Play();
+            })
+            .AppendInterval(engineStartUpClip.length)
+            .AppendCallback(() =>
+            {
+                rotatingPartAudioSource.clip = engineRunClip;
+                rotatingPartAudioSource.Play();
+            })
+            .AppendInterval(engineRunClip.length)
+            .AppendCallback(() =>
+            {
+                rotatingPartAudioSource.clip = engineSlowDownClip;
+                rotatingPartAudioSource.Play();
+            });
+
+        return DOTween.Sequence().Join(audioSequence)
+            .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
     }
 
     private void EnsureIsInitializedCorrectly()
