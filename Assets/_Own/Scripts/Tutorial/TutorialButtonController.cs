@@ -20,7 +20,6 @@ public class TutorialButtonController : MonoBehaviour
         tutorialDirector = GetComponent<TutorialDirector>();
         handTransform
             .DOPunchPosition(new Vector3(0, handTransform.localScale.y, 0) * -0.05f, 1, 1)
-            .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
     }
 

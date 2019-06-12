@@ -20098,6 +20098,10 @@ PrefabInstance:
       propertyPath: lightSectionToRevealWith
       value: 
       objectReference: {fileID: 32478136}
+    - target: {fileID: 807775413, guid: ff73d2c1cb1f34920883884fd8c2f5b6, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff73d2c1cb1f34920883884fd8c2f5b6, type: 3}
 --- !u!1001 &1203167319

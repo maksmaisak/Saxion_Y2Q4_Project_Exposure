@@ -90,6 +90,7 @@ public class TutorialDirector : MonoBehaviour
         radarController.transform.SetParent(null, true);
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
+
         handTutorial.SetActive(true);
         controllerTutorial.SetActive(true);
         //Destroy(gameObject);
