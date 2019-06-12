@@ -19,6 +19,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] GameObject controllerTutorial;
+    [SerializeField] GameObject handTutorial;
 
     [Header("Audio Settings")] 
     [SerializeField] AudioClip engineStartUpClip;
@@ -69,7 +70,7 @@ public class TutorialDirector : MonoBehaviour
         // Turn left
         yield return RotateAndPlaySoundSequence(Vector3.up * -90.0f, rotatingDuration)
             .WaitForCompletion();
-        
+
         // Pulse
         radarController.StartUsing();
         yield return new WaitForSeconds(radarController.GetChargeupDuration() + 0.1f);
@@ -82,15 +83,15 @@ public class TutorialDirector : MonoBehaviour
 
         // Open
         yield return opening.Open().WaitForCompletion();
-        
+
         // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-        
-        yield return new WaitForSeconds(controllerTutorialAppearDelay);
-        controllerTutorial.SetActive(true);
 
+        yield return new WaitForSeconds(controllerTutorialAppearDelay);
+        handTutorial.SetActive(true);
+        controllerTutorial.SetActive(true);
         //Destroy(gameObject);
     }
 
