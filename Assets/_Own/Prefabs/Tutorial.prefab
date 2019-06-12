@@ -6528,6 +6528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5662344087870142097}
   - component: {fileID: 688565476447781233}
+  - component: {fileID: 484897614693094971}
   m_Layer: 0
   m_Name: RotatingPart
   m_TagString: Untagged
@@ -6570,6 +6571,102 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!82 &484897614693094971
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5662344087870142096}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.589
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0.1
+  MaxDistance: 3
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5807397314262494638
 GameObject:
   m_ObjectHideFlags: 0
@@ -6620,6 +6717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBeforeStart: 2
+  rotatingDuration: 4.6
   radarController: {fileID: 5256177348563802413}
   rotateTransform: {fileID: 5662344087870142097}
   overrideWavespherePrefab: {fileID: 6376555769719011767, guid: 8de53bace70574f7aa681f287bfd2245,
@@ -6635,6 +6733,10 @@ MonoBehaviour:
     slideOutZOffset: 0.3
   controllerTutorialAppearDelay: 0.7
   controllerTutorial: {fileID: 4178366872538170070}
+  engineStartUpClip: {fileID: 8300000, guid: e8bf82cf6b8494e4091f41ed660651c4, type: 3}
+  engineRunClip: {fileID: 8300000, guid: 1a67fd8cbfbe1d04fbff74ad659006bc, type: 3}
+  engineSlowDownClip: {fileID: 8300000, guid: 8e7ab8f02bd2ea34dab4181c3a5f22dd, type: 3}
+  rotatingPartAudioSource: {fileID: 484897614693094971}
 --- !u!114 &779227063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7051,6 +7153,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5662344087870142097}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7106,13 +7213,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6190a9bc8421454c9e194018e6faa34, type: 3}
+--- !u!4 &6198496074467598570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
+    type: 3}
+  m_PrefabInstance: {fileID: 8694910964969780332}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5256177348563802413 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3484438141555027265, guid: a6190a9bc8421454c9e194018e6faa34,
@@ -7125,9 +7233,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6198496074467598570 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
-    type: 3}
-  m_PrefabInstance: {fileID: 8694910964969780332}
-  m_PrefabAsset: {fileID: 0}
