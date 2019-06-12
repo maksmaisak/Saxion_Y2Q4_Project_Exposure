@@ -11,8 +11,11 @@ public class HandTutorial : Singleton<HandTutorial>
 
         transform
             .DOPunchPosition(new Vector3(0, transform.localPosition.y, 0) * -0.05f, 1, 1)
-            .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
+
+        var radarController = FindObjectOfType<RadarController>();
+        if (radarController && radarController.IsGrabbed())
+            Remove();
     }
 
 
