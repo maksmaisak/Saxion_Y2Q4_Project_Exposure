@@ -13929,6 +13929,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 2.771988
       objectReference: {fileID: 0}
+    - target: {fileID: 1591524118721113299, guid: f4fb9cc83ad3df44f838050fd5a54b38,
+        type: 3}
+      propertyPath: delay
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4fb9cc83ad3df44f838050fd5a54b38, type: 3}
 --- !u!1001 &1653844231
@@ -16045,6 +16050,11 @@ PrefabInstance:
       propertyPath: lightSectionToRevealWith
       value: 
       objectReference: {fileID: 844067859}
+    - target: {fileID: 7878361257375765436, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
+        type: 3}
+      propertyPath: appearDelay
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3394958956063038918, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -17670,6 +17680,11 @@ PrefabInstance:
     - target: {fileID: 3196405047599072054, guid: e2ed50579730f8a4e88d6b0d389e6cb1,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2841791106186458659, guid: e2ed50579730f8a4e88d6b0d389e6cb1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
