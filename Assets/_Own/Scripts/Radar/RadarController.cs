@@ -193,6 +193,9 @@ public class RadarController : VRTK_InteractableObject
         
         if (ControllerTutorial.exists) 
             ControllerTutorial.instance.HighlightTrigger();
+
+        if (HandTutorial.exists)
+            HandTutorial.instance.Remove();
         
         isHandGrabbed = true;
     }

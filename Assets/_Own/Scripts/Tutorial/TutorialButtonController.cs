@@ -20,7 +20,6 @@ public class TutorialButtonController : MonoBehaviour
         tutorialDirector = GetComponent<TutorialDirector>();
         handTransform
             .DOPunchPosition(new Vector3(0, handTransform.localScale.y, 0) * -0.05f, 1, 1)
-            .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
     }
 
@@ -51,5 +50,7 @@ public class TutorialButtonController : MonoBehaviour
         this.Delay(1.0f, () => buttonTransform.DOScale(0, timeToDisapear).SetEase(Ease.InBack).OnComplete(() => Destroy(buttonTransform.gameObject)));
         
         tutorialDirector.StartTutorial();
+        
+        controllable.GetComponent<AudioSource>()?.Play();
     }
 }
