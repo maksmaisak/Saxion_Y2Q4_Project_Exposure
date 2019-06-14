@@ -53,6 +53,21 @@ public class RadarController : VRTK_InteractableObject
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
+    
+    protected override void Update()
+    {
+        base.Update();
+
+        spinningThingSpeed = Mathf.Clamp(
+            isChargingUp
+                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
+                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
+            0.0f, maxAngularSpeed);
+        
+        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+
+        ChargeUp();
+    }
 
     public float GetChargeupDuration() => chargeUpDuration;
 
@@ -104,19 +119,20 @@ public class RadarController : VRTK_InteractableObject
         StartPlayingInterruptIfNeeded();
     }
 
-    protected override void Update()
+    public override void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
     {
-        base.Update();
-
-        spinningThingSpeed = Mathf.Clamp(
-            isChargingUp
-                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
-                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
-            0.0f, maxAngularSpeed);
+        if (!isGrabbable)
+            return;
         
-        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+        base.StartTouching(currentTouchingObject);
+        if (!currentTouchingObject)
+            return;
 
-        ChargeUp();
+        var interactGrab = currentTouchingObject.GetComponent<VRTK_InteractGrab>();
+        if (!interactGrab)
+            return;
+        
+        interactGrab.AttemptGrab();
     }
 
     private void ChargeUp()

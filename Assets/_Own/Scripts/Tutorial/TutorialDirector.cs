@@ -32,10 +32,8 @@ public class TutorialDirector : MonoBehaviour
 
     private void Start()
     {
-        Assert.IsNotNull(engineStartUpClip);
-        Assert.IsNotNull(engineRunClip);
-        Assert.IsNotNull(engineSlowDownClip);
-        Assert.IsNotNull(rotatingPartAudioSource);
+        EnsureIsInitializedCorrectly();
+        radarController.isGrabbable = false;
     }
     
     public void StartTutorial()
@@ -49,9 +47,6 @@ public class TutorialDirector : MonoBehaviour
 
     IEnumerator TutorialCoroutine()
     {
-        EnsureIsInitializedCorrectly();
-
-        radarController.isGrabbable = false;
         PulseSettings oldPulseSettings = radarTool.GetPulseSettings();
         radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
 
@@ -127,6 +122,11 @@ public class TutorialDirector : MonoBehaviour
         Assert.IsNotNull(rotateTransform);
         radarTool = radarController.GetComponent<RadarTool>();
         Assert.IsNotNull(radarTool);
+        
+        Assert.IsNotNull(engineStartUpClip);
+        Assert.IsNotNull(engineRunClip);
+        Assert.IsNotNull(engineSlowDownClip);
+        Assert.IsNotNull(rotatingPartAudioSource);
     }
 
     private PulseSettings MakeOverridePulseSettings(PulseSettings settings)
