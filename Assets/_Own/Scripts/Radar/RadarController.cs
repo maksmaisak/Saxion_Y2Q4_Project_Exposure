@@ -17,8 +17,12 @@ public class RadarController : VRTK_InteractableObject
     [Header("Spinning Thing Settings")] 
     [SerializeField] float maxAngularSpeed = 1500.0f;
     [SerializeField] float angularStepSpeed = 20.0f;
-    [SerializeField] GameObject spinningThingGameObject;
-    
+    [SerializeField] Transform spinningThingTransform;
+
+    [Header("Particles Settings")] 
+    [SerializeField] ParticleSystem chargeupParticleSystem;
+    [SerializeField] float maxParticleEmissionRate = 100.0f;
+
     [Header("Audio Settings")]
     [SerializeField] AudioClip shootClip;
     [SerializeField] AudioClip chargeUpClip;
@@ -50,7 +54,11 @@ public class RadarController : VRTK_InteractableObject
         Assert.IsNotNull(interruptClip);
         Assert.IsNotNull(releaseAudioSource);
         Assert.IsNotNull(chargeUpAudioSource);
-        Assert.IsNotNull(spinningThingGameObject);
+        Assert.IsNotNull(spinningThingTransform);
+        Assert.IsNotNull(chargeupParticleSystem);
+        
+        ParticleSystem.EmissionModule emission = chargeupParticleSystem.emission;
+        emission.rateOverTime = 0.0f;
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
     }
@@ -59,14 +67,15 @@ public class RadarController : VRTK_InteractableObject
     {
         base.Update();
 
-        spinningThingSpeed = Mathf.Clamp(
-            isChargingUp
-                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
-                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
-            0.0f, maxAngularSpeed);
+        float multiplier = isChargingUp ? Time.deltaTime : -Time.deltaTime;
         
-        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+        spinningThingSpeed = Mathf.Clamp(spinningThingSpeed + angularStepSpeed * multiplier, 0.0f, maxAngularSpeed);
+        spinningThingTransform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
 
+        ParticleSystem.EmissionModule emission = chargeupParticleSystem.emission;
+        float currentEmissionRate = emission.rateOverTime.constant;
+        emission.rateOverTime = Mathf.Clamp(currentEmissionRate + maxParticleEmissionRate * multiplier / chargeUpDuration, 0.0f, maxParticleEmissionRate);
+        
         ChargeUp();
     }
 
@@ -78,7 +87,7 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
 
-            if(isChargingUp)
+            if (isChargingUp)
                 StartPlayingInterruptIfNeeded();
             
             lastChargeUpStartingTime = 0.0f;
