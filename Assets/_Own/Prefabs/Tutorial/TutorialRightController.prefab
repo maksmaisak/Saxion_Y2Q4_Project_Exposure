@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a895b2a7af0134690cd7ba5b165aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grip: {fileID: 8402054812324393202}
   trigger: {fileID: 8669843660561198044}
   baseMaterial: {fileID: 2100000, guid: eacafe280fdfa6a44845c135057ae6a5, type: 2}
   highlightMaterial: {fileID: 2100000, guid: bba821fe7241e134ba2f912e0b8ca118, type: 2}
@@ -24,6 +23,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: dcf47ede5598f2b4eabb8212ece8b025,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialRightController
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dcf47ede5598f2b4eabb8212ece8b025,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -82,22 +86,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: dcf47ede5598f2b4eabb8212ece8b025,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dcf47ede5598f2b4eabb8212ece8b025,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dcf47ede5598f2b4eabb8212ece8b025,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: dcf47ede5598f2b4eabb8212ece8b025,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialRightController
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: dcf47ede5598f2b4eabb8212ece8b025,
         type: 3}
@@ -109,11 +108,6 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: -4735675971083084693, guid: dcf47ede5598f2b4eabb8212ece8b025,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: bba821fe7241e134ba2f912e0b8ca118, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcf47ede5598f2b4eabb8212ece8b025, type: 3}
 --- !u!1 &4178366871512741264 stripped
@@ -125,12 +119,6 @@ GameObject:
 --- !u!137 &8669843660561198044 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -5581051471263856827, guid: dcf47ede5598f2b4eabb8212ece8b025,
-    type: 3}
-  m_PrefabInstance: {fileID: 5394581858904812697}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &8402054812324393202 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -4735675971083084693, guid: dcf47ede5598f2b4eabb8212ece8b025,
     type: 3}
   m_PrefabInstance: {fileID: 5394581858904812697}
   m_PrefabAsset: {fileID: 0}

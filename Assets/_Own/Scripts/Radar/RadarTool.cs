@@ -60,6 +60,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     public class OnSpawnedWavesphereHandler : UnityEvent<RadarTool, FlyingSphere> {}
     public OnSpawnedWavesphereHandler onSpawnedWavesphere;
 
+    public UnityEvent onPulse;
+
     [Header("Debug settings")] 
     [SerializeField] bool highlightWithoutWavespheres = false;
     [SerializeField] bool drawSpherecastRays          = false;
@@ -110,7 +112,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
         if (Input.GetKeyDown(KeyCode.Space)) 
-            Probe();
+            Pulse();
     }
 
     public void On(OnRevealEvent message)
@@ -118,10 +120,11 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         StopAllCoroutines();
     }
     
-    public void Probe()
+    public void Pulse()
     {
+        onPulse?.Invoke();
+        
         CreateWavePulse();
-
         GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
         SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
         HandleSpherecastResults();

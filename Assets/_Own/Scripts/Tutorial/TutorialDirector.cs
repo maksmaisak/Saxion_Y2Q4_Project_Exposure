@@ -18,8 +18,8 @@ public class TutorialDirector : MonoBehaviour
     [Space]
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
-    [SerializeField] GameObject controllerTutorial;
-    [SerializeField] GameObject handTutorial;
+    [SerializeField] ControllerTutorial controllerTutorial;
+    [SerializeField] HandTutorial handTutorial;
 
     [Header("Audio Settings")] 
     [SerializeField] AudioClip engineStartUpClip;
@@ -30,15 +30,24 @@ public class TutorialDirector : MonoBehaviour
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
-    private void Start()
+    void Start()
     {
         EnsureIsInitializedCorrectly();
+        
         radarController.isGrabbable = false;
+
+        radarController.InteractableObjectGrabbed += OnInteractableObjectGrabbed;
+        void OnInteractableObjectGrabbed(object sender, VRTK.InteractableObjectEventArgs e)
+        {
+            radarController.InteractableObjectGrabbed -= OnInteractableObjectGrabbed;
+            if (handTutorial)
+                handTutorial.Remove();
+        }
     }
     
     public void StartTutorial()
     {
-        if (isTutorialRunning) 
+        if (isTutorialRunning)
             return;
         
         isTutorialRunning = true;
@@ -83,12 +92,23 @@ public class TutorialDirector : MonoBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
+        
+        // Make controller disappear on pulse
+        radarTool.onPulse.AddListener(OnPulse);
+        void OnPulse()
+        {
+            radarTool.onPulse.RemoveListener(OnPulse);
+            if (controllerTutorial)
+                controllerTutorial.Remove();
+        }
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
 
-        handTutorial.SetActive(true);
-        controllerTutorial.SetActive(true);
-        //Destroy(gameObject);
+        if (handTutorial)
+            handTutorial.gameObject.SetActive(true);
+        
+        if (controllerTutorial)
+            controllerTutorial.gameObject.SetActive(true);
     }
 
     private Sequence RotateAndPlaySoundSequence(Vector3 rotateTo, float tweenDuration)
