@@ -40,8 +40,12 @@ public class TutorialDirector : MonoBehaviour
         void OnInteractableObjectGrabbed(object sender, VRTK.InteractableObjectEventArgs e)
         {
             radarController.InteractableObjectGrabbed -= OnInteractableObjectGrabbed;
+            
             if (handTutorial)
                 handTutorial.Remove();
+
+            if (controllerTutorial)
+                controllerTutorial.gameObject.SetActive(true);
         }
     }
     
@@ -106,9 +110,6 @@ public class TutorialDirector : MonoBehaviour
 
         if (handTutorial)
             handTutorial.gameObject.SetActive(true);
-        
-        if (controllerTutorial)
-            controllerTutorial.gameObject.SetActive(true);
     }
 
     private Sequence RotateAndPlaySoundSequence(Vector3 rotateTo, float tweenDuration)
