@@ -17,6 +17,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
     [Space]
     [SerializeField] TutorialMachineOpen opening;
+    [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
@@ -44,8 +45,11 @@ public class TutorialDirector : MonoBehaviour
             if (handTutorial)
                 handTutorial.Remove();
 
-            if (controllerTutorial)
-                controllerTutorial.gameObject.SetActive(true);
+            this.Delay(controllerTutorialAppearDelay, () =>
+            {
+                if (controllerTutorial)
+                    controllerTutorial.gameObject.SetActive(true);
+            });
         }
     }
     
@@ -106,7 +110,7 @@ public class TutorialDirector : MonoBehaviour
                 controllerTutorial.Remove();
         }
 
-        yield return new WaitForSeconds(controllerTutorialAppearDelay);
+        yield return new WaitForSeconds(handTutorialAppearDelay);
 
         if (handTutorial)
             handTutorial.gameObject.SetActive(true);
