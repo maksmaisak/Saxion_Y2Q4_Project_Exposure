@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 29318037156756764}
   - component: {fileID: 9021605220923361066}
   - component: {fileID: 3319055400291646419}
-  - component: {fileID: 7989996349492416614}
   - component: {fileID: 7876035715221383595}
-  - component: {fileID: 7666748384676984744}
   m_Layer: 0
   m_Name: Container_Plant_Simple
   m_TagString: Untagged
@@ -80,25 +78,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &7989996349492416614
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3905589828425322255}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: fe9bfd150ac7ded4baa1aafd2fa592ff, type: 3}
-  m_Controller: {fileID: 9100000, guid: a75b408ca92d7b54499c3470ea32156b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!64 &7876035715221383595
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -113,32 +92,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: -1423752896988512312, guid: fe9bfd150ac7ded4baa1aafd2fa592ff, type: 3}
---- !u!114 &7666748384676984744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3905589828425322255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94584770ed5b9b24dad680b89993313c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onReveal:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7989996349492416614}
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  delay: 1
