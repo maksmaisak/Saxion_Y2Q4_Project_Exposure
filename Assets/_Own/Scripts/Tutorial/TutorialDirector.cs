@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -8,40 +7,42 @@ public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
-    [Space]
-    [SerializeField] RadarController radarController;
+    [Space] [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
-    [Space]
-    [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [Space] [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
-    [Space]
-    [SerializeField] TutorialMachineOpen opening;
+    [Space] [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
-    [Header("Audio Settings")] 
-    [SerializeField] AudioClip engineStartUpClip;
+    [Header("Audio Settings")] [SerializeField]
+    AudioClip engineStartUpClip;
+
     [SerializeField] AudioClip engineRunClip;
     [SerializeField] AudioClip engineSlowDownClip;
     [SerializeField] AudioSource rotatingPartAudioSource;
 
+    private AudioSource thisAudioSoruce;
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
     void Start()
     {
         EnsureIsInitializedCorrectly();
-        
+
+        thisAudioSoruce = GetComponent<AudioSource>();
+
         radarController.isGrabbable = false;
 
         radarController.InteractableObjectGrabbed += OnInteractableObjectGrabbed;
+
         void OnInteractableObjectGrabbed(object sender, VRTK.InteractableObjectEventArgs e)
         {
             radarController.InteractableObjectGrabbed -= OnInteractableObjectGrabbed;
-            
+
             if (handTutorial)
                 handTutorial.Remove();
 
@@ -52,12 +53,12 @@ public class TutorialDirector : MonoBehaviour
             });
         }
     }
-    
+
     public void StartTutorial()
     {
         if (isTutorialRunning)
             return;
-        
+
         isTutorialRunning = true;
         StartCoroutine(TutorialCoroutine());
     }
@@ -100,9 +101,10 @@ public class TutorialDirector : MonoBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-        
+
         // Make controller disappear on pulse
         radarTool.onPulse.AddListener(OnPulse);
+
         void OnPulse()
         {
             radarTool.onPulse.RemoveListener(OnPulse);
@@ -114,6 +116,16 @@ public class TutorialDirector : MonoBehaviour
 
         if (handTutorial)
             handTutorial.gameObject.SetActive(true);
+
+        var timeOfMovement = engineRunClip.length + engineStartUpClip.length + engineSlowDownClip.length;
+
+        yield return MoveAndPlaySoundSequence(new Vector3(0, -2.5f, 0), timeOfMovement)
+            .WaitForCompletion();
+        
+        yield return MoveAndPlaySoundSequence(new Vector3(0, 0, -1.5f), timeOfMovement)
+            .WaitForCompletion();
+
+        gameObject.SetActive(false);
     }
 
     private Sequence RotateAndPlaySoundSequence(Vector3 rotateTo, float tweenDuration)
@@ -141,13 +153,38 @@ public class TutorialDirector : MonoBehaviour
             .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
     }
 
+    private Sequence MoveAndPlaySoundSequence(Vector3 moveTo, float tweenDuration)
+    {
+        var moveSequence = DOTween.Sequence();
+        moveSequence.AppendCallback(() =>
+            {
+                thisAudioSoruce.clip = engineStartUpClip;
+                thisAudioSoruce.Play();
+            })
+            .AppendInterval(engineStartUpClip.length)
+            .AppendCallback(() =>
+            {
+                thisAudioSoruce.clip = engineRunClip;
+                thisAudioSoruce.Play();
+            })
+            .AppendInterval(engineRunClip.length)
+            .AppendCallback(() =>
+            {
+                thisAudioSoruce.clip = engineSlowDownClip;
+                thisAudioSoruce.Play();
+            });
+
+        return DOTween.Sequence().Join(moveSequence)
+            .Join(transform.DOMove(moveTo, tweenDuration).SetRelative().SetEase(Ease.Linear));
+    }
+
     private void EnsureIsInitializedCorrectly()
     {
         Assert.IsNotNull(radarController);
         Assert.IsNotNull(rotateTransform);
         radarTool = radarController.GetComponent<RadarTool>();
         Assert.IsNotNull(radarTool);
-        
+
         Assert.IsNotNull(engineStartUpClip);
         Assert.IsNotNull(engineRunClip);
         Assert.IsNotNull(engineSlowDownClip);
@@ -164,22 +201,24 @@ public class TutorialDirector : MonoBehaviour
 
         return settings;
     }
-    
+
     // TODO BUG: if all currently existing wavespheres are caught, even if the wave is still going and will spawn more, this ends.
     private CustomYieldInstruction WaitUntilAllSpawnedWavespheresAreCaught()
     {
         int numWavespheresLeftToCatch = 0;
         bool anyWavespheresSpawned = false;
+
         void WavesphereSpawnedHandler(RadarTool sender, FlyingSphere flyingSphere)
         {
             anyWavespheresSpawned = true;
             numWavespheresLeftToCatch += 1;
-            
+
             flyingSphere.onCaught.AddListener(() => numWavespheresLeftToCatch -= 1);
         }
+
         radarTool.onSpawnedWavesphere.AddListener(WavesphereSpawnedHandler);
 
-        return new WaitUntil(() => 
+        return new WaitUntil(() =>
         {
             Assert.IsTrue(numWavespheresLeftToCatch >= 0);
             if (!anyWavespheresSpawned || numWavespheresLeftToCatch > 0)
@@ -188,5 +227,23 @@ public class TutorialDirector : MonoBehaviour
             radarTool.onSpawnedWavesphere.RemoveListener(WavesphereSpawnedHandler);
             return true;
         });
+    }
+
+    private void TutorialMachineDisappear()
+    {
+        transform.DOKill();
+        
+        thisAudioSoruce.clip = engineRunClip;
+
+        this.Delay(2,
+            () =>
+            {
+                thisAudioSoruce.Play();
+                transform.DOMoveY(-2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        thisAudioSoruce.Play();
+                        transform.DOMoveZ(2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() => gameObject.SetActive(false));
+                    });
+            });
     }
 }
