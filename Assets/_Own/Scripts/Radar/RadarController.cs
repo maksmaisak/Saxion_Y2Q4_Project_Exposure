@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 using VRTK;
+using VRTK.UnityEventHelper;
 
 public class RadarController : VRTK_InteractableObject
 {
@@ -52,6 +53,21 @@ public class RadarController : VRTK_InteractableObject
         Assert.IsNotNull(spinningThingGameObject);
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
+    }
+    
+    protected override void Update()
+    {
+        base.Update();
+
+        spinningThingSpeed = Mathf.Clamp(
+            isChargingUp
+                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
+                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
+            0.0f, maxAngularSpeed);
+        
+        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+
+        ChargeUp();
     }
 
     public float GetChargeupDuration() => chargeUpDuration;
@@ -104,19 +120,20 @@ public class RadarController : VRTK_InteractableObject
         StartPlayingInterruptIfNeeded();
     }
 
-    protected override void Update()
+    public override void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
     {
-        base.Update();
-
-        spinningThingSpeed = Mathf.Clamp(
-            isChargingUp
-                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
-                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
-            0.0f, maxAngularSpeed);
+        if (!isGrabbable)
+            return;
         
-        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+        base.StartTouching(currentTouchingObject);
+        if (!currentTouchingObject)
+            return;
 
-        ChargeUp();
+        var interactGrab = currentTouchingObject.GetComponent<VRTK_InteractGrab>();
+        if (!interactGrab)
+            return;
+        
+        interactGrab.AttemptGrab();
     }
 
     private void ChargeUp()
@@ -129,10 +146,7 @@ public class RadarController : VRTK_InteractableObject
             {
                 FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
 
-                radarTool.Probe();
-
-                if (ControllerTutorial.exists)
-                    ControllerTutorial.instance.Remove();
+                radarTool.Pulse();
 
                 if (isHandGrabbed)
                     isChargingUp = false;
@@ -190,13 +204,7 @@ public class RadarController : VRTK_InteractableObject
     public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
     {
         base.Grabbed(currentGrabbingObject);
-        
-        if (ControllerTutorial.exists) 
-            ControllerTutorial.instance.HighlightTrigger();
 
-        if (HandTutorial.exists)
-            HandTutorial.instance.Remove();
-        
         isHandGrabbed = true;
     }
 }
