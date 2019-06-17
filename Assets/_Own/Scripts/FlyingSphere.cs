@@ -141,7 +141,8 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         const float Duration = 0.2f;
         transform.DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-        var otherPosition = other.transform.position;
+        
+        Vector3 otherPosition = other.transform.position;
         transform.DOLookAt(otherPosition - transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
@@ -170,10 +171,10 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private void RandomizeSpeedAndDirection()
     {
-        var targetPositionRandomizationRadius = targetSphereRadius;
+        float targetPositionRandomizationRadius = targetSphereRadius;
 
-        var targetPosition = targetCenter ?? Camera.main.transform.position;
-        var distance = Vector3.Distance(targetPosition, transform.position);
+        Vector3 targetPosition = targetCenter ?? Camera.main.transform.position;
+        float distance = Vector3.Distance(targetPosition, transform.position);
         if (distance < slowdownRadius)
         {
             float multiplier = Mathf.Max(distance / slowdownRadius, 0.01f);

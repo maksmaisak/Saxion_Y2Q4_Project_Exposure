@@ -5,7 +5,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-// TODO don't make it a singleton jeez. Make it react to events instead. Or something.
 public class ControllerTutorial : MonoBehaviour
 {
     [SerializeField] SkinnedMeshRenderer trigger;
