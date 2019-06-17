@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -11,10 +12,13 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
 
     private LightSection currentSection;
 
+    private Sequence updateFillSequence;
+    private float targetFillAmount;
+
     void Start()
     {
         Assert.IsNotNull(indicator);
-        indicator.fillAmount = 0.0f;
+        indicator.fillAmount = targetFillAmount = 0.0f;
 
         currentSection = GetFirstSection();
         Assert.IsNotNull(currentSection);
@@ -24,25 +28,34 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
     {
         if (!currentSection)
         {
-            indicator.fillAmount = 0.0f;
+            indicator.fillAmount = targetFillAmount = 0.0f;
             return;
         }
 
         if (currentSection.isRevealed)
         {
-            indicator.fillAmount = 1.0f;
+            indicator.fillAmount = targetFillAmount = 1.0f;
             return;
         }
+
+        float currentRevealProgress = currentSection.GetRevealProgress();
+        if (Mathf.Approximately(targetFillAmount, currentRevealProgress)) 
+            return;
+
+        targetFillAmount = currentRevealProgress;
         
-        indicator.fillAmount = Mathf.MoveTowards(
-            indicator.fillAmount, 
-            currentSection.GetRevealProgress(), 
-            maxProgressPerSecond * Time.deltaTime
-        );
+        updateFillSequence?.Kill();
+        updateFillSequence = DOTween.Sequence()
+            .Join(indicator.DOFillAmount(targetFillAmount, Mathf.Abs(targetFillAmount - indicator.fillAmount) / maxProgressPerSecond))
+            .Join(indicator.transform.DOPunchScale(-0.1f * indicator.transform.localScale, 0.5f, vibrato: 1))
+            .OnComplete(() => updateFillSequence = null);
     }
 
     public void On(OnTeleportEvent message)
     {
+        updateFillSequence?.Kill();
+        updateFillSequence = null;
+
         var section = message.navpoint.GetComponentInParent<LightSection>();
         Assert.IsNotNull(section);
         
