@@ -21,17 +21,19 @@ public struct PulseSettings
         wavePulseMaxRange = 35.0f,
         sphereCastRadius = 0.05f,
         
-        minDistanceBetweenSpawnedWavespheres = 2.0f,
+        maxNumWavespheresPerPulse = -1,
         maxNumWavespheresPerSecond = 2.0f,
+        minDistanceBetweenSpawnedWavespheres = 2.0f,
         wavesphereSpeedMin = 2.5f,
         wavesphereSpeedMax = 4.5f,
+        
         baseDotConeAngle = 40.0f,
         dotConeAngleFalloff = 0.1f,
         dotConeAngleFalloffPower = 1.0f,
         maxDotDistanceFromSurfacePointAlongOriginalRay = 1.0f
     };
     
-    [Header("Wave pulse settings")]
+    [Header("Wave Pulse Settings")]
     public GameObject wavePulsePrefab;
     [Range(0.0f, 360.0f)] public float wavePulseAngleHorizontal;
     [Range(0.0f, 360.0f)] public float wavePulseAngleVertical;
@@ -39,13 +41,16 @@ public struct PulseSettings
     public float wavePulseMaxRange;
     public float sphereCastRadius ;
 
-    [Header("Wavesphere settings")] 
-    public float minDistanceBetweenSpawnedWavespheres;
+    [Header("Wavesphere Settings")] 
     public float maxNumWavespheresPerSecond;
+    public int maxNumWavespheresPerPulse;
+    public float minDistanceBetweenSpawnedWavespheres;
     public float wavesphereSpeedMin;
     public float wavesphereSpeedMax;
     public FlyingSphere wavespherePrefab;
     public Transform    wavesphereTarget;
+
+    [Header("Dots Settings")]
     [Range(0.0f, 360.0f)] public float baseDotConeAngle;
     [Range(0.01f, 1.0f)]  public float dotConeAngleFalloff;
     [Range(0.1f , 5.0f)]  public float dotConeAngleFalloffPower;
@@ -180,36 +185,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private void HandleSpherecastResults()
     {
-        // The candidates are sorted into bands with similar distance.
-        // Candidates in the same band preserve the initial order.
-        const float DistanceBandWidth = 2.0f;
-        const ulong NumDotsBandWidth = 20;
-
-        var dotsManager = DotsManager.instance;
-        DotsRegistry dotsRegistry = dotsManager.registry;
-        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
-
-        CandidateLocation[] candidateLocations = hits
-            .Select((hit, i) => (hit, i))
-            .Where(tuple => tuple.hit.collider)
-            .Select(tuple => (tuple.hit, tuple.i, lightSection: dotsManager.GetSection(tuple.hit.collider)))
-            .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
-            .Select(tuple =>
-            {
-                float speed = Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
-                return new CandidateLocation
-                {
-                    hitIndex = tuple.i,
-                    lightSection = tuple.lightSection,
-                    point = tuple.hit.point,
-                    speed = speed,
-                    timeToArrive = tuple.hit.distance / speed,
-                    numDots = GetRoundedNumDotsAround(tuple.hit.point),
-                };
-            })
-            .OrderBy(l => Mathf.RoundToInt(hits[l.hitIndex].distance / DistanceBandWidth))
-            .ToArray();
-
+        CandidateLocation[] candidateLocations = GetCandidateLocationsFromSpherecastResults();
         if (candidateLocations.Length <= 0) 
             return;
 
@@ -228,6 +204,9 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         
         while (usedCandidateIndices.Count < candidateLocations.Length)
         {
+            if (pulseSettings.maxNumWavespheresPerPulse >= 0 && usedCandidateIndices.Count >= pulseSettings.maxNumWavespheresPerPulse)
+                break;
+
             int candidateIndex = candidateLocations
                 .Select((l, i) => i)
                 .Where(i => !usedCandidateIndices.Contains(i) && !IsTooCloseToAlreadyUsedLocations(i))
@@ -246,6 +225,41 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             int i = location.hitIndex;
             SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed, location.lightSection);
         }
+    }
+
+    private CandidateLocation[] GetCandidateLocationsFromSpherecastResults()
+    {
+        // The candidates are sorted into bands with similar distance.
+        // Candidates in the same band preserve the initial order.
+        const float DistanceBandWidth = 2.0f;
+        const ulong NumDotsBandWidth = 20;
+
+        var dotsManager = DotsManager.instance;
+        DotsRegistry dotsRegistry = dotsManager.registry;
+        
+        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
+        int GetRoundedHitDistance(int hitIndex) => Mathf.RoundToInt(hits[hitIndex].distance / DistanceBandWidth);
+
+        return hits
+            .Select((hit, i) => (hit, i))
+            .Where(tuple => tuple.hit.collider)
+            .Select(tuple => (tuple.hit, tuple.i, lightSection: dotsManager.GetSection(tuple.hit.collider)))
+            .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
+            .Select(tuple =>
+            {
+                float speed = Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
+                return new CandidateLocation
+                {
+                    hitIndex = tuple.i,
+                    lightSection = tuple.lightSection,
+                    point = tuple.hit.point,
+                    speed = speed,
+                    timeToArrive = tuple.hit.distance / pulseSettings.wavePulseSpeed + tuple.hit.distance / speed,
+                    numDots = GetRoundedNumDotsAround(tuple.hit.point),
+                };
+            })
+            .OrderBy(l => GetRoundedHitDistance(l.hitIndex))
+            .ToArray();
     }
 
     private void CreateWavePulse()
