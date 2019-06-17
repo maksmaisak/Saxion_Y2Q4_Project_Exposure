@@ -203,7 +203,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
                     lightSection = tuple.lightSection,
                     point = tuple.hit.point,
                     speed = speed,
-                    timeToArrive = tuple.hit.distance / speed,
+                    timeToArrive = tuple.hit.distance / pulseSettings.wavePulseSpeed + tuple.hit.distance / speed,
                     numDots = GetRoundedNumDotsAround(tuple.hit.point),
                 };
             })
