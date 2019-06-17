@@ -26,8 +26,9 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] AudioClip engineSlowDownClip;
     [SerializeField] AudioSource rotatingPartAudioSource;
     
+    [FormerlySerializedAs("timeForMachineToDisappear")]
     [Space]
-    [SerializeField] float timeForMachineToDisappear = 0.5f;
+    [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
     [SerializeField] private float machineOffsetY = -2.5f;
     [SerializeField] private float machineOffsetZ = -1.5f;
 
@@ -127,7 +128,7 @@ public class TutorialDirector : MonoBehaviour
         
         var timeOfMovement = engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length;
         
-        yield return new WaitForSeconds(timeForMachineToDisappear);
+        yield return new WaitForSeconds(delayAfterGunIsGrabbed);
         
         yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement)
             .WaitForCompletion();
@@ -135,7 +136,7 @@ public class TutorialDirector : MonoBehaviour
         yield return MoveMachine(new Vector3(0, 0, machineOffsetZ), timeOfMovement)
             .WaitForCompletion();
 
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     private Sequence RotateMachine(Vector3 rotateTo, float tweenDuration)
