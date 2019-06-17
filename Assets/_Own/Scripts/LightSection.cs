@@ -107,13 +107,23 @@ public class LightSection : MonoBehaviour
 
     public float GetRevealProgress() => Mathf.Clamp01((float)numDots / numDotsToReveal);
     
-    public void AddDots(IList<Vector3> positions)
+    public void AddDots(IList<Vector3> positions, float particleAppearDelay = 0.0f)
     {
         if (isRevealed)
             return;
         
-        dotsParticleSystem.AddParticles(positions);
         numDots += positions.Count;
+
+        if (particleAppearDelay <= 0.0f)
+        {
+            dotsParticleSystem.AddParticles(positions);
+        }
+        else
+        {
+            // TODO preallocate the buffer
+            var buffer = new List<Vector3>(positions);
+            this.Delay(particleAppearDelay, () => dotsParticleSystem.AddParticles(buffer));
+        }
     }
 
     [ContextMenu("Reveal")]
@@ -125,6 +135,7 @@ public class LightSection : MonoBehaviour
         Debug.Log("Revealing LightSection: " + this);
         isRevealed = true;
 
+        StopAllCoroutines();
         RevealGameObjects();
         HideDots();
         RevealLights();

@@ -13,7 +13,6 @@ public class DotsAnimator : MonoBehaviour
 {
     public bool isBusy { get; private set; }
     
-    [SerializeField] float duration = 1.0f;
     [SerializeField] new ParticleSystem particleSystem;
 
     private readonly List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
@@ -76,7 +75,7 @@ public class DotsAnimator : MonoBehaviour
         }
     }
     
-    public void AnimateDots(IReadOnlyList<Vector3> positions, Vector3 origin, Action<DotsAnimator, IList<Vector3>> onDoneCallback)
+    public void AnimateDots(IReadOnlyList<Vector3> positions, Vector3 origin, float duration = 1.0f, Action<DotsAnimator, IList<Vector3>> onDoneCallback = null)
     {
         Assert.IsFalse(isBusy);
         isBusy = true;
