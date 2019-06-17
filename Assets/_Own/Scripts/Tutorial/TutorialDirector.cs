@@ -19,14 +19,17 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
-    [Header("Audio Settings")] [SerializeField]
-    AudioClip engineStartUpClip;
-
+    [Header("Audio Settings")] 
+    [SerializeField] AudioClip engineStartUpClip;
     [SerializeField] AudioClip engineRunClip;
     [SerializeField] private AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     [SerializeField] AudioSource rotatingPartAudioSource;
-    [SerializeField] int timesToPlayRunClip = 1;
+    
+    [Space]
+    [SerializeField] float timeForMachineToDisappear = 0.5f;
+    [SerializeField] private float machineOffsetY = -2.5f;
+    [SerializeField] private float machineOffsetZ = -1.5f;
 
     private AudioSource audioSource;
     private RadarTool radarTool;
@@ -124,12 +127,12 @@ public class TutorialDirector : MonoBehaviour
         
         var timeOfMovement = engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length;
         
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(timeForMachineToDisappear);
         
-        yield return MoveMachine(new Vector3(0, -2.5f, 0), timeOfMovement)
+        yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement)
             .WaitForCompletion();
         
-        yield return MoveMachine(new Vector3(0, 0, -1.5f), timeOfMovement)
+        yield return MoveMachine(new Vector3(0, 0, machineOffsetZ), timeOfMovement)
             .WaitForCompletion();
 
         gameObject.SetActive(false);
@@ -244,28 +247,5 @@ public class TutorialDirector : MonoBehaviour
             radarTool.onSpawnedWavesphere.RemoveListener(WavesphereSpawnedHandler);
             return true;
         });
-    }
-
-    public static void MoveMachineAway()
-    {
-        
-    }
-
-    private void TutorialMachineDisappear()
-    {
-        transform.DOKill();
-        
-        audioSource.clip = engineRunClip;
-
-        this.Delay(2,
-            () =>
-            {
-                audioSource.Play();
-                transform.DOMoveY(-2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        audioSource.Play();
-                        transform.DOMoveZ(2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() => gameObject.SetActive(false));
-                    });
-            });
     }
 }
