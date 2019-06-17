@@ -12,7 +12,7 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
 
     private LightSection currentSection;
 
-    private Sequence updateFillSequence;
+    private Tween updateFillTween;
     private float targetFillAmount;
 
     void Start()
@@ -43,18 +43,17 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
             return;
 
         targetFillAmount = currentRevealProgress;
-        
-        updateFillSequence?.Kill();
-        updateFillSequence = DOTween.Sequence()
-            .Join(indicator.DOFillAmount(targetFillAmount, Mathf.Abs(targetFillAmount - indicator.fillAmount) / maxProgressPerSecond))
-            .Join(indicator.transform.DOPunchScale(-0.1f * indicator.transform.localScale, 0.5f, vibrato: 1))
-            .OnComplete(() => updateFillSequence = null);
+
+        updateFillTween?.Kill();
+        updateFillTween = 
+            indicator.DOFillAmount(targetFillAmount, Mathf.Abs(targetFillAmount - indicator.fillAmount) / maxProgressPerSecond)
+            .OnComplete(() => updateFillTween = null);
     }
 
     public void On(OnTeleportEvent message)
     {
-        updateFillSequence?.Kill();
-        updateFillSequence = null;
+        updateFillTween?.Kill();
+        updateFillTween = null;
 
         var section = message.navpoint.GetComponentInParent<LightSection>();
         Assert.IsNotNull(section);
