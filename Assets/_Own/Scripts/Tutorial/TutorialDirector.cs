@@ -120,8 +120,12 @@ public class TutorialDirector : MonoBehaviour
         if (handTutorial)
             handTutorial.gameObject.SetActive(true);
 
+        yield return new WaitUntil(() => radarController.IsGrabbed());
+        
         var timeOfMovement = engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length;
-
+        
+        yield return new WaitForSeconds(0.5f);
+        
         yield return MoveMachine(new Vector3(0, -2.5f, 0), timeOfMovement)
             .WaitForCompletion();
         
@@ -240,6 +244,11 @@ public class TutorialDirector : MonoBehaviour
             radarTool.onSpawnedWavesphere.RemoveListener(WavesphereSpawnedHandler);
             return true;
         });
+    }
+
+    public static void MoveMachineAway()
+    {
+        
     }
 
     private void TutorialMachineDisappear()
