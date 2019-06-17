@@ -46,6 +46,8 @@ public class Navpoint : VRTK_DestinationMarker
     private new Camera camera;
     private AudioSource audioSource;
 
+    public bool isUsed { get; private set; }
+    
     enum State
     {
         Unfilling,
@@ -119,12 +121,13 @@ public class Navpoint : VRTK_DestinationMarker
         GetComponentsInChildren<Collider>().Each(c => c.enabled = false);
         canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.0f;
-
-        this.DOKill(complete: true);
+        
+        this.DOKill(true);
     }
     
     private void Show()
     {
+        
         GetComponentsInChildren<Collider>().Each(c => c.enabled = true);
         canvasGroup.interactable = true;
 
@@ -181,6 +184,8 @@ public class Navpoint : VRTK_DestinationMarker
         
         this.Delay(teleporter.blinkTransitionSpeed, () =>
         {
+            isUsed = true;
+            
             teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
 
             new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
