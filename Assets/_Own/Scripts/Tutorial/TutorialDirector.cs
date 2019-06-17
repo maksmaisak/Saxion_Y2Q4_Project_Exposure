@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 
 public class TutorialDirector : MonoBehaviour
 {
@@ -22,10 +23,12 @@ public class TutorialDirector : MonoBehaviour
     AudioClip engineStartUpClip;
 
     [SerializeField] AudioClip engineRunClip;
+    [SerializeField] private AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     [SerializeField] AudioSource rotatingPartAudioSource;
+    [SerializeField] int timesToPlayRunClip = 1;
 
-    private AudioSource thisAudioSoruce;
+    private AudioSource audioSource;
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
@@ -33,7 +36,7 @@ public class TutorialDirector : MonoBehaviour
     {
         EnsureIsInitializedCorrectly();
 
-        thisAudioSoruce = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
         radarController.isGrabbable = false;
 
@@ -71,7 +74,7 @@ public class TutorialDirector : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeStart);
 
         // Turn Right and Play Sound
-        yield return RotateAndPlaySoundSequence(Vector3.up * 90.0f, rotatingDuration)
+        yield return RotateMachine(Vector3.up * 90.0f, rotatingDuration)
             .WaitForCompletion();
 
         // Pulse
@@ -81,7 +84,7 @@ public class TutorialDirector : MonoBehaviour
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         // Turn left
-        yield return RotateAndPlaySoundSequence(Vector3.up * -90.0f, rotatingDuration)
+        yield return RotateMachine(Vector3.up * -90.0f, rotatingDuration)
             .WaitForCompletion();
 
         // Pulse
@@ -91,7 +94,7 @@ public class TutorialDirector : MonoBehaviour
         yield return WaitUntilAllSpawnedWavespheresAreCaught();
 
         // Turn forward
-        yield return RotateAndPlaySoundSequence(Vector3.forward, rotatingDuration)
+        yield return RotateMachine(Vector3.forward, rotatingDuration)
             .WaitForCompletion();
 
         // Open
@@ -117,19 +120,55 @@ public class TutorialDirector : MonoBehaviour
         if (handTutorial)
             handTutorial.gameObject.SetActive(true);
 
-        var timeOfMovement = engineRunClip.length + engineStartUpClip.length + engineSlowDownClip.length;
+        var timeOfMovement = engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length;
 
-        yield return MoveAndPlaySoundSequence(new Vector3(0, -2.5f, 0), timeOfMovement)
+        yield return MoveMachine(new Vector3(0, -2.5f, 0), timeOfMovement)
             .WaitForCompletion();
         
-        yield return MoveAndPlaySoundSequence(new Vector3(0, 0, -1.5f), timeOfMovement)
+        yield return MoveMachine(new Vector3(0, 0, -1.5f), timeOfMovement)
             .WaitForCompletion();
 
         gameObject.SetActive(false);
     }
 
-    private Sequence RotateAndPlaySoundSequence(Vector3 rotateTo, float tweenDuration)
+    private Sequence RotateMachine(Vector3 rotateTo, float tweenDuration)
     {
+        return DOTween.Sequence().Join(RotationAudioSequence())
+            .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
+    }
+
+    private Sequence MoveMachine(Vector3 moveTo, float tweenDuration)
+    {
+        return DOTween.Sequence().Join(MovementAudioSequence())
+            .Join(transform.DOMove(moveTo, tweenDuration).SetRelative().SetEase(Ease.InOutSine));
+    }
+
+    private Sequence MovementAudioSequence()
+    {
+        var audioSequence = DOTween.Sequence();
+        audioSequence.AppendCallback(() =>
+            {
+                audioSource.clip = engineStartUpClip;
+                audioSource.Play();
+            })
+            .AppendInterval(engineStartUpClip.length)
+            .AppendCallback(() =>
+            {
+                audioSource.clip = engineRunLoopClip;
+                audioSource.Play();
+            })
+            .AppendInterval(engineRunLoopClip.length)
+            .AppendCallback(() =>
+        {
+            audioSource.clip = engineSlowDownClip;
+            audioSource.Play();
+        });
+
+        return audioSequence;
+    }
+
+    private Sequence RotationAudioSequence()
+    {        
         var audioSequence = DOTween.Sequence();
         audioSequence.AppendCallback(() =>
             {
@@ -149,33 +188,7 @@ public class TutorialDirector : MonoBehaviour
                 rotatingPartAudioSource.Play();
             });
 
-        return DOTween.Sequence().Join(audioSequence)
-            .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
-    }
-
-    private Sequence MoveAndPlaySoundSequence(Vector3 moveTo, float tweenDuration)
-    {
-        var moveSequence = DOTween.Sequence();
-        moveSequence.AppendCallback(() =>
-            {
-                thisAudioSoruce.clip = engineStartUpClip;
-                thisAudioSoruce.Play();
-            })
-            .AppendInterval(engineStartUpClip.length)
-            .AppendCallback(() =>
-            {
-                thisAudioSoruce.clip = engineRunClip;
-                thisAudioSoruce.Play();
-            })
-            .AppendInterval(engineRunClip.length)
-            .AppendCallback(() =>
-            {
-                thisAudioSoruce.clip = engineSlowDownClip;
-                thisAudioSoruce.Play();
-            });
-
-        return DOTween.Sequence().Join(moveSequence)
-            .Join(transform.DOMove(moveTo, tweenDuration).SetRelative().SetEase(Ease.Linear));
+        return audioSequence;
     }
 
     private void EnsureIsInitializedCorrectly()
@@ -233,15 +246,15 @@ public class TutorialDirector : MonoBehaviour
     {
         transform.DOKill();
         
-        thisAudioSoruce.clip = engineRunClip;
+        audioSource.clip = engineRunClip;
 
         this.Delay(2,
             () =>
             {
-                thisAudioSoruce.Play();
+                audioSource.Play();
                 transform.DOMoveY(-2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() =>
                     {
-                        thisAudioSoruce.Play();
+                        audioSource.Play();
                         transform.DOMoveZ(2.5f, engineRunClip.length).SetEase(Ease.Linear).OnComplete(() => gameObject.SetActive(false));
                     });
             });
