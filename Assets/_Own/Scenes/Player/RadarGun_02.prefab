@@ -1105,10 +1105,11 @@ MonoBehaviour:
     wavePulseAngleHorizontal: 60
     wavePulseAngleVertical: 60
     wavePulseSpeed: 10
-    wavePulseMaxRange: 35
+    wavePulseMaxRange: 20
     sphereCastRadius: 0.05
-    minDistanceBetweenSpawnedWavespheres: 2
     maxNumWavespheresPerSecond: 3
+    maxNumWavespheresPerPulse: -1
+    minDistanceBetweenSpawnedWavespheres: 2
     wavesphereSpeedMin: 2.5
     wavesphereSpeedMax: 4.5
     wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
