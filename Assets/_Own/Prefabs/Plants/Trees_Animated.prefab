@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 9080152636209553226}
   - component: {fileID: 1191533567378485808}
   - component: {fileID: 1591524118721113299}
+  - component: {fileID: -2148079364361452238}
   m_Layer: 0
   m_Name: Trees_Animated
   m_TagString: Untagged
@@ -332,6 +333,20 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   delay: 8
+--- !u!64 &-2148079364361452238
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213047883750583641}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
 --- !u!1 &5729310819596950091
 GameObject:
   m_ObjectHideFlags: 0
