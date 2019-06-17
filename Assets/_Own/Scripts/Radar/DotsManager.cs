@@ -15,10 +15,11 @@ public class DotsManager : Singleton<DotsManager>
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] float maxDotSpawnDistance = 200.0f;
-    [Space]
+    [Space] 
     [SerializeField] DotsAnimator dotsAnimatorPrefab;
     [SerializeField] int numAnimatorsToPreCreate = 8;
-    
+    [SerializeField] float dotsAnimationDuration = 1.0f;
+
     public DotsRegistry registry { get; private set; }
 
     private LightSection [] lightSections;
@@ -87,7 +88,7 @@ public class DotsManager : Singleton<DotsManager>
         
         GenerateRaycastCommands(ref location, layerMask);
         RaycastCommand.ScheduleBatch(commands, hits, 1).Complete();
-        FillPositionsBufferFromRaycastResults(ref location);
+        FillPositionBuffersFromRaycastResults(ref location);
 
         for (int i = 0; i < lightSections.Length; ++i)
         {
@@ -95,14 +96,13 @@ public class DotsManager : Singleton<DotsManager>
             if (positionsBuffer.Count == 0)
                 continue;
             
-            var section = lightSections[i];
-            GetFreeDotsAnimator().AnimateDots(positionsBuffer, dotsOrigin, (animator, positions) =>
+            GetFreeDotsAnimator().AnimateDots(positionsBuffer, dotsOrigin, dotsAnimationDuration, onDoneCallback: (animator, positions) =>
             {
-                section.AddDots(positions); 
                 freeDotsAnimators.Push(animator);
             });
-            
+            lightSections[i].AddDots(positionsBuffer, dotsAnimationDuration);
             positionsBuffer.ForEach(registry.RegisterDot);
+            
             new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             positionsBuffer.Clear();
         }
@@ -144,7 +144,7 @@ public class DotsManager : Singleton<DotsManager>
         }
     }
     
-    private void FillPositionsBufferFromRaycastResults(ref RadarHighlightLocation location)
+    private void FillPositionBuffersFromRaycastResults(ref RadarHighlightLocation location)
     {
         for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
         {
