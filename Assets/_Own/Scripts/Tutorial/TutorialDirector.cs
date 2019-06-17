@@ -8,12 +8,15 @@ public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
-    [Space] [SerializeField] RadarController radarController;
+    [Space] 
+    [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
-    [Space] [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [Space] 
+    [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
-    [Space] [SerializeField] TutorialMachineOpen opening;
+    [Space] 
+    [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] ControllerTutorial controllerTutorial;
@@ -126,9 +129,9 @@ public class TutorialDirector : MonoBehaviour
 
         yield return new WaitUntil(() => radarController.IsGrabbed());
         
-        var timeOfMovement = engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length;
-        
         yield return new WaitForSeconds(delayAfterGunIsGrabbed);
+        
+        float timeOfMovement = audioSource.pitch * (engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length);
         
         yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement)
             .WaitForCompletion();
@@ -141,20 +144,22 @@ public class TutorialDirector : MonoBehaviour
 
     private Sequence RotateMachine(Vector3 rotateTo, float tweenDuration)
     {
-        return DOTween.Sequence().Join(RotationAudioSequence())
+        return DOTween.Sequence()
+            .Join(RotationAudioSequence())
             .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
     }
 
     private Sequence MoveMachine(Vector3 moveTo, float tweenDuration)
     {
-        return DOTween.Sequence().Join(MovementAudioSequence())
+        return DOTween.Sequence()
+            .Join(MovementAudioSequence())
             .Join(transform.DOMove(moveTo, tweenDuration).SetRelative().SetEase(Ease.InOutSine));
     }
 
     private Sequence MovementAudioSequence()
     {
-        var audioSequence = DOTween.Sequence();
-        audioSequence.AppendCallback(() =>
+        return DOTween.Sequence()
+            .AppendCallback(() =>
             {
                 audioSource.clip = engineStartUpClip;
                 audioSource.Play();
@@ -167,18 +172,16 @@ public class TutorialDirector : MonoBehaviour
             })
             .AppendInterval(engineRunLoopClip.length)
             .AppendCallback(() =>
-        {
-            audioSource.clip = engineSlowDownClip;
-            audioSource.Play();
-        });
-
-        return audioSequence;
+            {
+                audioSource.clip = engineSlowDownClip;
+                audioSource.Play();
+            });
     }
 
     private Sequence RotationAudioSequence()
     {        
-        var audioSequence = DOTween.Sequence();
-        audioSequence.AppendCallback(() =>
+        return DOTween.Sequence()
+            .AppendCallback(() =>
             {
                 rotatingPartAudioSource.clip = engineStartUpClip;
                 rotatingPartAudioSource.Play();
@@ -195,8 +198,6 @@ public class TutorialDirector : MonoBehaviour
                 rotatingPartAudioSource.clip = engineSlowDownClip;
                 rotatingPartAudioSource.Play();
             });
-
-        return audioSequence;
     }
 
     private void EnsureIsInitializedCorrectly()
