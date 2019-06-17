@@ -274,7 +274,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 280186499924064832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0178}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 579819482579113711}
@@ -291,7 +291,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.005
+  m_Radius: 0.02
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &346951561626997743
 GameObject:
@@ -1170,7 +1170,7 @@ ParticleSystemForceField:
   m_GameObject: {fileID: 1806261326887280155}
   m_Enabled: 1
   m_Parameters:
-    m_Shape: 1
+    m_Shape: 0
     m_StartRange: 0
     m_EndRange: 0.1
     m_Length: 1
@@ -1338,7 +1338,7 @@ ParticleSystemForceField:
     m_GravityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.01
+      scalar: 0.02
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1391,7 +1391,7 @@ ParticleSystemForceField:
     m_RotationSpeedCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.4
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1444,7 +1444,7 @@ ParticleSystemForceField:
     m_RotationAttractionCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.025
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -2541,7 +2541,7 @@ ParticleSystem:
     sphericalDirectionAmount: 1
     randomPositionAmount: 0
     radius:
-      value: 0.15
+      value: 0.1
       mode: 0
       spread: 0
       speed:
@@ -2660,7 +2660,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 400
       minScalar: 10
       maxCurve:
         serializedVersion: 2
