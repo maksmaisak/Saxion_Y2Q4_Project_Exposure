@@ -135,6 +135,7 @@ public class LightSection : MonoBehaviour
         Debug.Log("Revealing LightSection: " + this);
         isRevealed = true;
 
+        StopAllCoroutines();
         RevealGameObjects();
         HideDots();
         RevealLights();
