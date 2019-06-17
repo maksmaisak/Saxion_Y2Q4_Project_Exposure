@@ -7,12 +7,16 @@ public class TutorialDirector : MonoBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
-    [Space] [SerializeField] RadarController radarController;
+    [Space] 
+    [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
-    [Space] [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [Space] 
+    [SerializeField] FlyingSphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
-    [Space] [SerializeField] TutorialMachineOpen opening;
+    [SerializeField] int overrideMaxNumWavespheresPerPulse = -1;
+    [Space] 
+    [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
     [SerializeField] ControllerTutorial controllerTutorial;
@@ -198,6 +202,7 @@ public class TutorialDirector : MonoBehaviour
 
         settings.wavePulseSpeed = overridePulseSpeed;
         settings.wavesphereSpeedMin = settings.wavesphereSpeedMax = overrideWavesphereSpeed;
+        settings.maxNumWavespheresPerPulse = overrideMaxNumWavespheresPerPulse;
 
         return settings;
     }
