@@ -49,14 +49,9 @@ public class RadarController : VRTK_InteractableObject
     private float chargeup;
     
     private float maxParticleEmissionRate;
-    
-    private float lastStartUsingTime;
-    private float lastStopUsingTime;
+
     private Coroutine interruptCoroutine;
     
-    private float timeSinceLastStartUsing => Time.time - lastStartUsingTime;
-    private float timeSinceLastStopUsing  => Time.time - lastStopUsingTime;
-
     IEnumerator Start()
     {
         void Initialize(ref AudioSourceSettings s)
@@ -88,7 +83,7 @@ public class RadarController : VRTK_InteractableObject
         
         ChargeUp();
         
-        float spinningThingSpeed = Mathf.Lerp(0.0f, maxAngularSpeed, chargeup);
+        float spinningThingSpeed = IsGrabbed() ? Mathf.Lerp(0.0f, maxAngularSpeed, chargeup) : 0.0f;
         spinningThingTransform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
         
         ParticleSystem.EmissionModule emission = chargeupParticleSystem.emission;
@@ -105,9 +100,7 @@ public class RadarController : VRTK_InteractableObject
 
             if (isChargingUp)
                 interruptCoroutine = StartCoroutine(InterruptCoroutine());
-            
-            lastStartUsingTime = 0.0f;
-            lastStopUsingTime = 0.0f;
+
             chargeup = 0.0f;
         }
 
@@ -144,7 +137,6 @@ public class RadarController : VRTK_InteractableObject
             interruptCoroutine = null;
         }
 
-        lastStartUsingTime = Time.time;
         isChargingUp = true;
         
         FadeInAndPlay(audioChargeup);
@@ -158,7 +150,6 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        lastStopUsingTime = Time.time;
         if (isChargingUp)
         {
             Assert.IsNull(interruptCoroutine);

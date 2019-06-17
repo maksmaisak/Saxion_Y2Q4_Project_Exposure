@@ -16,10 +16,10 @@ public class DotsAnimator : MonoBehaviour
     [SerializeField] float duration = 1.0f;
     [SerializeField] new ParticleSystem particleSystem;
 
-    private List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
-    private List<Vector3> deltasBuffer    = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
-    private List<float> distancesBuffer   = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
-    private List<float> multipliersBuffer = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
+    private readonly List<Vector3> positionsBuffer = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    private readonly List<Vector3> deltasBuffer    = new List<Vector3>(DotsManager.MaxNumDotsPerHighlight);
+    private readonly List<float> distancesBuffer   = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
+    private readonly List<float> multipliersBuffer = new List<float>  (DotsManager.MaxNumDotsPerHighlight);
     
     /// xyz: vector from origin to the end
     /// w: delta length relative to the longest delta (if half as long as the longest delta, then this is 0.5)
