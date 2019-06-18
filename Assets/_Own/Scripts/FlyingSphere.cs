@@ -15,6 +15,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] float targetSphereRadius = 0.25f;
     [SerializeField] float attractionRadius = 1.5f;
     [SerializeField] float attractionAngularSpeed = 1.0f;
+    [SerializeField] float forcedAttractionRadius = 1.0f;
 
     [Tooltip("If the wavesphere is spawned closer than this to the target, it will be slower.")] 
     [SerializeField] float slowdownRadius = 4.0f;
@@ -63,6 +64,11 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     public RadarHighlightLocation highlightLocation { get; set; }
     public float speedMultiplier { get; set; } = 1.0f;
+
+    public bool isVisibleToCamera { get; set; } = true;
+    
+    /** Wanted direction to rotate the wavesphere */
+    public Vector3 targetDirection { get; set; }
     
     private static float lastTimeWasCaught;
 
@@ -187,7 +193,9 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         targetPosition += Random.insideUnitSphere * targetPositionRandomizationRadius;
 
         // Rotate the along movement direction
-        transform.rotation = Quaternion.LookRotation(targetPosition - transform.position);
+        targetDirection = (targetPosition - transform.position).normalized;
+        
+        transform.rotation = Quaternion.LookRotation(targetDirection);
     }
 
     // Randomize scale over time
@@ -221,13 +229,25 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         Vector3 position = transform.position;
         Transform targetTransform = targetTransforms.ArgMin(t => (t.position - position).sqrMagnitude);
-        Vector3 targetDelta = targetTransform.position - position;
-        
-        if (!mustGetCaught)
-            if (targetDelta.sqrMagnitude > attractionRadius * attractionRadius)
-                return;
 
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDelta.normalized, attractionAngularSpeed * Time.deltaTime, 0.0f);
+        Vector3 sphereToTargetDelta = targetTransform.position - position;
+
+        float distanceToTargetSqr = (sphereToTargetDelta).sqrMagnitude;
+
+        // Allow to change target Direction from FlyingSphereTutorial class
+        if (!mustGetCaught || (mustGetCaught && isVisibleToCamera) ||
+            (mustGetCaught && !isVisibleToCamera && distanceToTargetSqr <= forcedAttractionRadius * forcedAttractionRadius))
+            targetDirection = sphereToTargetDelta;
+
+        if (!mustGetCaught)
+        {
+            if (distanceToTargetSqr > attractionRadius * attractionRadius)
+                return;
+        }
+
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDirection.normalized,
+            attractionAngularSpeed * Time.deltaTime, 0.0f);
+
         transform.rotation = Quaternion.LookRotation(newDir);
     }
 

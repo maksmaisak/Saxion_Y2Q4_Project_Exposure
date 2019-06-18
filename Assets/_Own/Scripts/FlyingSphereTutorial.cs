@@ -14,7 +14,7 @@ public class FlyingSphereTutorial : MonoBehaviour
     [SerializeField] float pulseInterval   = 0.3f;
     [SerializeField] float pulsePunchScale = 0.1f;
     [SerializeField] int   pulseVibrato = 1;
-    [SerializeField] float stoppingDistance = 1.75f;
+    [SerializeField] float distanceFromPlayer = 4.5f;
     [Space]
     [SerializeField] Rect visibleViewportRect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -50,22 +50,19 @@ public class FlyingSphereTutorial : MonoBehaviour
         if (!camera)
             return;
         
-        var targetPosition = camera.transform.position;
-
-        float distanceToTarget = (targetPosition - transform.position).sqrMagnitude;
-
-        bool isWithinStoppingDistance = distanceToTarget <= stoppingDistance * stoppingDistance;
-
-        float targetSpeedMultiplier = 1.0f;
-
-        if (isWithinStoppingDistance && !IsVisibleToCamera())
-            targetSpeedMultiplier = 0.0f;
+        bool isVisibleToCamera = IsVisibleToCamera();
         
-        wavesphere.speedMultiplier = Mathf.MoveTowards(
-            wavesphere.speedMultiplier, 
-            targetSpeedMultiplier, 
-            Time.deltaTime
-        );
+        if (!isVisibleToCamera)
+        {
+            Vector3 cameraPosition = camera.transform.position;
+            Vector3 currentPosition = transform.position;
+            
+            Vector3 targetPosition = cameraPosition + camera.transform.forward * distanceFromPlayer;
+            
+            wavesphere.targetDirection = (targetPosition - currentPosition).normalized;
+        }
+
+        wavesphere.isVisibleToCamera = isVisibleToCamera;
     }
 
     private IEnumerator PulseCoroutine()

@@ -115,7 +115,7 @@ MonoBehaviour:
   pulseInterval: 0.3
   pulsePunchScale: 0.1
   pulseVibrato: 1
-  stoppingDistance: 2.25
+  distanceFromPlayer: 3
   visibleViewportRect:
     serializedVersion: 2
     x: 0
@@ -129,11 +129,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
-        type: 3}
-      propertyPath: m_Name
-      value: Wavesphere_TutorialVariant
-      objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: targetSphereRadius
@@ -158,6 +153,21 @@ PrefabInstance:
         type: 3}
       propertyPath: mustGetCaught
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: attractionAngularSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: forcedAttractionRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: m_Name
+      value: Wavesphere_TutorialVariant
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
