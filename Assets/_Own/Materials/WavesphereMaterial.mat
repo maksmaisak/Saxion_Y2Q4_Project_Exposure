@@ -36,7 +36,7 @@ Material:
     m_Floats:
     - Vector1_AB0A4D1A: 10
     - Vector1_AE4CA238: 10
-    - _MaxFadeoutDistance: 0.4
+    - _MaxFadeoutDistance: 0.6
     - _MinFadeoutDistance: 0.2
     m_Colors:
     - Color_40E9251C: {r: 0.0706212, g: 0.6509434, b: 0.0859913, a: 1}
