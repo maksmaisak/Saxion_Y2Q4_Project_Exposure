@@ -40,8 +40,8 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
         if (!canDisplay)
             return;
         
-        directionToNavpoint = (navpointTransform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(directionToNavpoint);
+        directionToNavpoint = (navpointTransform.position - arrowTransform.position).normalized;
+        arrowTransform.rotation = Quaternion.LookRotation(directionToNavpoint);
     }
     
     public void On(OnRevealEvent onReveal)

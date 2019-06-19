@@ -184,7 +184,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7991416397456036521}
-  - component: {fileID: 3866259895766940210}
   m_Layer: 16
   m_Name: NavpointArrow
   m_TagString: Untagged
@@ -207,25 +206,6 @@ Transform:
   m_Father: {fileID: 3866259895988613709}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3866259895766940210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7991416397456036520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd45355f829773d4597472377fb272a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navpointTransform: {fileID: 0}
-  arrowTransform: {fileID: 0}
-  delayTillDisplay: 20
-  indicatorLocationTransforms:
-  - {fileID: 3866259896423735718}
-  - {fileID: 3866259895959734087}
-  - {fileID: 3866259897167560498}
 --- !u!1001 &3818705644326800318
 PrefabInstance:
   m_ObjectHideFlags: 0
