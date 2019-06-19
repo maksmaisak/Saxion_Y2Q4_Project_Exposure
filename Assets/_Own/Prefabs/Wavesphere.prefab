@@ -222,6 +222,7 @@ MonoBehaviour:
   targetSphereRadius: 0.5
   attractionRadius: 1
   attractionAngularSpeed: 1
+  forcedAttractionRadius: 1
   slowdownRadius: 4
   scaleDuration: 2
   scaleMin: 0.0864
@@ -238,7 +239,7 @@ MonoBehaviour:
   vibrationDuration: 40
   frequency: 2
   strength: 100
-  spawnAudio: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
+  spawnAudio: {fileID: 8300000, guid: 96c6081f5015f8d47951fa1b3a6e9cc1, type: 3}
   grabAudioVolume: 0.01
   playOnAwake: 0
   buzzAudioSource: {fileID: 2681657970494475077}
