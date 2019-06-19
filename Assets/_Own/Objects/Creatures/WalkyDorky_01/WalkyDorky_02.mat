@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-558859782806428532
+--- !u!114 &-6702315486156203103
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WalkyDorky
+  m_Name: WalkyDorky_02
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
   m_LightmapFlags: 2
@@ -34,27 +34,27 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 30d147dba051bad4cb7c4c03ee52c77b, type: 3}
+        m_Texture: {fileID: 2800000, guid: fb1dbab945ddfc344933cadbbdd553f0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 9fc4efc9909db3e49bdb27937ba16000, type: 3}
+        m_Texture: {fileID: 2800000, guid: b61595b0e2011e545862916005d62944, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: f77ab53036fd35e43b6d2d8de624afb0, type: 3}
+        m_Texture: {fileID: 2800000, guid: d5500b7bc0d47e74bbbedd72ffe91fc0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 30d147dba051bad4cb7c4c03ee52c77b, type: 3}
+        m_Texture: {fileID: 2800000, guid: fb1dbab945ddfc344933cadbbdd553f0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 35cbae9874731cb4cb62b0631eb78a7e, type: 3}
+        m_Texture: {fileID: 2800000, guid: c299d408f2991684a93a14ee4fcc66cd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: bede099fa97049e4bb8d2f15c28667e0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2afa0f71276db99468384a226c9284ff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
