@@ -379,7 +379,7 @@ PrefabInstance:
         type: 3}
       propertyPath: navpointTransform
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 450230742}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 253a6a3b0c2861e4da7ecd72b942d087, type: 3}
 --- !u!1 &31066422
@@ -3905,6 +3905,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8870642505128140312, guid: db88ac80e0ad72a479799a31b693298c,
     type: 3}
   m_PrefabInstance: {fileID: 442887578}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &450230742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7878361257375765435, guid: ff73d2c1cb1f34920883884fd8c2f5b6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1929257982}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &488285926
 PrefabInstance:

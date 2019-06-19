@@ -60,7 +60,6 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
             {
                 currentLocationTransform = newTransform;
                 arrowTransform.position = newTransform.position;
-                ArrowPunchPositionToNavpoint();
             }
 
             StartCoroutine(AppearAndUpdateCoroutine());
@@ -87,6 +86,8 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
             .From()
             .SetEase(Ease.OutCirc)
             .WaitForCompletion();
+
+        ArrowPunchPositionToNavpoint();
 
         if (indicatorLocationTransforms.Count <= 0)
             yield break;
