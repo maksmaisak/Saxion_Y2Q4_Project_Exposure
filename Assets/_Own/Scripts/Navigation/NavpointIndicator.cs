@@ -1,44 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Assert = UnityEngine.Assertions.Assert;
 
 public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEventReceiver<OnTeleportEvent>
 {
     [SerializeField] Transform navpointTransform;
-    [SerializeField] float delayTillDisplay = 8.0f;
-    [SerializeField] List<Transform> indicatorLocationsTransform = new List<Transform>();
+    [SerializeField] Transform arrowTransform;
+    [SerializeField] float delayTillDisplay = 10.0f;
+    [FormerlySerializedAs("indicatorLocationsTransform")] [SerializeField] List<Transform> indicatorLocationTransforms = new List<Transform>();
     
-    private bool canDisplay = false;
-
-    private MeshRenderer[] meshRenderers;
-
+    private Renderer[] renderers;
+    private LightSection lightSection;
     private Transform currentLocationTransform;
-
     private Vector3 directionToNavpoint;
     
-    Transform cameraTransform;
+    private bool canDisplay = false;
+    private Transform cameraTransform;
     
-    private IEnumerator Start()
+    IEnumerator Start()
     {
-        Assert.IsNotNull(transform.parent, "Navpoint Indicator should be parented under a Light Section!");
+        arrowTransform = arrowTransform ? arrowTransform : transform;
+        
+        lightSection = GetComponentInParent<LightSection>();
+        Assert.IsNotNull(lightSection, "Navpoint Indicator should be parented under a Light Section!");
         Assert.IsNotNull(navpointTransform, "Please set the next navpoint this indicator should point to!");
 
-        meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        
-        Assert.IsNotNull(meshRenderers);
-        
-        foreach (MeshRenderer meshRenderer in meshRenderers)
-            meshRenderer.enabled = false;
+        renderers = GetComponentsInChildren<Renderer>();
+        renderers.Each(r => r.enabled = false);
 
         yield return new WaitUntil(() => Camera.main != null);
-
         cameraTransform = Camera.main.transform;
     }
 
-    private void Update()
+    void Update()
     {
         if (!canDisplay)
             return;
@@ -49,79 +46,56 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
     
     public void On(OnRevealEvent onReveal)
     {
-        if (navpointTransform && transform.IsChildOf(onReveal.lightSection.transform))
-        {
-            canDisplay = true;
-            
-            this.Delay(delayTillDisplay, ()=> 
-            { 
-                foreach (MeshRenderer meshRenderer in meshRenderers)
-                    meshRenderer.enabled = true;
+        if (!navpointTransform || !transform.IsChildOf(onReveal.lightSection.transform)) 
+            return;
+        
+        canDisplay = true;
+        this.Delay(delayTillDisplay, ()=> 
+        { 
+            renderers.Each(r => r.enabled = true);
 
-                Transform newTransform = FindNearestLocationInCameraView();
+            Transform newTransform = FindNearestLocationInCameraView();
+            if (newTransform)
+            {
+                currentLocationTransform = newTransform;
+                arrowTransform.position = newTransform.position;
+            }
 
-                if (newTransform != null)
-                {
-                    currentLocationTransform = newTransform;
-                    transform.position = newTransform.position;
-                }
-
-                StartCoroutine(MoveToClosestLocationInCameraView());
-            });
-        }
+            StartCoroutine(MoveToClosestLocationInCameraView());
+        });
     }
 
     public void On(OnTeleportEvent message)
     {
         // If the next navpoint is not in the current lightsection stop displaying the arrow
-        if (canDisplay && !message.navpoint.transform.IsChildOf(transform.parent))
-        {
-            canDisplay = false;
-            
-            foreach (MeshRenderer meshRenderer in meshRenderers)
-                meshRenderer.enabled = false;
-
-            transform.DOKill();
-            
-            StopAllCoroutines();
-        }
-    }
-
-    Transform FindNearestLocationInCameraView()
-    {
-        if (indicatorLocationsTransform.Count <= 0)
-            return null;
-
-        Vector3 cameraPos = cameraTransform.position;
-        Vector3 cameraForward = cameraTransform.forward;
-
-        Transform newTransform = indicatorLocationsTransform.ArgMax(t =>
-            Vector3.Dot((t.position - cameraPos).normalized, cameraForward));
-
-        return newTransform;
+        if (!canDisplay || message.navpoint.transform.IsChildOf(lightSection.transform)) 
+            return;
+        
+        canDisplay = false;
+        
+        renderers.Each(r => r.enabled = false);
+        arrowTransform.DOKill();
+        StopAllCoroutines();
     }
 
     private IEnumerator MoveToClosestLocationInCameraView()
     {
-        if (indicatorLocationsTransform.Count <= 0)
+        if (indicatorLocationTransforms.Count <= 0)
             yield break;
 
         while (true)
         {
             Transform newTransform = FindNearestLocationInCameraView();
-
             if (newTransform && currentLocationTransform != newTransform)
             {
-                transform.DOKill();
-
+                arrowTransform.DOKill();
                 currentLocationTransform = newTransform;
-
-                yield return transform
+                yield return arrowTransform
                     .DOMove(currentLocationTransform.position, 1.5f)
                     .SetEase(Ease.OutQuart)
                     .OnComplete(() =>
                     {
-                        transform
+                        arrowTransform
                             .DOPunchPosition(directionToNavpoint, 1.5f, 1, 0.1f)
                             .SetEase(Ease.OutQuart)
                             .SetLoops(-1);
@@ -131,5 +105,17 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
 
             yield return new WaitForSeconds(0.5f);
         }
+    }
+    
+    Transform FindNearestLocationInCameraView()
+    {
+        if (indicatorLocationTransforms.Count <= 0)
+            return null;
+
+        Vector3 cameraPosition = cameraTransform.position;
+        Vector3 cameraForward  = cameraTransform.forward;
+        return indicatorLocationTransforms.ArgMax(t => 
+            Vector3.Dot((t.position - cameraPosition).normalized, cameraForward)
+        );
     }
 }
