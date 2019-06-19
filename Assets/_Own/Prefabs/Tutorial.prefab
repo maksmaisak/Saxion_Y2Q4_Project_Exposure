@@ -6744,7 +6744,7 @@ MonoBehaviour:
     radarGun: {fileID: 6198496074467598570}
     openCabinetDuration: 1.5
     slideOutDuration: 1.5
-    slideOutZOffset: 0.5
+    slideOutZOffset: 1
   handTutorialAppearDelay: 0.01
   controllerTutorialAppearDelay: 0.7
   controllerTutorial: {fileID: 893418524702273683}
@@ -6924,7 +6924,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6337205202485192146}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.4, z: 0}
+  m_LocalPosition: {x: 0, y: 3.4, z: -0.493}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2006163250388688584}
@@ -7191,7 +7191,7 @@ PrefabInstance:
     - target: {fileID: 128091148868383096, guid: 43012c1a486f66545ad519c4260a33ba,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.8
+      value: -1.293
       objectReference: {fileID: 0}
     - target: {fileID: 128091148868383096, guid: 43012c1a486f66545ad519c4260a33ba,
         type: 3}
