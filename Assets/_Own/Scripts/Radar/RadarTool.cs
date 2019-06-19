@@ -195,11 +195,12 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         float sqrMinDistance = pulseSettings.minDistanceBetweenSpawnedWavespheres * pulseSettings.minDistanceBetweenSpawnedWavespheres;
         bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
         {
-            Vector3 point = candidateLocations[candidateIndex].point;
-            float timeOfArrival = candidateLocations[candidateIndex].timeToArrive;
+            ref CandidateLocation location = ref candidateLocations[candidateIndex];
+            Vector3 point      = location.point;
+            float timeToArrive = location.timeToArrive;
             return 
                 usedCandidateIndices.Any(i => Vector3.SqrMagnitude(candidateLocations[i].point - point) < sqrMinDistance) || 
-                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeToArrive - timeOfArrival) < minTimeDistanceBetweenWavespheres);
+                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeToArrive - timeToArrive) < minTimeDistanceBetweenWavespheres);
         }
         
         while (usedCandidateIndices.Count < candidateLocations.Length)
@@ -247,7 +248,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
             .Select(tuple =>
             {
-                float speed = Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
+                float speed = GetWavesphereSpeedFromDistance(tuple.hit.distance);
                 return new CandidateLocation
                 {
                     hitIndex = tuple.i,
@@ -262,6 +263,14 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             .ToArray();
     }
 
+    private float GetWavesphereSpeedFromDistance(float distance)
+    {
+        //return Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
+        
+        float t = Mathf.InverseLerp(0, pulseSettings.wavePulseMaxRange, distance);
+        return Mathf.Lerp(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax, t);
+    }
+
     private void CreateWavePulse()
     {
         Assert.IsNotNull(pulseSettings.wavePulsePrefab);
@@ -274,7 +283,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             .SetEase(Ease.Linear)
             .OnComplete(() => Destroy(pulse));
         
-        var material = pulse.GetComponent<Renderer>().material;
+        Material material = pulse.GetComponent<Renderer>().material;
+        Assert.IsNotNull(material);
         material.SetFloat(CosHalfHorizontalAngle, Mathf.Cos(Mathf.Deg2Rad * pulseSettings.wavePulseAngleHorizontal * 0.5f));
         material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * pulseSettings.wavePulseAngleVertical   * 0.5f));
     }

@@ -22,11 +22,9 @@ public class RenderToImage : MonoBehaviour
         if (!targetCamera)
             return;
 
-        var renderTexture = RenderToTexture(targetCamera);
-        var texture = ToTexture2D(renderTexture);
+        RenderTexture renderTexture = RenderToTexture(targetCamera);
+        Texture2D texture = ToTexture2D(renderTexture);
         WriteToFile(texture);
-        
-        texture.EncodeToPNG();
     }
 
     private Camera GetCamera()
@@ -42,7 +40,7 @@ public class RenderToImage : MonoBehaviour
     {   
         var renderTexture = new RenderTexture(resolution.x, resolution.y, 24);
         
-        var previousTarget = camera.targetTexture;
+        RenderTexture previousTarget = camera.targetTexture;
         camera.targetTexture = renderTexture;
         camera.Render();
         camera.targetTexture = previousTarget;
