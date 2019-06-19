@@ -10,7 +10,8 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
     [SerializeField] Transform navpointTransform;
     [SerializeField] Transform arrowTransform;
     [SerializeField] float delayTillDisplay = 10.0f;
-    [FormerlySerializedAs("indicatorLocationsTransform")] [SerializeField] List<Transform> indicatorLocationTransforms = new List<Transform>();
+    [SerializeField] float appearDuration = 1.0f;
+    [SerializeField] List<Transform> indicatorLocationTransforms = new List<Transform>();
     
     private Renderer[] renderers;
     private LightSection lightSection;
@@ -50,7 +51,7 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
             return;
         
         canDisplay = true;
-        this.Delay(delayTillDisplay, ()=> 
+        this.Delay(delayTillDisplay, () => 
         { 
             renderers.Each(r => r.enabled = true);
 
@@ -59,9 +60,10 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
             {
                 currentLocationTransform = newTransform;
                 arrowTransform.position = newTransform.position;
+                ArrowPunchPositionToNavpoint();
             }
 
-            StartCoroutine(MoveToClosestLocationInCameraView());
+            StartCoroutine(AppearAndUpdateCoroutine());
         });
     }
 
@@ -78,8 +80,14 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
         StopAllCoroutines();
     }
 
-    private IEnumerator MoveToClosestLocationInCameraView()
+    private IEnumerator AppearAndUpdateCoroutine()
     {
+        yield return arrowTransform
+            .DOScale(Vector3.zero, appearDuration)
+            .From()
+            .SetEase(Ease.OutCirc)
+            .WaitForCompletion();
+
         if (indicatorLocationTransforms.Count <= 0)
             yield break;
 
@@ -93,13 +101,7 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
                 yield return arrowTransform
                     .DOMove(currentLocationTransform.position, 1.5f)
                     .SetEase(Ease.OutQuart)
-                    .OnComplete(() =>
-                    {
-                        arrowTransform
-                            .DOPunchPosition(directionToNavpoint, 1.5f, 1, 0.1f)
-                            .SetEase(Ease.OutQuart)
-                            .SetLoops(-1);
-                    })
+                    .OnComplete(() => ArrowPunchPositionToNavpoint())
                     .WaitForCompletion();
             }
 
@@ -117,5 +119,14 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
         return indicatorLocationTransforms.ArgMax(t => 
             Vector3.Dot((t.position - cameraPosition).normalized, cameraForward)
         );
+    }
+
+    Tween ArrowPunchPositionToNavpoint()
+    {
+        arrowTransform.DOKill();
+        return arrowTransform
+            .DOPunchPosition(directionToNavpoint, 1.5f, 1, 0.1f)
+            .SetEase(Ease.OutQuart)
+            .SetLoops(-1);
     }
 }
