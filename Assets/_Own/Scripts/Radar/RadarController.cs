@@ -41,6 +41,7 @@ public class RadarController : VRTK_InteractableObject
     [SerializeField] AudioSourceSettings audioChargeup  = AudioSourceSettings.GetDefault();
     [SerializeField] AudioSourceSettings audioShoot     = AudioSourceSettings.GetDefault();
     [SerializeField] AudioSourceSettings audioInterrupt = AudioSourceSettings.GetDefault();
+    [SerializeField] AudioSourceSettings audioGrabbed   = AudioSourceSettings.GetDefault();
 
     private bool canUse = true;
     private bool isChargingUp;
@@ -66,6 +67,7 @@ public class RadarController : VRTK_InteractableObject
         Initialize(ref audioChargeup);
         Initialize(ref audioShoot);
         Initialize(ref audioInterrupt);
+        Initialize(ref audioGrabbed);
 
         Assert.IsNotNull(spinningThingTransform);
         Assert.IsNotNull(chargeupParticleSystem);
@@ -106,7 +108,13 @@ public class RadarController : VRTK_InteractableObject
 
         canUse = isUsable;
     }
-    
+
+    public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
+    {
+        base.Grabbed(currentGrabbingObject);
+        FadeInAndPlay(audioGrabbed);
+    }
+
     public override void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
     {
         if (!isGrabbable)
