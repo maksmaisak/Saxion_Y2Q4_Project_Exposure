@@ -164,6 +164,11 @@ PrefabInstance:
       propertyPath: forcedAttractionRadius
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
+        type: 3}
+      propertyPath: spawnAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 96c6081f5015f8d47951fa1b3a6e9cc1, type: 3}
     - target: {fileID: 1850085830539742750, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_Name
