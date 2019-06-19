@@ -108,11 +108,6 @@ public class TutorialDirector : MonoBehaviour
         // Open
         yield return opening.Open().WaitForCompletion();
 
-        // Unlock the gun
-        radarTool.SetPulseSettings(oldPulseSettings);
-        radarController.isGrabbable = true;
-        radarController.transform.SetParent(null, true);
-
         // Make controller disappear on pulse
         radarTool.onPulse.AddListener(OnPulse);
 
@@ -122,6 +117,11 @@ public class TutorialDirector : MonoBehaviour
             if (controllerTutorial)
                 controllerTutorial.Remove();
         }
+
+        // Unlock the gun
+        radarTool.SetPulseSettings(oldPulseSettings);
+        radarController.isGrabbable = true;
+        radarController.transform.SetParent(null, true);
 
         yield return new WaitForSeconds(handTutorialAppearDelay);
 
