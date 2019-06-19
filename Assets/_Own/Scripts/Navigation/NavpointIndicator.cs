@@ -58,6 +58,14 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
                 foreach (MeshRenderer meshRenderer in meshRenderers)
                     meshRenderer.enabled = true;
 
+                Transform newTransform = FindNearestLocationInCameraView();
+
+                if (newTransform != null)
+                {
+                    currentLocationTransform = newTransform;
+                    transform.position = newTransform.position;
+                }
+
                 StartCoroutine(MoveToClosestLocationInCameraView());
             });
         }
@@ -79,6 +87,20 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
         }
     }
 
+    Transform FindNearestLocationInCameraView()
+    {
+        if (indicatorLocationsTransform.Count <= 0)
+            return null;
+
+        Vector3 cameraPos = cameraTransform.position;
+        Vector3 cameraForward = cameraTransform.forward;
+
+        Transform newTransform = indicatorLocationsTransform.ArgMax(t =>
+            Vector3.Dot((t.position - cameraPos).normalized, cameraForward));
+
+        return newTransform;
+    }
+
     private IEnumerator MoveToClosestLocationInCameraView()
     {
         if (indicatorLocationsTransform.Count <= 0)
@@ -86,11 +108,7 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
 
         while (true)
         {
-            Vector3 cameraPos = cameraTransform.position;
-            Vector3 cameraForward = cameraTransform.forward;
-
-            Transform newTransform = indicatorLocationsTransform.ArgMax(t =>
-                Vector3.Dot((t.position - cameraPos).normalized, cameraForward));
+            Transform newTransform = FindNearestLocationInCameraView();
 
             if (newTransform && currentLocationTransform != newTransform)
             {
