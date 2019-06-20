@@ -232,7 +232,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         // The candidates are sorted into bands with similar distance.
         // Candidates in the same band preserve the initial order.
         const float DistanceBandWidth = 2.0f;
-        const ulong NumDotsBandWidth = 20;
+        const ulong NumDotsBandWidth = 80;
 
         var dotsManager = DotsManager.instance;
         DotsRegistry dotsRegistry = dotsManager.registry;
