@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 /// A globally-accessible service for managing dot-based object highlighting.
 public class DotsManager : Singleton<DotsManager>
 {
-    public const int MaxNumDotsPerHighlight = 400;
+    public const int MaxNumDotsPerHighlight = 1600;
 
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
