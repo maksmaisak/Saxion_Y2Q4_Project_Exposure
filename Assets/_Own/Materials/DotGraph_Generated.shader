@@ -82,6 +82,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
             struct SurfaceDescriptionInputs
             {
                 float3 ViewSpacePosition;
+                float4 VertexColor;
                 half4 uv0;
             };
 
@@ -131,6 +132,11 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
                 float3 P = abs(frac(In.xxx + K.xyz) * 6.0 - K.www);
                 Out = In.z * lerp(K.xxx, saturate(P - K.xxx), In.y);
+            }
+
+            void Unity_Multiply_float (float4 A, float4 B, out float4 Out)
+            {
+                Out = A * B;
             }
 
             void Unity_Combine_float(float R, float G, float B, float A, out float4 RGBA, out float3 RGB, out float2 RG)
@@ -206,10 +212,13 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float _SampleTexture2D_E713EA74_G = _SampleTexture2D_E713EA74_RGBA.g;
                 float _SampleTexture2D_E713EA74_B = _SampleTexture2D_E713EA74_RGBA.b;
                 float _SampleTexture2D_E713EA74_A = _SampleTexture2D_E713EA74_RGBA.a;
-                float _Split_7535A2B5_R = _SampleTexture2D_E713EA74_RGBA[0];
-                float _Split_7535A2B5_G = _SampleTexture2D_E713EA74_RGBA[1];
-                float _Split_7535A2B5_B = _SampleTexture2D_E713EA74_RGBA[2];
-                float _Split_7535A2B5_A = _SampleTexture2D_E713EA74_RGBA[3];
+                float4 _Multiply_4D8F079C_Out;
+                Unity_Multiply_float(IN.VertexColor, _SampleTexture2D_E713EA74_RGBA, _Multiply_4D8F079C_Out);
+
+                float _Split_7535A2B5_R = _Multiply_4D8F079C_Out[0];
+                float _Split_7535A2B5_G = _Multiply_4D8F079C_Out[1];
+                float _Split_7535A2B5_B = _Multiply_4D8F079C_Out[2];
+                float _Split_7535A2B5_A = _Multiply_4D8F079C_Out[3];
                 float4 _Combine_2F736A03_RGBA;
                 float3 _Combine_2F736A03_RGB;
                 float2 _Combine_2F736A03_RG;
@@ -235,6 +244,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
+                float4 color : COLOR;
                 float4 texcoord0 : TEXCOORD0;
                 float4 texcoord1 : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -251,6 +261,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent : TEXCOORD5;
                 float3 WorldSpaceBiTangent : TEXCOORD6;
                 float3 WorldSpaceViewDirection : TEXCOORD7;
+                float4 VertexColor : COLOR;
                 half4 uv0 : TEXCOORD8;
                 half4 uv1 : TEXCOORD9;
 
@@ -271,6 +282,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = normalize(mul((float3x3)UNITY_MATRIX_M,v.tangent.xyz));
                 float3 WorldSpaceBiTangent = cross(WorldSpaceNormal, WorldSpaceTangent.xyz) * v.tangent.w;
                 float3 WorldSpaceViewDirection = _WorldSpaceCameraPos.xyz - mul(GetObjectToWorldMatrix(), float4(v.vertex.xyz, 1.0)).xyz;
+                float4 VertexColor = v.color;
                 float4 uv0 = v.texcoord0;
                 float4 uv1 = v.texcoord1;
                 float3 ObjectSpacePosition = mul(UNITY_MATRIX_I_M,float4(WorldSpacePosition,1.0)).xyz;
@@ -290,6 +302,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 o.WorldSpaceTangent = WorldSpaceTangent;
                 o.WorldSpaceBiTangent = WorldSpaceBiTangent;
                 o.WorldSpaceViewDirection = WorldSpaceViewDirection;
+                o.VertexColor = VertexColor;
                 o.uv0 = uv0;
                 o.uv1 = uv1;
 
@@ -307,6 +320,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = IN.WorldSpaceTangent;
                 float3 WorldSpaceBiTangent = IN.WorldSpaceBiTangent;
                 float3 WorldSpaceViewDirection = IN.WorldSpaceViewDirection;
+                float4 VertexColor = IN.VertexColor;
                 float4 uv0 = IN.uv0;
                 float4 uv1 = IN.uv1;
                 float3 ViewSpacePosition = mul(UNITY_MATRIX_V,float4(WorldSpacePosition,1.0)).xyz;
@@ -315,6 +329,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 SurfaceDescriptionInputs surfaceInput = (SurfaceDescriptionInputs)0;
                 // Surface description inputs defined by graph
                 surfaceInput.ViewSpacePosition = ViewSpacePosition;
+                surfaceInput.VertexColor = VertexColor;
                 surfaceInput.uv0 = uv0;
 
 
@@ -386,9 +401,15 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
 
             struct SurfaceDescriptionInputs
             {
+                float4 VertexColor;
                 half4 uv0;
             };
 
+
+            void Unity_Multiply_float (float4 A, float4 B, out float4 Out)
+            {
+                Out = A * B;
+            }
 
             struct VertexDescription
             {
@@ -417,10 +438,13 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float _SampleTexture2D_E713EA74_G = _SampleTexture2D_E713EA74_RGBA.g;
                 float _SampleTexture2D_E713EA74_B = _SampleTexture2D_E713EA74_RGBA.b;
                 float _SampleTexture2D_E713EA74_A = _SampleTexture2D_E713EA74_RGBA.a;
-                float _Split_7535A2B5_R = _SampleTexture2D_E713EA74_RGBA[0];
-                float _Split_7535A2B5_G = _SampleTexture2D_E713EA74_RGBA[1];
-                float _Split_7535A2B5_B = _SampleTexture2D_E713EA74_RGBA[2];
-                float _Split_7535A2B5_A = _SampleTexture2D_E713EA74_RGBA[3];
+                float4 _Multiply_4D8F079C_Out;
+                Unity_Multiply_float(IN.VertexColor, _SampleTexture2D_E713EA74_RGBA, _Multiply_4D8F079C_Out);
+
+                float _Split_7535A2B5_R = _Multiply_4D8F079C_Out[0];
+                float _Split_7535A2B5_G = _Multiply_4D8F079C_Out[1];
+                float _Split_7535A2B5_B = _Multiply_4D8F079C_Out[2];
+                float _Split_7535A2B5_A = _Multiply_4D8F079C_Out[3];
                 float _Property_C9327209_Out = Vector1_324C3AD2;
                 surface.Alpha = _Split_7535A2B5_A;
                 surface.AlphaClipThreshold = _Property_C9327209_Out;
@@ -432,6 +456,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
+                float4 color : COLOR;
                 float4 texcoord0 : TEXCOORD0;
                 float4 texcoord1 : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -448,6 +473,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent : TEXCOORD5;
                 float3 WorldSpaceBiTangent : TEXCOORD6;
                 float3 WorldSpaceViewDirection : TEXCOORD7;
+                float4 VertexColor : COLOR;
                 half4 uv0 : TEXCOORD8;
                 half4 uv1 : TEXCOORD9;
 
@@ -470,6 +496,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = normalize(mul((float3x3)UNITY_MATRIX_M,v.tangent.xyz));
                 float3 WorldSpaceBiTangent = cross(WorldSpaceNormal, WorldSpaceTangent.xyz) * v.tangent.w;
                 float3 WorldSpaceViewDirection = _WorldSpaceCameraPos.xyz - mul(GetObjectToWorldMatrix(), float4(v.vertex.xyz, 1.0)).xyz;
+                float4 VertexColor = v.color;
                 float4 uv0 = v.texcoord0;
                 float4 uv1 = v.texcoord1;
                 float3 ObjectSpacePosition = mul(UNITY_MATRIX_I_M,float4(WorldSpacePosition,1.0)).xyz;
@@ -488,6 +515,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 o.WorldSpaceTangent = WorldSpaceTangent;
                 o.WorldSpaceBiTangent = WorldSpaceBiTangent;
                 o.WorldSpaceViewDirection = WorldSpaceViewDirection;
+                o.VertexColor = VertexColor;
                 o.uv0 = uv0;
                 o.uv1 = uv1;
 
@@ -518,12 +546,14 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = IN.WorldSpaceTangent;
                 float3 WorldSpaceBiTangent = IN.WorldSpaceBiTangent;
                 float3 WorldSpaceViewDirection = IN.WorldSpaceViewDirection;
+                float4 VertexColor = IN.VertexColor;
                 float4 uv0 = IN.uv0;
                 float4 uv1 = IN.uv1;
 
                 SurfaceDescriptionInputs surfaceInput = (SurfaceDescriptionInputs)0;
 
         		// Surface description inputs defined by graph
+                surfaceInput.VertexColor = VertexColor;
                 surfaceInput.uv0 = uv0;
 
                 SurfaceDescription surf = PopulateSurfaceData(surfaceInput);
@@ -592,9 +622,15 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
 
             struct SurfaceDescriptionInputs
             {
+                float4 VertexColor;
                 half4 uv0;
             };
 
+
+            void Unity_Multiply_float (float4 A, float4 B, out float4 Out)
+            {
+                Out = A * B;
+            }
 
             struct VertexDescription
             {
@@ -623,10 +659,13 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float _SampleTexture2D_E713EA74_G = _SampleTexture2D_E713EA74_RGBA.g;
                 float _SampleTexture2D_E713EA74_B = _SampleTexture2D_E713EA74_RGBA.b;
                 float _SampleTexture2D_E713EA74_A = _SampleTexture2D_E713EA74_RGBA.a;
-                float _Split_7535A2B5_R = _SampleTexture2D_E713EA74_RGBA[0];
-                float _Split_7535A2B5_G = _SampleTexture2D_E713EA74_RGBA[1];
-                float _Split_7535A2B5_B = _SampleTexture2D_E713EA74_RGBA[2];
-                float _Split_7535A2B5_A = _SampleTexture2D_E713EA74_RGBA[3];
+                float4 _Multiply_4D8F079C_Out;
+                Unity_Multiply_float(IN.VertexColor, _SampleTexture2D_E713EA74_RGBA, _Multiply_4D8F079C_Out);
+
+                float _Split_7535A2B5_R = _Multiply_4D8F079C_Out[0];
+                float _Split_7535A2B5_G = _Multiply_4D8F079C_Out[1];
+                float _Split_7535A2B5_B = _Multiply_4D8F079C_Out[2];
+                float _Split_7535A2B5_A = _Multiply_4D8F079C_Out[3];
                 float _Property_C9327209_Out = Vector1_324C3AD2;
                 surface.Alpha = _Split_7535A2B5_A;
                 surface.AlphaClipThreshold = _Property_C9327209_Out;
@@ -638,6 +677,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
+                float4 color : COLOR;
                 float4 texcoord0 : TEXCOORD0;
                 float4 texcoord1 : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -654,6 +694,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent : TEXCOORD5;
                 float3 WorldSpaceBiTangent : TEXCOORD6;
                 float3 WorldSpaceViewDirection : TEXCOORD7;
+                float4 VertexColor : COLOR;
                 half4 uv0 : TEXCOORD8;
                 half4 uv1 : TEXCOORD9;
 
@@ -674,6 +715,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = normalize(mul((float3x3)UNITY_MATRIX_M,v.tangent.xyz));
                 float3 WorldSpaceBiTangent = cross(WorldSpaceNormal, WorldSpaceTangent.xyz) * v.tangent.w;
                 float3 WorldSpaceViewDirection = _WorldSpaceCameraPos.xyz - mul(GetObjectToWorldMatrix(), float4(v.vertex.xyz, 1.0)).xyz;
+                float4 VertexColor = v.color;
                 float4 uv0 = v.texcoord0;
                 float4 uv1 = v.texcoord1;
                 float3 ObjectSpacePosition = mul(UNITY_MATRIX_I_M,float4(WorldSpacePosition,1.0)).xyz;
@@ -692,6 +734,7 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 o.WorldSpaceTangent = WorldSpaceTangent;
                 o.WorldSpaceBiTangent = WorldSpaceBiTangent;
                 o.WorldSpaceViewDirection = WorldSpaceViewDirection;
+                o.VertexColor = VertexColor;
                 o.uv0 = uv0;
                 o.uv1 = uv1;
 
@@ -710,12 +753,14 @@ Vector1_ADA3E76E("Min Falloff Distance", Range(0, 15)) = 0
                 float3 WorldSpaceTangent = IN.WorldSpaceTangent;
                 float3 WorldSpaceBiTangent = IN.WorldSpaceBiTangent;
                 float3 WorldSpaceViewDirection = IN.WorldSpaceViewDirection;
+                float4 VertexColor = IN.VertexColor;
                 float4 uv0 = IN.uv0;
                 float4 uv1 = IN.uv1;
 
                 SurfaceDescriptionInputs surfaceInput = (SurfaceDescriptionInputs)0;
 
         		// Surface description inputs defined by graph
+                surfaceInput.VertexColor = VertexColor;
                 surfaceInput.uv0 = uv0;
 
                 SurfaceDescription surf = PopulateSurfaceData(surfaceInput);

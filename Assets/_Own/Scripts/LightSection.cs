@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.Experimental.ParticleSystemJobs;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -238,12 +239,15 @@ public class LightSection : MonoBehaviour
         
         gameObjectData.Clear();
     }
-    
+
     private void HideDots()
     {
         Assert.IsTrue(dotsParticleSystem.particleCount <= particleBuffer.Length, $"The dots particle system has more than {particleBuffer.Length} particles, which is not supported.");
+        
+        dotsParticleSystem.SetJob(new FadeOutParticlesJob {dt = Time.deltaTime / revealDuration});
+        this.Delay(revealDuration, dotsParticleSystem.ClearJob);
 
-        var random = new System.Random();
+        /*var random = new System.Random();
         var ease = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(Ease.OutQuad);
         
         int numParticles = dotsParticleSystem.GetParticles(particleBuffer, particleBuffer.Length);
@@ -253,7 +257,7 @@ public class LightSection : MonoBehaviour
             particleBuffer[i].startLifetime = particleBuffer[i].remainingLifetime = t * revealDuration;
         }
         
-        dotsParticleSystem.SetParticles(particleBuffer, numParticles);
+        dotsParticleSystem.SetParticles(particleBuffer, numParticles);*/
     }
     
     private void RevealLights()
