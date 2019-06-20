@@ -776,7 +776,7 @@ PrefabInstance:
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
@@ -2543,7 +2543,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &665423899
 GameObject:
@@ -2921,7 +2921,7 @@ PrefabInstance:
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1850085830539742746, guid: 6718b7e95c304134a9ce291972c7fb79,
         type: 3}
@@ -5101,7 +5101,7 @@ PrefabInstance:
     - target: {fileID: 2479731003896856648, guid: 2e14c15d39139ff4db74ae1957309fc5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2479731003896856648, guid: 2e14c15d39139ff4db74ae1957309fc5,
         type: 3}
@@ -5529,7 +5529,7 @@ Transform:
   m_Children:
   - {fileID: 823338741}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 20.146, y: 195.09, z: 0.001}
 --- !u!114 &1687258586
 MonoBehaviour:
@@ -5628,16 +5628,16 @@ MonoBehaviour:
   pulseSettings:
     wavePulsePrefab: {fileID: 2801166979771105473, guid: 22e6971030cfb4b7ab97cc509def0ae4,
       type: 3}
-    wavePulseAngleHorizontal: 40
-    wavePulseAngleVertical: 40
+    wavePulseAngleHorizontal: 60
+    wavePulseAngleVertical: 60
     wavePulseSpeed: 10
     wavePulseMaxRange: 35
     sphereCastRadius: 0.05
     maxNumWavespheresPerSecond: 2
     maxNumWavespheresPerPulse: -1
     minDistanceBetweenSpawnedWavespheres: 2
-    wavesphereSpeedMin: 2.5
-    wavesphereSpeedMax: 4.5
+    wavesphereSpeedMin: 10
+    wavesphereSpeedMax: 10
     wavespherePrefab: {fileID: 1850085830539742747, guid: 6718b7e95c304134a9ce291972c7fb79,
       type: 3}
     wavesphereTarget: {fileID: 0}
