@@ -258,12 +258,14 @@ public class LightSection : MonoBehaviour
         Assert.IsTrue(dotsParticleSystem.particleCount <= multipliersBuffer.Length, $"The dots particle system has more than {multipliersBuffer.Length} particles, which is not supported.");
 
         for (int i = 0; i < dotsParticleSystem.particleCount; ++i)
-            multipliersBuffer[i] = 1.0f / Random.value;
+            multipliersBuffer[i] = 1.0f / Random.Range(1.0f, 1.01f);
 
+        var camera = Camera.main;
         dotsParticleSystem.SetJob(new FadeOutParticlesJob
         {
             multipliers = multipliersBuffer, 
-            dt = Time.fixedDeltaTime / revealDuration
+            dt = Time.fixedDeltaTime / revealDuration,
+            origin = camera ? camera.transform.position : transform.position
         });
         
         this.Delay(revealDuration, () =>
