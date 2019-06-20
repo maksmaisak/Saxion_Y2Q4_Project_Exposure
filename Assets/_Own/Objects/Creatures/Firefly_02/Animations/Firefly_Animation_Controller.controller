@@ -10,20 +10,20 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 6429972911078972592}
-    m_Position: {x: 340, y: 230, z: 0}
+    m_State: {fileID: -7812455411912244256}
+    m_Position: {x: 340, y: 150, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -1539321389478544497}
+    m_State: {fileID: -8459649812160247933}
     m_Position: {x: 340, y: 20, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -1960737030028696903}
-    m_Position: {x: 340, y: -50, z: 0}
+    m_State: {fileID: 7086139041096946501}
+    m_Position: {x: 340, y: 80, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 9135422258872823052}
-    m_Position: {x: 340, y: 160, z: 0}
+    m_State: {fileID: 8480200020616047922}
+    m_Position: {x: 340, y: 220, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -8411576440224387440}
-    m_Position: {x: 340, y: 90, z: 0}
+    m_State: {fileID: -8142255186392269540}
+    m_Position: {x: 340, y: 270, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -33,15 +33,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 140, y: 70, z: 0}
   m_ExitPosition: {x: 600, y: 70, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 9135422258872823052}
---- !u!1102 &-8411576440224387440
+  m_DefaultState: {fileID: -7812455411912244256}
+--- !u!1102 &-8459649812160247933
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Antennas_bouncing
+  m_Name: AntennaCurlInOut
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -54,21 +54,21 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1557284467256203138, guid: 610288b76115fa643b3deacfcddedb34,
+  m_Motion: {fileID: -4324608330688967849, guid: 5e080e004576f8a47a85722d3b885d30,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-1960737030028696903
+--- !u!1102 &-8142255186392269540
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Close_wings
+  m_Name: OpenWings
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -81,22 +81,22 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -7602574597056749008, guid: 610288b76115fa643b3deacfcddedb34,
+  m_Motion: {fileID: 1827226128182048838, guid: 5e080e004576f8a47a85722d3b885d30,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-1539321389478544497
+--- !u!1102 &-7812455411912244256
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Antennas_rolling_in_out
-  m_Speed: 10
+  m_Name: Flying 0
+  m_Speed: 20
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -108,7 +108,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -7840745701374511575, guid: 610288b76115fa643b3deacfcddedb34,
+  m_Motion: {fileID: -4526551656673740845, guid: 5e080e004576f8a47a85722d3b885d30,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -165,14 +165,14 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!1102 &6429972911078972592
+--- !u!1102 &7086139041096946501
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Open_Wings
+  m_Name: AntennaUpDown
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -185,22 +185,22 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 610288b76115fa643b3deacfcddedb34,
+  m_Motion: {fileID: -8616886849510084652, guid: 5e080e004576f8a47a85722d3b885d30,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &9135422258872823052
+--- !u!1102 &8480200020616047922
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Flying
-  m_Speed: 20
+  m_Name: CloseWings
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -212,7 +212,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -4526551656673740845, guid: 610288b76115fa643b3deacfcddedb34,
+  m_Motion: {fileID: 2495397315976549065, guid: 5e080e004576f8a47a85722d3b885d30,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
