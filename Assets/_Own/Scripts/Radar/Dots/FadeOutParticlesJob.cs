@@ -20,7 +20,7 @@ struct FadeOutParticlesJob : IParticleSystemJob
 
         t += dt;
         
-        var ease = EaseManager.ToEaseFunction(Ease.InOutQuad);
+        var ease = EaseManager.ToEaseFunction(Ease.InQuad);
         NativeArray<Color32> colors = jobData.startColors;
         
         NativeArray<float> posX = jobData.positions.x;
@@ -37,7 +37,7 @@ struct FadeOutParticlesJob : IParticleSystemJob
             float tEased = ease(tClamped, 1.0f, 0.0f, 0.0f);
             
             Color32 color = colors[i];
-            color.a = (byte)(byte.MaxValue * Mathf.Lerp(1.0f, 0.5f, tEased));
+            color.a = (byte)(byte.MaxValue * Mathf.Lerp(1.0f, 0.0f, tEased));
             colors[i] = color;
         }
     }
