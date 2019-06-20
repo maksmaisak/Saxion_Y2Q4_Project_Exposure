@@ -38,13 +38,13 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028374, g: 0.22571413, b: 0.3069228, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -132,6 +132,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_smallplant_07
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: a3e5b3a31a1dabf49ac19db21cbfdea1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a3e5b3a31a1dabf49ac19db21cbfdea1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -205,6 +210,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_smallplant_09
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: e37dc72af69b07e4d996c0ff766e939d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e37dc72af69b07e4d996c0ff766e939d,
         type: 3}
@@ -280,6 +290,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_smallplant_10
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4702d9a31a7f46644b223b41d720213c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4702d9a31a7f46644b223b41d720213c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -353,6 +368,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_smallplant_04
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 911ea490af7ac994c83d63419d678460,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 911ea490af7ac994c83d63419d678460,
         type: 3}
@@ -519,6 +539,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_smallplant_06
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9fa328b4b7ce0234fba1289b02694a0d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9fa328b4b7ce0234fba1289b02694a0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -592,6 +617,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_smallplant_11
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cbae242db2d8b6a4581c47e220506c0b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cbae242db2d8b6a4581c47e220506c0b,
         type: 3}
@@ -758,6 +788,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_smallplant_02
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cbc721a7526e5574dac5d7a4ee50617a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cbc721a7526e5574dac5d7a4ee50617a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -915,6 +950,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrum_smallplant_08
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b813848b8d175cd49afb6f98ed2a13d5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b813848b8d175cd49afb6f98ed2a13d5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -988,6 +1028,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_smallplant_05 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0070021762c035e49a050b3f81478317,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0070021762c035e49a050b3f81478317,
         type: 3}
@@ -1066,7 +1111,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 5b9430a902c9ea9468c19a8b9375c97f,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5b9430a902c9ea9468c19a8b9375c97f,
         type: 3}
@@ -1237,6 +1282,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scrum_smallplant_03
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9a087f1bd32bd934f8c33ebc5c770f1c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9a087f1bd32bd934f8c33ebc5c770f1c,
         type: 3}
