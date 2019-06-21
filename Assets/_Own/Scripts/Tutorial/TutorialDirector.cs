@@ -43,26 +43,8 @@ public class TutorialDirector : MonoBehaviour
     void Start()
     {
         EnsureIsInitializedCorrectly();
-
-        audioSource = GetComponent<AudioSource>();
-
+        
         radarController.isGrabbable = false;
-
-        radarController.InteractableObjectGrabbed += OnInteractableObjectGrabbed;
-
-        void OnInteractableObjectGrabbed(object sender, VRTK.InteractableObjectEventArgs e)
-        {
-            radarController.InteractableObjectGrabbed -= OnInteractableObjectGrabbed;
-
-            if (handTutorial)
-                handTutorial.Remove();
-
-            this.Delay(controllerTutorialAppearDelay, () =>
-            {
-                if (controllerTutorial)
-                    controllerTutorial.gameObject.SetActive(true);
-            });
-        }
     }
 
     public void StartTutorial()
@@ -72,6 +54,22 @@ public class TutorialDirector : MonoBehaviour
 
         isTutorialRunning = true;
         StartCoroutine(TutorialCoroutine());
+    }
+    
+    private void EnsureIsInitializedCorrectly()
+    {
+        Assert.IsNotNull(radarController);
+        Assert.IsNotNull(rotateTransform);
+        radarTool = radarController.GetComponent<RadarTool>();
+        Assert.IsNotNull(radarTool);
+        
+        audioSource = GetComponent<AudioSource>();
+        Assert.IsNotNull(audioSource);
+
+        Assert.IsNotNull(engineStartUpClip);
+        Assert.IsNotNull(engineRunClip);
+        Assert.IsNotNull(engineSlowDownClip);
+        Assert.IsNotNull(rotatingPartAudioSource);
     }
 
     IEnumerator TutorialCoroutine()
@@ -107,40 +105,65 @@ public class TutorialDirector : MonoBehaviour
 
         // Open
         yield return opening.Open().WaitForCompletion();
-
-        // Make controller disappear on pulse
-        radarTool.onPulse.AddListener(OnPulse);
-
-        void OnPulse()
-        {
-            radarTool.onPulse.RemoveListener(OnPulse);
-            if (controllerTutorial)
-                controllerTutorial.Remove();
-        }
-
+        
         // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-
+        
+        StartCoroutine(HandTutorialCoroutine());
+        StartCoroutine(ControllerTutorialCoroutine());
+        
+        yield return StartCoroutine(MachineMoveAwayCoroutine());
+        Destroy(gameObject);
+    }
+    
+    private IEnumerator HandTutorialCoroutine()
+    {
         yield return new WaitForSeconds(handTutorialAppearDelay);
 
-        if (handTutorial)
-            handTutorial.gameObject.SetActive(true);
-
-        yield return new WaitUntil(() => radarController.IsGrabbed());
+        if (radarController.IsGrabbed() || !handTutorial) 
+            yield break;
         
+        handTutorial.gameObject.SetActive(true);
+            
+        yield return new WaitUntil(() => radarController.IsGrabbed());
+            
+        if (handTutorial)
+            handTutorial.Remove();
+    }
+
+    private IEnumerator ControllerTutorialCoroutine()
+    {
+        bool didPulse = false;
+        radarTool.onPulse.AddListener(OnPulse);
+        void OnPulse()
+        {
+            radarTool.onPulse.RemoveListener(OnPulse);
+            didPulse = true;
+        }
+
+        yield return new WaitForSeconds(controllerTutorialAppearDelay);
+
+        if (didPulse || !controllerTutorial)
+            yield break;
+
+        controllerTutorial.gameObject.SetActive(true);
+        
+        yield return new WaitUntil(() => didPulse);
+
+        if (controllerTutorial)
+            controllerTutorial.Remove();
+    }
+
+    private IEnumerator MachineMoveAwayCoroutine()
+    {
+        yield return new WaitUntil(() => radarController.IsGrabbed());
         yield return new WaitForSeconds(delayAfterGunIsGrabbed);
         
         float timeOfMovement = audioSource.pitch * (engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length);
-        
-        yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement)
-            .WaitForCompletion();
-        
-        yield return MoveMachine(new Vector3(0, 0, machineOffsetZ), timeOfMovement)
-            .WaitForCompletion();
-
-        Destroy(gameObject);
+        yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement).WaitForCompletion();
+        yield return MoveMachine(new Vector3(0, 0, machineOffsetZ), timeOfMovement).WaitForCompletion();
     }
 
     private Sequence RotateMachine(Vector3 rotateTo, float tweenDuration)
@@ -199,19 +222,6 @@ public class TutorialDirector : MonoBehaviour
                 rotatingPartAudioSource.clip = engineSlowDownClip;
                 rotatingPartAudioSource.Play();
             });
-    }
-
-    private void EnsureIsInitializedCorrectly()
-    {
-        Assert.IsNotNull(radarController);
-        Assert.IsNotNull(rotateTransform);
-        radarTool = radarController.GetComponent<RadarTool>();
-        Assert.IsNotNull(radarTool);
-
-        Assert.IsNotNull(engineStartUpClip);
-        Assert.IsNotNull(engineRunClip);
-        Assert.IsNotNull(engineSlowDownClip);
-        Assert.IsNotNull(rotatingPartAudioSource);
     }
 
     private PulseSettings MakeOverridePulseSettings(PulseSettings settings)
