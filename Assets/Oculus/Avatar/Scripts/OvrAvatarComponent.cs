@@ -46,8 +46,7 @@ public class OvrAvatarComponent : MonoBehaviour
                 case ovrAvatarRenderPartType.SkinnedMeshRender:
                     if (!renderComponent)
                         return;
-                    
-                    ((OvrAvatarSkinnedMeshRenderComponent)renderComponent)?.UpdateSkinnedMeshRender(this, avatar, renderPart);
+                    ((OvrAvatarSkinnedMeshRenderComponent)renderComponent).UpdateSkinnedMeshRender(this, avatar, renderPart);
                     break;
                 case ovrAvatarRenderPartType.SkinnedMeshRenderPBS:
                     ((OvrAvatarSkinnedMeshRenderPBSComponent)renderComponent).UpdateSkinnedMeshRenderPBS(avatar, renderPart, renderComponent.mesh.sharedMaterial);
