@@ -78,7 +78,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     {
         const string filepath = "questionnaire.csv";
         bool isFirstTime = !File.Exists(filepath);
-        using (var sw = new StreamWriter(filepath))
+        using (var sw = File.AppendText(filepath))
         {
             if (isFirstTime)
             {
