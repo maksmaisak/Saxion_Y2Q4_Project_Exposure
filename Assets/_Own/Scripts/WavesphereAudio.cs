@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingSphereAudio : Singleton<FlyingSphereAudio>
+public class WavesphereAudio : Singleton<WavesphereAudio>
 {
     [SerializeField] AudioClip[] grabAudioClips;
 
