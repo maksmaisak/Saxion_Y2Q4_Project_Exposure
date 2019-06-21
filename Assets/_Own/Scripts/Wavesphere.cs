@@ -221,21 +221,16 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         Vector3 position = transform.position;
         Transform targetTransform = targetTransforms.ArgMin(t => (t.position - position).sqrMagnitude);
-
         Vector3 sphereToTargetDelta = targetTransform.position - position;
-
-        float distanceToTargetSqr = (sphereToTargetDelta).sqrMagnitude;
-
+        float distanceToTargetSqr = sphereToTargetDelta.sqrMagnitude;
         // Allow to change target Direction from FlyingSphereTutorial class
         if (!mustGetCaught || (mustGetCaught && isVisibleToCamera) ||
             (mustGetCaught && !isVisibleToCamera && distanceToTargetSqr <= forcedAttractionRadius * forcedAttractionRadius))
             targetDirection = sphereToTargetDelta;
 
         if (!mustGetCaught)
-        {
             if (distanceToTargetSqr > attractionRadius * attractionRadius)
                 return;
-        }
 
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDirection.normalized,
             attractionAngularSpeed * Time.deltaTime, 0.0f);

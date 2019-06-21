@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 
 [Serializable]
-public class FadeZoom
+public class FadeZoom 
 {
     [SerializeField] float transitionDuration = 0.1f;
     [SerializeField] float fadedOutScale = 2f;
