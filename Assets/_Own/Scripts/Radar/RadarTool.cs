@@ -47,7 +47,7 @@ public struct PulseSettings
     public float minDistanceBetweenSpawnedWavespheres;
     public float wavesphereSpeedMin;
     public float wavesphereSpeedMax;
-    public FlyingSphere wavespherePrefab;
+    public Wavesphere wavespherePrefab;
     public Transform    wavesphereTarget;
 
     [Header("Dots Settings")]
@@ -62,7 +62,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] PulseSettings pulseSettings = PulseSettings.Default;
     
     [Serializable]
-    public class OnSpawnedWavesphereHandler : UnityEvent<RadarTool, FlyingSphere> {}
+    public class OnSpawnedWavesphereHandler : UnityEvent<RadarTool, Wavesphere> {}
     public OnSpawnedWavesphereHandler onSpawnedWavesphere;
 
     public UnityEvent onPulse;
@@ -290,7 +290,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             maxDotDistanceFromSurfacePointAlongOriginalRay = pulseSettings.maxDotDistanceFromSurfacePointAlongOriginalRay
         };
         
-        FlyingSphere prefab = pulseSettings.wavespherePrefab;
+        Wavesphere prefab = pulseSettings.wavespherePrefab;
         Assert.IsNotNull(prefab);
         Vector3 targetPosition = (pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform).position;
         
@@ -305,11 +305,11 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
                 return;
             }
             
-            FlyingSphere flyingSphere = Instantiate(prefab, hit.point, Quaternion.identity);
-            flyingSphere.Initialize(targetPosition, speed, lightSection);
-            flyingSphere.highlightLocation = highlightLocation;
+            Wavesphere wavesphere = Instantiate(prefab, hit.point, Quaternion.identity);
+            wavesphere.Initialize(targetPosition, speed, lightSection);
+            wavesphere.highlightLocation = highlightLocation;
             
-            onSpawnedWavesphere?.Invoke(this, flyingSphere);
+            onSpawnedWavesphere?.Invoke(this, wavesphere);
         });
     }
     

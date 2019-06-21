@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using VRTK;
 using Random = UnityEngine.Random;
 
-public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
+public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [Header("Movement Settings")] 
     [SerializeField] float targetSphereRadius = 0.25f;
@@ -38,9 +38,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] int strength = 100;
 
     [Header("Audio Settings")]
-    [SerializeField] AudioClip spawnAudio;
     [SerializeField] [Range(0, 1)] float grabAudioVolume;
-    [SerializeField] bool playOnAwake = false;
     [SerializeField] AudioSource buzzAudioSource;
 
     [Header("Other Settings")] 
@@ -84,7 +82,7 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     {
         base.Awake();
 
-        transform = GetComponent<Transform>();
+        transform   = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
 
         if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
@@ -102,10 +100,6 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeScale();
         RandomizeSpeedAndDirection();
 
-        audioSource.playOnAwake = playOnAwake;
-
-        audioSource.PlayOneShot(spawnAudio);
-        
         if (!mustGetCaught)
             Destroy(gameObject, delayToDespawn);
     }
@@ -127,33 +121,31 @@ public class FlyingSphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         DotsManager.instance.Highlight(highlightLocation, transform.position);
         
+        lastTimeWasCaught = Time.time;
         isFadingOut = true;
 
-        lastTimeWasCaught = Time.time;
-
-        AudioClip grabAudioClip = FlyingSphereAudio.instance.GetGrabAudioClip();
+        AudioClip grabAudioClip = WavesphereAudio.instance.GetGrabAudioClip();
         Assert.IsNotNull(grabAudioClip);
         audioSource.clip = grabAudioClip;
         audioSource.volume = grabAudioVolume;
         audioSource.Play();
 
         VibrateController(other);
-
-        transform.parent = other.transform;
         
-        onCaught?.Invoke();
-
-        transform.DOKill();
         const float Duration = 0.2f;
-        transform.DOScale(0.0f, Duration)
+        transform.DOKill();
+        transform.parent = other.transform;
+        transform
+            .DOScale(0.0f, Duration)
             .SetEase(Ease.OutQuart);
-        
-        Vector3 otherPosition = other.transform.position;
-        transform.DOLookAt(otherPosition - transform.position, Duration)
+        transform
+            .DOLookAt(other.transform.position, Duration)
             .SetEase(Ease.OutQuart);
 
         FadeOutAudio();
         
+        onCaught?.Invoke();
+
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
 

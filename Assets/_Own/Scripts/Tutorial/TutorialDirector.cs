@@ -12,7 +12,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
     [Space] 
-    [SerializeField] FlyingSphere overrideWavespherePrefab;
+    [SerializeField] Wavesphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
     [SerializeField] int overrideMaxNumWavespheresPerPulse = -1;
@@ -242,7 +242,7 @@ public class TutorialDirector : MonoBehaviour
         int numWavespheresLeftToCatch = 0;
         bool anyWavespheresSpawned = false;
 
-        void WavesphereSpawnedHandler(RadarTool sender, FlyingSphere flyingSphere)
+        void WavesphereSpawnedHandler(RadarTool sender, Wavesphere flyingSphere)
         {
             anyWavespheresSpawned = true;
             numWavespheresLeftToCatch += 1;

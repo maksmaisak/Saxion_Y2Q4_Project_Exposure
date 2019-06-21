@@ -4,8 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(FlyingSphere))]
-public class FlyingSphereTutorial : MonoBehaviour
+[RequireComponent(typeof(Wavesphere))]
+public class WavesphereTutorial : MonoBehaviour
 {
     [SerializeField] AudioSource audioSourceSecondary;
     [SerializeField] AudioClip pulseSound;
@@ -19,14 +19,14 @@ public class FlyingSphereTutorial : MonoBehaviour
     [SerializeField] Rect visibleViewportRect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
 
     private new Camera camera;
-    private FlyingSphere wavesphere;
+    private Wavesphere wavesphere;
     private Sequence pulseSequence;
     
     IEnumerator Start()
     {
         audioSourceSecondary = audioSourceSecondary ? audioSourceSecondary : GetComponent<AudioSource>();
         
-        wavesphere = GetComponent<FlyingSphere>();
+        wavesphere = GetComponent<Wavesphere>();
         Assert.IsNotNull(wavesphere);
         
         yield return new WaitUntil(() => camera = Camera.main);
