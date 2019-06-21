@@ -23,12 +23,12 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
-    [Header("Audio Settings")] 
+    [Header("Audio Settings")]
+    [SerializeField] AudioSource engineAudioSource;
     [SerializeField] AudioClip engineStartUpClip;
     [SerializeField] AudioClip engineRunClip;
-    [SerializeField] private AudioClip engineRunLoopClip;
+    [SerializeField] AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
-    [SerializeField] AudioSource rotatingPartAudioSource;
     
     [FormerlySerializedAs("timeForMachineToDisappear")]
     [Space]
@@ -36,7 +36,6 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] private float machineOffsetY = -2.5f;
     [SerializeField] private float machineOffsetZ = -1.5f;
 
-    private AudioSource audioSource;
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
@@ -63,13 +62,10 @@ public class TutorialDirector : MonoBehaviour
         radarTool = radarController.GetComponent<RadarTool>();
         Assert.IsNotNull(radarTool);
         
-        audioSource = GetComponent<AudioSource>();
-        Assert.IsNotNull(audioSource);
-
+        Assert.IsNotNull(engineAudioSource);
         Assert.IsNotNull(engineStartUpClip);
         Assert.IsNotNull(engineRunClip);
         Assert.IsNotNull(engineSlowDownClip);
-        Assert.IsNotNull(rotatingPartAudioSource);
     }
 
     IEnumerator TutorialCoroutine()
@@ -161,7 +157,7 @@ public class TutorialDirector : MonoBehaviour
         yield return new WaitUntil(() => radarController.IsGrabbed());
         yield return new WaitForSeconds(delayAfterGunIsGrabbed);
         
-        float timeOfMovement = audioSource.pitch * (engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length);
+        float timeOfMovement = engineAudioSource.pitch * (engineStartUpClip.length + engineRunLoopClip.length + engineSlowDownClip.length);
         yield return MoveMachine(new Vector3(0, machineOffsetY, 0), timeOfMovement).WaitForCompletion();
         yield return MoveMachine(new Vector3(0, 0, machineOffsetZ), timeOfMovement).WaitForCompletion();
     }
@@ -169,59 +165,39 @@ public class TutorialDirector : MonoBehaviour
     private Sequence RotateMachine(Vector3 rotateTo, float tweenDuration)
     {
         return DOTween.Sequence()
-            .Join(RotationAudioSequence())
+            .Join(EngineAudioSequence(engineRunClip))
             .Join(rotateTransform.DORotate(rotateTo, tweenDuration).SetEase(Ease.InOutQuad));
     }
 
     private Sequence MoveMachine(Vector3 moveTo, float tweenDuration)
     {
         return DOTween.Sequence()
-            .Join(MovementAudioSequence())
+            .Join(EngineAudioSequence(engineRunLoopClip))
             .Join(transform.DOMove(moveTo, tweenDuration).SetRelative().SetEase(Ease.InOutSine));
     }
 
-    private Sequence MovementAudioSequence()
+    private Sequence EngineAudioSequence(AudioClip runClip)
     {
+        engineAudioSource.DOKill();
         return DOTween.Sequence()
             .AppendCallback(() =>
             {
-                audioSource.clip = engineStartUpClip;
-                audioSource.Play();
+                engineAudioSource.clip = engineStartUpClip;
+                engineAudioSource.Play();
             })
             .AppendInterval(engineStartUpClip.length)
             .AppendCallback(() =>
             {
-                audioSource.clip = engineRunLoopClip;
-                audioSource.Play();
+                engineAudioSource.clip = runClip;
+                engineAudioSource.Play();
             })
-            .AppendInterval(engineRunLoopClip.length)
+            .AppendInterval(runClip.length)
             .AppendCallback(() =>
             {
-                audioSource.clip = engineSlowDownClip;
-                audioSource.Play();
-            });
-    }
-
-    private Sequence RotationAudioSequence()
-    {        
-        return DOTween.Sequence()
-            .AppendCallback(() =>
-            {
-                rotatingPartAudioSource.clip = engineStartUpClip;
-                rotatingPartAudioSource.Play();
+                engineAudioSource.clip = engineSlowDownClip;
+                engineAudioSource.Play();
             })
-            .AppendInterval(engineStartUpClip.length)
-            .AppendCallback(() =>
-            {
-                rotatingPartAudioSource.clip = engineRunClip;
-                rotatingPartAudioSource.Play();
-            })
-            .AppendInterval(engineRunClip.length)
-            .AppendCallback(() =>
-            {
-                rotatingPartAudioSource.clip = engineSlowDownClip;
-                rotatingPartAudioSource.Play();
-            });
+            .SetTarget(engineAudioSource);
     }
 
     private PulseSettings MakeOverridePulseSettings(PulseSettings settings)
