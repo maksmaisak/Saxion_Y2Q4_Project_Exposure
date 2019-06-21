@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 
-public class TutorialDirector : MonoBehaviour
+public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] float delayBeforeStart = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
@@ -35,6 +35,9 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
     [SerializeField] private float machineOffsetY = -2.5f;
     [SerializeField] private float machineOffsetZ = -1.5f;
+    
+    [Space]
+    [SerializeField] private GameObject infographicsImage;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -238,4 +241,6 @@ public class TutorialDirector : MonoBehaviour
             return true;
         });
     }
+
+    public void On(OnRevealEvent revealEvent) => infographicsImage.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
 }
