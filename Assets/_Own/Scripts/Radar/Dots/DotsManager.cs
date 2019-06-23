@@ -67,7 +67,8 @@ public class DotsManager : Singleton<DotsManager>
 
         for (int i = 0; i < lightSections.Length; ++i)
         {
-            var colliders = lightSections[i].GetGameObjects()
+            var colliders = lightSections[i]
+                .GetGameObjects()
                 .SelectMany(go => go.GetComponentsInChildren<Collider>())
                 .Distinct();
          
@@ -159,7 +160,7 @@ public class DotsManager : Singleton<DotsManager>
             //float distanceAlongRay = Mathf.Abs(Vector3.Dot(delta, location.originalRay.direction));
             if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
                 continue;
-
+            
             if (!colliderToLightSectionIndex.TryGetValue(dotHit.collider, out int sectionIndex))
                 continue;
 
