@@ -108,6 +108,7 @@ public class TutorialDirector : MonoBehaviour
         radarController.transform.SetParent(null, true);
         
         StartCoroutine(HandTutorialCoroutine());
+        yield return new WaitUntil(() => radarController.IsGrabbed());
         StartCoroutine(ControllerTutorialCoroutine());
         
         yield return StartCoroutine(MachineMoveAwayCoroutine());
