@@ -8,6 +8,23 @@ using VRTK;
 
 public class RadarController : VRTK_InteractableObject
 {
+    [Serializable]
+    private struct AudioSourceSettings
+    {
+        public static AudioSourceSettings GetDefault() => new AudioSourceSettings
+        {
+            fadeInDuration = 0.05f,
+            fadeOutDuration = 0.05f
+        };
+        
+        public AudioSource audioSource;
+        public float fadeInDuration;
+        public float fadeOutDuration;
+
+        [HideInInspector] public float volume;
+        [HideInInspector] public float duration;
+    }
+    
     [Header("Radar Controller")] 
     [SerializeField] RadarTool radarTool;
     [SerializeField] float chargeUpDuration = 1.6f;
@@ -15,43 +32,64 @@ public class RadarController : VRTK_InteractableObject
 
     [Header("Spinning Thing Settings")] 
     [SerializeField] float maxAngularSpeed = 1500.0f;
-    [SerializeField] float angularStepSpeed = 20.0f;
-    [SerializeField] GameObject spinningThingGameObject;
-    
+    [SerializeField] Transform spinningThingTransform;
+
+    [Header("Particles Settings")] 
+    [SerializeField] ParticleSystem chargeupParticleSystem;
+
     [Header("Audio Settings")]
-    [SerializeField] AudioClip shootClip;
-    [SerializeField] AudioClip chargeUpClip;
-    [SerializeField] AudioClip interruptClip;
-    [SerializeField] float shootVolume = 0.8f;
-    [SerializeField] float chargeUpVolume = 0.6f;
-    [SerializeField] float interruptVolume = 0.35f;
-    [SerializeField] float fadeInDuration = 0.02f;
-    [SerializeField] float fadeOutDuration = 0.05f;
-    [SerializeField] AudioSource chargeUpAudioSource;
-    [SerializeField] AudioSource releaseAudioSource;
+    [SerializeField] AudioSourceSettings audioChargeup  = AudioSourceSettings.GetDefault();
+    [SerializeField] AudioSourceSettings audioShoot     = AudioSourceSettings.GetDefault();
+    [SerializeField] AudioSourceSettings audioInterrupt = AudioSourceSettings.GetDefault();
+    [SerializeField] AudioSourceSettings audioGrabbed   = AudioSourceSettings.GetDefault();
 
     private bool canUse = true;
-    private bool isHandGrabbed;
     private bool isChargingUp;
-    private bool forceCharged;
-
-    private float spinningThingSpeed;
-    private float lastChargeUpStartingTime;
-    private float lastReleaseStartingTime;
-    private float chargingUpDiff;
     
-    private Coroutine interruptingSoundCoroutine;
+    // From 0 to 1. Goes from 0 to 1 as you charge up. Pulse happens when it reaches 1
+    private float chargeup;
+    
+    private float maxParticleEmissionRate;
 
+    private Coroutine interruptCoroutine;
+    
     IEnumerator Start()
     {
-        Assert.IsNotNull(shootClip);
-        Assert.IsNotNull(chargeUpClip);
-        Assert.IsNotNull(interruptClip);
-        Assert.IsNotNull(releaseAudioSource);
-        Assert.IsNotNull(chargeUpAudioSource);
-        Assert.IsNotNull(spinningThingGameObject);
+        void Initialize(ref AudioSourceSettings s)
+        {
+            Assert.IsNotNull(s.audioSource);
+            Assert.IsNotNull(s.audioSource.clip);
+
+            s.volume = s.audioSource.volume;
+            s.duration = s.audioSource.pitch * s.audioSource.clip.length;
+        }
+        
+        Initialize(ref audioChargeup);
+        Initialize(ref audioShoot);
+        Initialize(ref audioInterrupt);
+        Initialize(ref audioGrabbed);
+
+        Assert.IsNotNull(spinningThingTransform);
+        Assert.IsNotNull(chargeupParticleSystem);
+        
+        ParticleSystem.EmissionModule emission = chargeupParticleSystem.emission;
+        maxParticleEmissionRate = emission.rateOverTime.constant;
+        emission.rateOverTime = 0.0f;
 
         yield return new WaitUntil(() => radarTool = radarTool ? radarTool : GetComponentInChildren<RadarTool>());
+    }
+    
+    protected override void Update()
+    {
+        base.Update();
+        
+        ChargeUp();
+        
+        float spinningThingSpeed = IsGrabbed() ? Mathf.Lerp(0.0f, maxAngularSpeed, chargeup) : 0.0f;
+        spinningThingTransform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
+        
+        ParticleSystem.EmissionModule emission = chargeupParticleSystem.emission;
+        emission.rateOverTime = Mathf.Lerp(0.0f, maxParticleEmissionRate, chargeup);
     }
 
     public float GetChargeupDuration() => chargeUpDuration;
@@ -62,36 +100,55 @@ public class RadarController : VRTK_InteractableObject
         {
             StopAllCoroutines();
 
-            if(isChargingUp)
-                StartPlayingInterruptIfNeeded();
-            
-            lastChargeUpStartingTime = 0.0f;
-            lastReleaseStartingTime = 0.0f;
-            chargingUpDiff = 0.0f;
+            if (isChargingUp)
+                interruptCoroutine = StartCoroutine(InterruptCoroutine());
+
+            chargeup = 0.0f;
         }
 
         canUse = isUsable;
     }
 
+    public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
+    {
+        base.Grabbed(currentGrabbingObject);
+        FadeInAndPlay(audioGrabbed);
+    }
+
+    public override void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
+    {
+        if (!isGrabbable)
+            return;
+        
+        base.StartTouching(currentTouchingObject);
+        if (!currentTouchingObject)
+            return;
+
+        var interactGrab = currentTouchingObject.GetComponent<VRTK_InteractGrab>();
+        if (!interactGrab)
+            return;
+        
+        interactGrab.AttemptGrab();
+    }
+
     public override void StartUsing(VRTK_InteractUse currentUsingObject = null)
     {
         base.StartUsing(currentUsingObject);
-
+        
         if (!canUse)
             return;
 
-        float timeSinceReleaseStarted = Time.time - lastReleaseStartingTime;
-        if (timeSinceReleaseStarted <= releaseDelay && interruptingSoundCoroutine != null)
-            StopCoroutine(interruptingSoundCoroutine);
+        if (interruptCoroutine != null)
+        {
+            StopCoroutine(interruptCoroutine);
+            FadeOut(audioInterrupt);
+            interruptCoroutine = null;
+        }
+
+        isChargingUp = true;
         
-        lastChargeUpStartingTime = Time.time;
-
-        FadeInAndPlay(chargeUpAudioSource, chargeUpClip, chargeUpVolume, fadeInDuration);
-
-        if (isHandGrabbed)
-            isChargingUp = true;
-        else
-            forceCharged = true;
+        FadeInAndPlay(audioChargeup);
+        audioChargeup.audioSource.time = chargeup * audioChargeup.duration;
     }
 
     public override void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
@@ -101,103 +158,58 @@ public class RadarController : VRTK_InteractableObject
         if (!canUse)
             return;
 
-        StartPlayingInterruptIfNeeded();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        spinningThingSpeed = Mathf.Clamp(
-            isChargingUp
-                ? spinningThingSpeed + angularStepSpeed * Time.deltaTime
-                : spinningThingSpeed - angularStepSpeed * Time.deltaTime,
-            0.0f, maxAngularSpeed);
-        
-        spinningThingGameObject.transform.Rotate(spinningThingSpeed * Time.deltaTime * Vector3.up, Space.Self);
-
-        ChargeUp();
+        if (isChargingUp)
+        {
+            Assert.IsNull(interruptCoroutine);
+            interruptCoroutine = StartCoroutine(InterruptCoroutine());
+        }
     }
 
     private void ChargeUp()
     {
-        if (isChargingUp || forceCharged)
+        if (!isChargingUp)
         {
-            chargingUpDiff += Time.deltaTime;
-
-            if (chargingUpDiff >= chargeUpDuration)
-            {
-                FadeInAndPlay(chargeUpAudioSource, shootClip, shootVolume, 0.0f);
-
-                radarTool.Probe();
-
-                if (ControllerTutorial.exists)
-                    ControllerTutorial.instance.Remove();
-
-                if (isHandGrabbed)
-                    isChargingUp = false;
-
-                if (forceCharged)
-                    forceCharged = false;
-
-                chargingUpDiff = 0;
-            }
-        }
-        else
-            chargingUpDiff = 0;
-    }
-
-    private void StartPlayingInterruptIfNeeded()
-    {
-        float timeSinceChargeupStarted = Time.time - lastChargeUpStartingTime;
-        if (timeSinceChargeupStarted >= chargeUpDuration)
+            chargeup = Mathf.Clamp01(chargeup - Time.deltaTime / (releaseDelay + audioInterrupt.duration));
             return;
+        }
+        
+        chargeup += Time.deltaTime / chargeUpDuration;
+        if (chargeup < 1.0f)
+            return;
+        
+        isChargingUp = false;
+        chargeup = 0.0f;
 
-        lastReleaseStartingTime = Time.time;
-
-        interruptingSoundCoroutine = StartCoroutine(PlayInterrupt());
+        radarTool.Pulse();
+        FadeInAndPlay(audioShoot);
     }
 
-    private IEnumerator PlayInterrupt()
+    private IEnumerator InterruptCoroutine()
     {
-        if (forceCharged)
-            forceCharged = false;
-
-        FadeOutAndStop(chargeUpAudioSource, fadeOutDuration);
-        
         yield return new WaitForSeconds(releaseDelay);
 
-        releaseAudioSource.volume = interruptVolume;
-        releaseAudioSource.clip = interruptClip;
-        releaseAudioSource.Play();
+        if (!isChargingUp)
+            yield break;
 
-        if (isHandGrabbed)
-            isChargingUp = false;
+        isChargingUp = false;
+        FadeOut(audioChargeup);
+        FadeInAndPlay(audioInterrupt);
     }
 
-    private void FadeInAndPlay(AudioSource source, AudioClip clip, float volume, float duration)
+    private void FadeInAndPlay(AudioSourceSettings s)
     {
-        source.DOFade(volume, duration).OnComplete(() =>
-        {
-            source.clip = clip;
-            source.Play();
-        });
+        var source = s.audioSource;
+        source.DOKill();
+        source.DOFade(s.volume, s.fadeInDuration);
+
+        source.time = 0.0f;
+        source.Play();
     }
 
-    private void FadeOutAndStop(AudioSource source, float newFadeOutDuration = 0.1f) =>
-        source.DOFade(0, newFadeOutDuration);
-
-    public override void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
+    private void FadeOut(AudioSourceSettings s)
     {
-        base.Grabbed(currentGrabbingObject);
-        
-        if (ControllerTutorial.exists) 
-            ControllerTutorial.instance.HighlightTrigger();
-
-        if (HandTutorial.exists)
-            HandTutorial.instance.Remove();
-        
-        isHandGrabbed = true;
+        s.audioSource.DOKill();
+        s.audioSource.DOFade(0.0f, s.fadeOutDuration);
     }
 }
 

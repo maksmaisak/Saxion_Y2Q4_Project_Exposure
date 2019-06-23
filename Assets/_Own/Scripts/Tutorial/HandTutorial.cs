@@ -1,12 +1,13 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 
-public class HandTutorial : Singleton<HandTutorial>
+public class HandTutorial : MonoBehaviour
 {
     void Start()
     {
         transform
-            .DOScale(0.2f, 1.0f)
+            .DOScale(0.0f, 1.0f)
+            .From()
             .SetEase(Ease.OutCirc);
 
         transform
@@ -17,7 +18,6 @@ public class HandTutorial : Singleton<HandTutorial>
         if (radarController && radarController.IsGrabbed())
             Remove();
     }
-
 
     public void Remove()
     {

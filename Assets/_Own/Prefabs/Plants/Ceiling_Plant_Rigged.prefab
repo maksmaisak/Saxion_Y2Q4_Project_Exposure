@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5140537585149230670}
   - component: {fileID: 3016523838919381812}
   - component: {fileID: 7838592310192833678}
+  - component: {fileID: 524725690}
   m_Layer: 0
   m_Name: Ceiling_Plant_Rigged
   m_TagString: Untagged
@@ -81,6 +82,20 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   delay: 1
+--- !u!64 &524725690
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146310693881891933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 6329158148709259305, guid: 4272a4b6fa4c8204eb64215d19fffc54, type: 3}
 --- !u!1001 &2817732527453018621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,14 +231,15 @@ PrefabInstance:
     - target: {fileID: -3723075870865499989, guid: 6afa4a9035aa3bd4d892f28cf47fb377,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 4294967295
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3891649660851658719, guid: 6afa4a9035aa3bd4d892f28cf47fb377,
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -6057140222963153312, guid: 6afa4a9035aa3bd4d892f28cf47fb377, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6afa4a9035aa3bd4d892f28cf47fb377, type: 3}
 --- !u!4 &7088714194198934247 stripped
 Transform:

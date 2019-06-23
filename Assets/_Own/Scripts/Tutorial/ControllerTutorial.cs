@@ -5,10 +5,8 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-// TODO don't make it a singleton jeez. Make it react to events instead. Or something.
-public class ControllerTutorial : Singleton<ControllerTutorial>
+public class ControllerTutorial : MonoBehaviour
 {
-    [SerializeField] SkinnedMeshRenderer grip;
     [SerializeField] SkinnedMeshRenderer trigger;
     [SerializeField] Material baseMaterial;
     [SerializeField] Material highlightMaterial;
@@ -18,32 +16,28 @@ public class ControllerTutorial : Singleton<ControllerTutorial>
     {
         Assert.IsNotNull(baseMaterial);
         Assert.IsNotNull(highlightMaterial);
+        Assert.IsNotNull(trigger);
+
+        trigger.sharedMaterial = highlightMaterial;
         
         transform
-            .DOScale(0.2f, 1.0f)
+            .DOScale(0.0f, 1.0f)
+            .From()
             .SetEase(Ease.OutCirc);
         
+        transform.rotation = Quaternion.identity;
         transform
             .DORotate(new Vector3(0, 360, 0), rotationDuration, RotateMode.LocalAxisAdd)
             .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
-
-        var radarController = FindObjectOfType<RadarController>();
-        if (radarController && radarController.IsGrabbed())
-            HighlightTrigger();
     }
 
-    public void HighlightTrigger()
+    public void Remove()
     {
-        if (trigger)
-            trigger.sharedMaterial = highlightMaterial;
-        
-        if (grip) 
-            grip.sharedMaterial = baseMaterial;
+        transform.DOKill();
+        transform
+            .DOScale(0.0f, 1.0f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() => Destroy(gameObject));
     }
-
-    public void Remove() => transform
-        .DOScale(0.0f, 1.0f)
-        .SetEase(Ease.InBack)
-        .OnComplete(() => Destroy(gameObject));
 }
