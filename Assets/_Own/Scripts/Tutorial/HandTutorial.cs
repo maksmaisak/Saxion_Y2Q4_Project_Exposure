@@ -6,7 +6,8 @@ public class HandTutorial : MonoBehaviour
     void Start()
     {
         transform
-            .DOScale(0.2f, 1.0f)
+            .DOScale(0.0f, 1.0f)
+            .From()
             .SetEase(Ease.OutCirc);
 
         transform
