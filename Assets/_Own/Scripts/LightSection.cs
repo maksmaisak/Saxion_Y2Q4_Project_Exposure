@@ -134,23 +134,28 @@ public class LightSection : MonoBehaviour
     {
         IEnumerable<GameObject> withRenderer;
         IEnumerable<GameObject> withParticleSystem;
+        IEnumerable<GameObject> withCollider;
         
         if (isGlobal)
         {
             lights = FindObjectsOfType<Light>().ToList();
 
             withRenderer       = FindObjectsOfType<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = FindObjectsOfType<ParticleSystem>().Select(r => r.gameObject);
+            withParticleSystem = FindObjectsOfType<ParticleSystem>().Select(ps => ps.gameObject);
+            withCollider       = FindObjectsOfType<Collider>().Select(c => c.gameObject);
         }
         else
         {
             lights = GetComponentsInChildren<Light>().ToList();
 
             withRenderer       = GetComponentsInChildren<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = GetComponentsInChildren<ParticleSystem>().Select(r => r.gameObject);
+            withParticleSystem = GetComponentsInChildren<ParticleSystem>().Select(ps => ps.gameObject);
+            withCollider       = GetComponentsInChildren<Collider>().Select(c => c.gameObject);
         }
 
-        return Enumerable.Union(withRenderer, withParticleSystem)
+        return withRenderer
+            .Union(withParticleSystem)
+            .Union(withCollider)
             .Distinct()
             .Where(go => go != dotsParticleSystem.gameObject && !exceptionLayer.ContainsLayer(go.layer))
             .ToList();
