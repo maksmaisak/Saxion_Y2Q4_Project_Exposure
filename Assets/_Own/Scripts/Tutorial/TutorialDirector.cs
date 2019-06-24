@@ -21,7 +21,6 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
-    //[SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
     [Header("Audio Settings")]
@@ -147,20 +146,15 @@ public class TutorialDirector : MonoBehaviour
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
 
-        if (didPulse || !rightController || !leftController)
+        if (didPulse)
             yield break;
 
-        
-        if(radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerLeftHand()))
-        {
-            leftController.gameObject.SetActive(true);
-        }
-        
-        if(radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerRightHand()))
-        {
-            rightController.gameObject.SetActive(true);
-        }
-        
+        ControllerTutorial controllerTutorial = radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerLeftHand()) ? leftController : rightController;
+        if (!controllerTutorial)
+            yield break;
+
+        controllerTutorial.gameObject.SetActive(true);
+
         yield return new WaitUntil(() => didPulse);
 
         if (rightController)

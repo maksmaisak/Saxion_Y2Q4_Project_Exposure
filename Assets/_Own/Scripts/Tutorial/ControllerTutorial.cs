@@ -36,6 +36,5 @@ public class ControllerTutorial : MonoBehaviour
             .DOScale(0.0f, 1.0f)
             .SetEase(Ease.InBack)
             .OnComplete(() => Destroy(gameObject));
-        
     }
 }
