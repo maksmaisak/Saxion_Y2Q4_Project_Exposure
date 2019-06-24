@@ -187,7 +187,7 @@ public class Navpoint : VRTK_DestinationMarker
         {
             isUsed = true;
             
-            teleporter.ForceTeleport(teleportToTransform.position, teleportToTransform.rotation);
+            teleporter.Teleport(transform, teleportToTransform.position, teleportToTransform.rotation);
 
             new OnTeleportEvent(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             onTeleport?.Invoke();
