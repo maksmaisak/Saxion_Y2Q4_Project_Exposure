@@ -4,16 +4,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using VRTK.Controllables.PhysicsBased;
 
 public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
-    [SerializeField] VRTK_PhysicsPusher[] buttons;
+    [SerializeField] QuestionnaireButton[] buttons;
+
+    [Header("Debug")] 
+    [SerializeField] bool showOnStart;
     
     private Navpoint[] navpoints;
     private QuestionnairePanel[] questionPanels;
     
     private int currentAnswer = -1;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        if (!showOnStart)
+            gameObject.SetActive(false);
+    }
 
     void Start()
     {
@@ -23,24 +33,23 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         for (int i = 0; i < buttons.Length; ++i)
         {
             int answer = i + 1;
-            var button = buttons[i];
-            button.stayPressed = false;
-            button.MaxLimitReached += (sender, args) =>
+            QuestionnaireButton button = buttons[i];
+            button.onActivate.AddListener(() =>
             {
                 currentAnswer = answer;
-                button.stayPressed = true;
-                this.Delay(0.5f, () => button.stayPressed = false);
-            };
+                this.Delay(1.0f, button.Show);
+            });
         }
-
-        // TEMP
+        
         Play();
     }
     
     public void On(OnTeleportEvent message)
     {
-        if (navpoints.All(n => n.isUsed))
-            Play();
+        if (!navpoints.All(n => n.isUsed)) 
+            return;
+        
+        gameObject.SetActive(true);
     }
 
     public Coroutine Play()
@@ -51,11 +60,25 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     private IEnumerator PlayCoroutine()
     {
         int[] answers = new int[questionPanels.Length];
+
+        bool areButtonsShown = false;
         
         for (int i = 0; i < questionPanels.Length; ++i)
         {
+            yield return new WaitForSeconds(2.0f);
+
             questionPanels[i].Show();
-            
+
+            if (!areButtonsShown)
+            {
+                foreach (QuestionnaireButton button in buttons)
+                {
+                    yield return new WaitForSeconds(0.4f);
+                    button.Show();
+                }
+                areButtonsShown = true;
+            }
+
             currentAnswer = -1;
             yield return new WaitUntil(() => currentAnswer != -1);
             answers[i] = currentAnswer;
@@ -69,7 +92,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     [ContextMenu("Find buttons")]
     private void FindButtons()
     {
-        buttons = GetComponentsInChildren<VRTK_PhysicsPusher>();
+        buttons = GetComponentsInChildren<QuestionnaireButton>();
     }
     
     private void AddToFile(int[] answers)
