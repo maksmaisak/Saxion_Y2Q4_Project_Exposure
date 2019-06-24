@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
-using VRTK.Controllables;
 using VRTK.Controllables.PhysicsBased;
 
 public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
