@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -128,6 +128,8 @@ public class RadarController : VRTK_InteractableObject
         if (!interactGrab)
             return;
         
+        transform.DOKill();
+
         interactGrab.AttemptGrab();
     }
 
