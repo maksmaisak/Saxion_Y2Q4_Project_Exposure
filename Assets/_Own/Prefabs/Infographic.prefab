@@ -116,8 +116,9 @@ MonoBehaviour:
   images:
   - {fileID: 1784896742663629157}
   - {fileID: 3796416997680495748}
-  crossFadeDuration: 1
+  crossFadeDuration: 0.5
   imageOnScreenDuration: 2
+  startActive: 0
 --- !u!1 &1784896742663629155
 GameObject:
   m_ObjectHideFlags: 0

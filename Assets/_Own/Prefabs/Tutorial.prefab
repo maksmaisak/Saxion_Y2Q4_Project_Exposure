@@ -6759,7 +6759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5045d3a9bee4e80a9457c042456c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayBeforeStart: 2
+  delayBeforeStart: 1
+  delayAfterInfographics: 3
   rotatingDuration: 4.6
   radarController: {fileID: 5256177348563802413}
   rotateTransform: {fileID: 5662344087870142097}
@@ -6787,7 +6788,7 @@ MonoBehaviour:
   delayAfterGunIsGrabbed: 0.5
   machineOffsetY: -2.5
   machineOffsetZ: -1.5
-  infographicsImage: {fileID: 0}
+  infographic: {fileID: 0}
 --- !u!114 &779227063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7195,6 +7196,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5662344087870142097}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7249,11 +7255,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
       objectReference: {fileID: 0}
     - target: {fileID: 7683828715288728065, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
@@ -7313,12 +7314,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8694910964969780332}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6198496074467598570 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
-    type: 3}
-  m_PrefabInstance: {fileID: 8694910964969780332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5256177348563802413 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3484438141555027265, guid: a6190a9bc8421454c9e194018e6faa34,
@@ -7331,3 +7326,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &6198496074467598570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
+    type: 3}
+  m_PrefabInstance: {fileID: 8694910964969780332}
+  m_PrefabAsset: {fileID: 0}

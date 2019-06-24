@@ -1038,12 +1038,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 95963349}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &98648931 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1784896742663629155, guid: 46453388953404f419c629aefccbee95,
-    type: 3}
-  m_PrefabInstance: {fileID: 1784896742724397568}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &102791922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7345,11 +7339,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5807397314262494636, guid: 6d7732be77df24dcba07b96a1dbb7670,
-        type: 3}
-      propertyPath: infographicsImage
-      value: 
-      objectReference: {fileID: 98648931}
     - target: {fileID: 5807397314262494636, guid: 6d7732be77df24dcba07b96a1dbb7670,
         type: 3}
       propertyPath: infographic

@@ -50,7 +50,6 @@ public class TutorialButtonController : MonoBehaviour
         this.Delay(1.0f, () => buttonTransform.DOScale(0, timeToDisapear).SetEase(Ease.InBack).OnComplete(() => Destroy(buttonTransform.gameObject)));
         
         tutorialDirector.StartTutorial();
-        tutorialDirector.ShowInfoGraphic();
         
         controllable.GetComponent<AudioSource>()?.Play();
     }

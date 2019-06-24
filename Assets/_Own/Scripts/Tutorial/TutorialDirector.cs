@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] float delayBeforeStart = 2.0f;
+    [SerializeField] float delayAfterInfographics = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
     [Space] 
     [SerializeField] RadarController radarController;
@@ -57,12 +58,6 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         StartCoroutine(TutorialCoroutine());
     }
 
-    public void ShowInfoGraphic()
-    {
-        if (infographic)
-            infographic.Show();
-    }
-
     public void On(OnRevealEvent revealEvent)
     {
         if (infographic)
@@ -88,6 +83,12 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
 
         yield return new WaitForSeconds(delayBeforeStart);
+
+        if (infographic)
+        {
+            infographic.Show();
+            yield return new WaitForSeconds(delayAfterInfographics);
+        }
 
         // Turn Right and Play Sound
         yield return RotateMachine(Vector3.up * 90.0f, rotatingDuration)
