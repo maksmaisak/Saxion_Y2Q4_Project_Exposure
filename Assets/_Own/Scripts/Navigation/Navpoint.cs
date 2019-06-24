@@ -179,7 +179,8 @@ public class Navpoint : VRTK_DestinationMarker
         if (teleportAudioSource != null)
             teleportAudioSource.PlayOneShot(teleportClip);
 
-        Assert.IsTrue(EnsureTeleporter());
+        bool hasTeleporter = EnsureTeleporter();
+        Assert.IsTrue(hasTeleporter);
         VRTK_SDK_Bridge.HeadsetFade(teleporter.blinkToColor, teleporter.blinkTransitionSpeed);
         
         this.Delay(teleporter.blinkTransitionSpeed, () =>
