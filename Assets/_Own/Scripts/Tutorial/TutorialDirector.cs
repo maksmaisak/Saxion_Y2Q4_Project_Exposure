@@ -248,5 +248,5 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         });
     }
 
-    public void On(OnRevealEvent revealEvent) => infographic.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
+    public void On(OnRevealEvent revealEvent) => infographic.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(infographic.gameObject));
 }
