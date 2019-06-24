@@ -113,10 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d114b01bcbd0e11499887b97f00e1177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image1: {fileID: 1784896742663629157}
-  image2: {fileID: 3796416997680495748}
+  images:
+  - {fileID: 1784896742663629157}
+  - {fileID: 3796416997680495748}
   crossFadeDuration: 1
-  imageOnScreenDuration: 5
+  imageOnScreenDuration: 2
 --- !u!1 &1784896742663629155
 GameObject:
   m_ObjectHideFlags: 0
