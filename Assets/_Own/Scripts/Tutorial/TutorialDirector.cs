@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using VRTK;
 
-public class TutorialDirector : MonoBehaviour
+public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] float delayBeforeStart = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
@@ -30,11 +30,14 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     
-    [FormerlySerializedAs("timeForMachineToDisappear")]
     [Space]
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
-    [SerializeField] private float machineOffsetY = -2.5f;
-    [SerializeField] private float machineOffsetZ = -1.5f;
+    [SerializeField] float machineOffsetY = -2.5f;
+    [SerializeField] float machineOffsetZ = -1.5f;
+    
+    [Space]
+    [SerializeField] Infographics infographics;
+    [SerializeField] float infographicsAppearDelay = 0.5f;
 
     [Header("Controller Settings")] 
     [SerializeField] ControllerTutorial leftController;
@@ -58,7 +61,13 @@ public class TutorialDirector : MonoBehaviour
         isTutorialRunning = true;
         StartCoroutine(TutorialCoroutine());
     }
-    
+
+    public void On(OnRevealEvent revealEvent)
+    {
+        if (infographics)
+            infographics.Hide();
+    }
+
     private void EnsureIsInitializedCorrectly()
     {
         Assert.IsNotNull(radarController);
@@ -110,13 +119,15 @@ public class TutorialDirector : MonoBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-        
+
         StartCoroutine(HandTutorialCoroutine());
         yield return new WaitUntil(() => radarController.IsGrabbed());
         StartCoroutine(ControllerTutorialCoroutine());
+        StartCoroutine(InfographicsCoroutine());
         
         yield return StartCoroutine(MachineMoveAwayCoroutine());
-        Destroy(gameObject);
+
+        gameObject.SetActive(false);
     }
     
     private IEnumerator HandTutorialCoroutine()
@@ -162,6 +173,15 @@ public class TutorialDirector : MonoBehaviour
         
         if (leftController)
             leftController.Remove();
+    }
+
+    private IEnumerator InfographicsCoroutine()
+    {
+        yield return new WaitUntil(() => radarController.IsGrabbed());
+        yield return new WaitForSeconds(infographicsAppearDelay);
+
+        if (infographics)
+            infographics.Show();
     }
 
     private IEnumerator MachineMoveAwayCoroutine()

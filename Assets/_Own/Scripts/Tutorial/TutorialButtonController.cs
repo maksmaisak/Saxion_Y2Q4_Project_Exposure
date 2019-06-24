@@ -14,8 +14,8 @@ public class TutorialButtonController : MonoBehaviour
     private TutorialDirector tutorialDirector;
     
     private bool wasPressed;
-    
-    void Start()
+
+    private void Start()
     {
         tutorialDirector = GetComponent<TutorialDirector>();
         handTransform
