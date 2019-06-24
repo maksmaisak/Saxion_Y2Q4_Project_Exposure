@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
+﻿using UnityEngine.Assertions;
 using UnityEngine;
-using UnityEngine.Assertions;
+using DG.Tweening;
 
 public class ControllerTutorial : MonoBehaviour
 {
+    [SerializeField] float rotationDuration = 10.0f;
     [SerializeField] SkinnedMeshRenderer trigger;
     [SerializeField] Material baseMaterial;
     [SerializeField] Material highlightMaterial;
-    [SerializeField] float rotationDuration = 10.0f;
 
-    void Start()
+    private void Start()
     {
         Assert.IsNotNull(baseMaterial);
         Assert.IsNotNull(highlightMaterial);
         Assert.IsNotNull(trigger);
-
+        
         trigger.sharedMaterial = highlightMaterial;
         
         transform
@@ -31,13 +28,14 @@ public class ControllerTutorial : MonoBehaviour
             .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart);
     }
-
+    
     public void Remove()
-    {
+    { 
         transform.DOKill();
         transform
             .DOScale(0.0f, 1.0f)
             .SetEase(Ease.InBack)
             .OnComplete(() => Destroy(gameObject));
+        
     }
 }

@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
+using VRTK;
 
 public class TutorialDirector : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
-    [SerializeField] ControllerTutorial controllerTutorial;
+    //[SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
     [Header("Audio Settings")]
@@ -36,6 +37,10 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] private float machineOffsetY = -2.5f;
     [SerializeField] private float machineOffsetZ = -1.5f;
 
+    [Header("Controller Settings")] 
+    [SerializeField] ControllerTutorial leftController;
+    [SerializeField] ControllerTutorial rightController;
+    
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
@@ -142,15 +147,27 @@ public class TutorialDirector : MonoBehaviour
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
 
-        if (didPulse || !controllerTutorial)
+        if (didPulse || !rightController || !leftController)
             yield break;
 
-        controllerTutorial.gameObject.SetActive(true);
+        
+        if(radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerLeftHand()))
+        {
+            leftController.gameObject.SetActive(true);
+        }
+        
+        if(radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerRightHand()))
+        {
+            rightController.gameObject.SetActive(true);
+        }
         
         yield return new WaitUntil(() => didPulse);
 
-        if (controllerTutorial)
-            controllerTutorial.Remove();
+        if (rightController)
+            rightController.Remove();
+        
+        if (leftController)
+            leftController.Remove();
     }
 
     private IEnumerator MachineMoveAwayCoroutine()
