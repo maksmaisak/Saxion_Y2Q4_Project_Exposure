@@ -6760,7 +6760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBeforeStart: 1
-  delayAfterInfographics: 3
+  delayAfterInfographics: 6
   rotatingDuration: 4.6
   radarController: {fileID: 5256177348563802413}
   rotateTransform: {fileID: 5662344087870142097}
@@ -7314,6 +7314,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8694910964969780332}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &6198496074467598570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
+    type: 3}
+  m_PrefabInstance: {fileID: 8694910964969780332}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5256177348563802413 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3484438141555027265, guid: a6190a9bc8421454c9e194018e6faa34,
@@ -7326,9 +7332,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c37935f50c1d86439fea1289fc70f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6198496074467598570 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
-    type: 3}
-  m_PrefabInstance: {fileID: 8694910964969780332}
-  m_PrefabAsset: {fileID: 0}

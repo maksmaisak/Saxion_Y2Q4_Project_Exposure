@@ -193,7 +193,7 @@ MonoBehaviour:
   - {fileID: 3796416997680495748}
   - {fileID: 1948192411}
   crossFadeDuration: 0.5
-  imageOnScreenDuration: 2
+  imageOnScreenDuration: 3
   startActive: 0
 --- !u!1 &1784896742663629155
 GameObject:

@@ -2,12 +2,10 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 
 public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] float delayBeforeStart = 2.0f;
-    [SerializeField] float delayAfterInfographics = 2.0f;
     [SerializeField] float rotatingDuration = 4.235f;
     [Space] 
     [SerializeField] RadarController radarController;
@@ -33,11 +31,12 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
     
     [Space]
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
-    [SerializeField] private float machineOffsetY = -2.5f;
-    [SerializeField] private float machineOffsetZ = -1.5f;
+    [SerializeField] float machineOffsetY = -2.5f;
+    [SerializeField] float machineOffsetZ = -1.5f;
     
     [Space]
-    [SerializeField] private Infographics infographic;
+    [SerializeField] Infographics infographics;
+    [SerializeField] float infographicsAppearDelay = 0.5f;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -60,8 +59,8 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     public void On(OnRevealEvent revealEvent)
     {
-        if (infographic)
-            infographic.Hide();
+        if (infographics)
+            infographics.Hide();
     }
 
     private void EnsureIsInitializedCorrectly()
@@ -83,12 +82,6 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         radarTool.SetPulseSettings(MakeOverridePulseSettings(oldPulseSettings));
 
         yield return new WaitForSeconds(delayBeforeStart);
-
-        if (infographic)
-        {
-            infographic.Show();
-            yield return new WaitForSeconds(delayAfterInfographics);
-        }
 
         // Turn Right and Play Sound
         yield return RotateMachine(Vector3.up * 90.0f, rotatingDuration)
@@ -121,12 +114,14 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-        
+
         StartCoroutine(HandTutorialCoroutine());
         StartCoroutine(ControllerTutorialCoroutine());
+        StartCoroutine(InfographicsCoroutine());
         
         yield return StartCoroutine(MachineMoveAwayCoroutine());
-        Destroy(gameObject);
+
+        gameObject.SetActive(false);
     }
     
     private IEnumerator HandTutorialCoroutine()
@@ -165,6 +160,15 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         if (controllerTutorial)
             controllerTutorial.Remove();
+    }
+
+    private IEnumerator InfographicsCoroutine()
+    {
+        yield return new WaitUntil(() => radarController.IsGrabbed());
+        yield return new WaitForSeconds(infographicsAppearDelay);
+
+        if (infographics)
+            infographics.Show();
     }
 
     private IEnumerator MachineMoveAwayCoroutine()
