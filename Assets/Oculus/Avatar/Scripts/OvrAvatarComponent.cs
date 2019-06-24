@@ -34,9 +34,7 @@ public class OvrAvatarComponent : MonoBehaviour
         for (UInt32 renderPartIndex = 0; renderPartIndex < component.renderPartCount; renderPartIndex++)
         {
             if (RenderParts.Count <= renderPartIndex)
-            {
                 break;
-            }
 
             OvrAvatarRenderComponent renderComponent = RenderParts[(int)renderPartIndex];
             IntPtr renderPart = OvrAvatar.GetRenderPart(component, renderPartIndex);
@@ -44,6 +42,8 @@ public class OvrAvatarComponent : MonoBehaviour
             switch (type)
             {
                 case ovrAvatarRenderPartType.SkinnedMeshRender:
+                    if (!renderComponent)
+                        break;
                     ((OvrAvatarSkinnedMeshRenderComponent)renderComponent).UpdateSkinnedMeshRender(this, avatar, renderPart);
                     break;
                 case ovrAvatarRenderPartType.SkinnedMeshRenderPBS:
