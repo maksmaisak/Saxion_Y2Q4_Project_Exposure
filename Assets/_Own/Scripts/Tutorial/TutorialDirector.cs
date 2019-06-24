@@ -30,14 +30,13 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     
-    [FormerlySerializedAs("timeForMachineToDisappear")]
     [Space]
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
     [SerializeField] private float machineOffsetY = -2.5f;
     [SerializeField] private float machineOffsetZ = -1.5f;
     
     [Space]
-    [SerializeField] private Transform infographic;
+    [SerializeField] private Infographics infographic;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -60,8 +59,14 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     public void ShowInfoGraphic()
     {
-        infographic.gameObject.SetActive(true);
-        infographic.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+        if (infographic)
+            infographic.Show();
+    }
+
+    public void On(OnRevealEvent revealEvent)
+    {
+        if (infographic)
+            infographic.Hide();
     }
 
     private void EnsureIsInitializedCorrectly()
@@ -247,6 +252,4 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
             return true;
         });
     }
-
-    public void On(OnRevealEvent revealEvent) => infographic.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(infographic.gameObject));
 }
