@@ -37,7 +37,7 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] private float machineOffsetZ = -1.5f;
     
     [Space]
-    [SerializeField] private GameObject infographicsImage;
+    [SerializeField] private Transform infographic;
 
     private RadarTool radarTool;
     private bool isTutorialRunning;
@@ -57,7 +57,13 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         isTutorialRunning = true;
         StartCoroutine(TutorialCoroutine());
     }
-    
+
+    public void ShowInfoGraphic()
+    {
+        infographic.gameObject.SetActive(true);
+        infographic.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+    }
+
     private void EnsureIsInitializedCorrectly()
     {
         Assert.IsNotNull(radarController);
@@ -242,5 +248,5 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         });
     }
 
-    public void On(OnRevealEvent revealEvent) => infographicsImage.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
+    public void On(OnRevealEvent revealEvent) => infographic.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
 }
