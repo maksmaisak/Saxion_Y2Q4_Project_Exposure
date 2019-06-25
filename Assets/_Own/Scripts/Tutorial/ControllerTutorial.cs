@@ -34,20 +34,11 @@ public class ControllerTutorial : MonoBehaviour
             .From()
             .SetEase(Ease.OutCirc);
 
-        controllerToRotate.localRotation = Quaternion.Euler(0, 45.0f, 0);
-
+        controllerToRotate.localRotation = Quaternion.Euler(0, degreesToRotate * 0.5f, 0);
         controllerToRotate
-            .DORotate(new Vector3(0, -degreesToRotate, 0), rotationDuration, RotateMode.LocalAxisAdd)
-            .SetEase(Ease.Linear)
+            .DOLocalRotate(new Vector3(0, -degreesToRotate, 0), rotationDuration, RotateMode.LocalAxisAdd)
+            .SetEase(Ease.InOutQuad)
             .SetLoops(-1, LoopType.Yoyo);
-    }
-
-    private void Update()
-    {
-        if (cameraTransform == null)
-            return;
-
-        transform.rotation = Quaternion.LookRotation(cameraTransform.position - transform.position);
     }
 
     public void Remove()
