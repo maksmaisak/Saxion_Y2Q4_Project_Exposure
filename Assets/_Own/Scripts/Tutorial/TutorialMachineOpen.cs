@@ -21,7 +21,7 @@ public class TutorialMachineOpen
         Assert.IsNotNull(leftCabinet);
         Assert.IsNotNull(rightCabinet);
 
-        return DOTween.Sequence()
+        return DOTween.Sequence().SetTarget(radarController)
             .Join(leftCabinet.DORotate(new Vector3(0, -90.0f, 0), openCabinetDuration).SetEase(Ease.InOutQuart))
             .Join(rightCabinet.DORotate(new Vector3(0, 90.0f, 0), openCabinetDuration).SetEase(Ease.InOutQuart))
             .Append(radarController.DOLocalMoveZ(-slideOutZOffset, slideOutDuration).SetRelative()

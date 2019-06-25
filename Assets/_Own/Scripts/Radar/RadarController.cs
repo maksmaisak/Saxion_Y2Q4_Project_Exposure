@@ -119,16 +119,17 @@ public class RadarController : VRTK_InteractableObject
     {
         if (!isGrabbable)
             return;
-        
-        base.StartTouching(currentTouchingObject);
+
         if (!currentTouchingObject)
             return;
+
+        transform.DOKill();
+
+        base.StartTouching(currentTouchingObject);
 
         var interactGrab = currentTouchingObject.GetComponent<VRTK_InteractGrab>();
         if (!interactGrab)
             return;
-        
-        transform.DOKill();
 
         interactGrab.AttemptGrab();
     }
