@@ -29,7 +29,6 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     {
         base.Awake();
         
-        
         originalScale = transform.localScale;
 
         if (!startActive)
@@ -52,7 +51,9 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     public void Show()
     {
         PlayAudioOnShow();
-        
+
+        ResetImageAlphas();
+
         Transform tf = transform;
         tf.DOKill();
         tf.localScale = Vector3.zero;
@@ -62,7 +63,6 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
 
         this.DOKill();
         DoFadeSequence().SetLoops(-1);
-        
     }
 
     public void Hide()
@@ -72,7 +72,28 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
         tf
             .DOScale(Vector3.zero, hideDuration)
             .SetEase(Ease.InBack)
-            .OnComplete(() => this.DOKill());
+            .OnComplete(() =>
+            {
+                this.DOKill();
+                ResetImageAlphas();
+            });
+    }
+
+    private void ResetImageAlphas()
+    {
+        if (images.Length == 0)
+            return;
+
+        SetAlpha(images[0], 1.0f);
+        for (int i = 1; i < images.Length; ++i)
+            SetAlpha(images[i], 0.0f);
+    }
+
+    private static void SetAlpha(Image image, float alpha)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
     }
 
     private Sequence DoFadeSequence()
