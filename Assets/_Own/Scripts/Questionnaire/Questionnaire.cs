@@ -11,6 +11,8 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
     [SerializeField] GameObject objectsParent;
     [SerializeField] QuestionnaireButton[] buttons;
+    [SerializeField] float startDelay = 4.0f;
+    [SerializeField] float delayBetweenQuestionPanels = 2.0f;
     [SerializeField] float showButtonsDelay = 1.0f;
     [SerializeField] float showButtonsPerButtonDelay = 0.5f;
 
@@ -57,31 +59,25 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
     private IEnumerator PlayCoroutine()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(startDelay);
         
         int[] answers = new int[questionPanels.Length];
-        bool areButtonsShown = false;
         for (int i = 0; i < questionPanels.Length; ++i)
         {
-            yield return new WaitForSeconds(2.0f);
-
             questionPanels[i].Show();
-
-            if (!areButtonsShown)
-            {
-                yield return new WaitForSeconds(showButtonsDelay);
-                yield return ShowButtons().WaitForCompletion();
-                areButtonsShown = true;
-            }
-
+            
+            yield return new WaitForSeconds(showButtonsDelay);
+            yield return ShowButtons().WaitForCompletion();
+            
             lastPressedButtonIndex = -1;
             yield return new WaitUntil(() => lastPressedButtonIndex != -1);
             answers[i] = lastPressedButtonIndex + 1;
-
-            if (i + 1 < questionPanels.Length)
-                this.Delay(2.0f, buttons[lastPressedButtonIndex].Show);
+            
+            yield return HideButtons().WaitForCompletion();
 
             questionPanels[i].Hide();
+            
+            yield return new WaitForSeconds(delayBetweenQuestionPanels);
         }
 
         HideButtons();
