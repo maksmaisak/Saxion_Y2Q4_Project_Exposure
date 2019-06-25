@@ -22,18 +22,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     protected override void Awake()
     {
         base.Awake();
-        
-     
-        Assert.IsNotNull(objectsParent);
-        if (!showOnStart)
-            objectsParent.SetActive(false);
-    }
 
-    void Start()
-    {
         navpoints = FindObjectsOfType<Navpoint>();
         questionPanels = GetComponentsInChildren<QuestionnairePanel>();
-        
+
         for (int i = 0; i < buttons.Length; ++i)
         {
             int answer = i + 1;
@@ -44,8 +36,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
                 this.Delay(1.0f, button.Show);
             });
         }
-        
-        Play();
+
+        Assert.IsNotNull(objectsParent);
+        if (!showOnStart)
+            objectsParent.SetActive(false);
     }
     
     public void On(OnTeleportEvent message)
@@ -54,6 +48,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
             return;
         
         objectsParent.SetActive(true);
+        Play();
     }
 
     public Coroutine Play()
