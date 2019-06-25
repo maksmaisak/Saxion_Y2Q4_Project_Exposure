@@ -139,7 +139,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.1
   MaxDistance: 20
   Pan2D: 0
   rolloffMode: 0
@@ -345,10 +345,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 128091148435443905}
     m_Modifications:
-    - target: {fileID: 1000011401907096, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
-      propertyPath: m_Name
-      value: ControllerRigidbodyActivator
-      objectReference: {fileID: 0}
     - target: {fileID: 4000014230070706, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -392,6 +388,10 @@ PrefabInstance:
     - target: {fileID: 4000014230070706, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011401907096, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
+      propertyPath: m_Name
+      value: ControllerRigidbodyActivator
       objectReference: {fileID: 0}
     - target: {fileID: 54000011260950592, guid: 33a096ef14a38e543af97bd67de0db31,
         type: 3}
