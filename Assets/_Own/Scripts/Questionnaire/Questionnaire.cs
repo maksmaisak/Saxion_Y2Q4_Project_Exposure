@@ -69,6 +69,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
             if (!areButtonsShown)
             {
+                yield return new WaitForSeconds(showButtonsDelay);
                 yield return ShowButtons().WaitForCompletion();
                 areButtonsShown = true;
             }
@@ -99,8 +100,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         this.DOKill();
         var sequence = DOTween
             .Sequence()
-            .SetTarget(this)
-            .AppendInterval(showButtonsDelay);
+            .SetTarget(this);
 
         for (int i = 0; i < buttons.Length; ++i)
         {
