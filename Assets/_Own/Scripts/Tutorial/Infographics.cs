@@ -1,24 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class Infographics : MonoBehaviour
+public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] Image[] images;
     [SerializeField] float crossFadeDuration = 1.0f;
     [SerializeField] float imageOnScreenDuration = 2.0f;
+    
     [SerializeField] bool startActive = false;
+    [SerializeField] private List<Navpoint> appearAt;
 
-    void Awake()
+    protected override void Awake()
     {
-        gameObject.SetActive(startActive);
+        base.Awake();
+        
+        if (!startActive) 
+            this.DoNextFrame(() => gameObject.SetActive(false));
     }
 
     void OnEnable()
     {
         this.DOKill();
         DoFadeSequence().SetLoops(-1);
+    }
+    
+    public void On(OnTeleportEvent message)
+    {
+        if (appearAt.Contains(message.navpoint))
+            Show();
+    }
+
+    public void On(OnRevealEvent message)
+    {
+        Hide();
     }
 
     public void Show()
@@ -38,7 +55,7 @@ public class Infographics : MonoBehaviour
         transform
             .DOScale(Vector3.zero, 0.5f)
             .SetEase(Ease.InBack)
-            .OnComplete(() => Destroy(gameObject));
+            .OnComplete(() => gameObject.SetActive(false));
     }
 
     private Sequence DoFadeSequence()

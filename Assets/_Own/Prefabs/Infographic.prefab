@@ -195,6 +195,7 @@ MonoBehaviour:
   crossFadeDuration: 0.5
   imageOnScreenDuration: 3
   startActive: 0
+  appearAt: []
 --- !u!1 &1784896742663629155
 GameObject:
   m_ObjectHideFlags: 0
