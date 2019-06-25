@@ -6,6 +6,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using VRTK;
 
 public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
@@ -41,6 +42,17 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         Assert.IsNotNull(objectsParent);
         if (!showOnStart)
             objectsParent.SetActive(false);
+    }
+
+    IEnumerator Start()
+    {
+        var follow = objectsParent.GetComponent<VRTK_TransformFollow>();
+        if (!follow)
+            yield break;
+
+        Transform cameraTransform = null;
+        yield return new WaitUntil(() => cameraTransform = VRTK_DeviceFinder.HeadsetCamera());
+        follow.gameObjectToFollow = cameraTransform.gameObject;
     }
     
     public void On(OnTeleportEvent message)
