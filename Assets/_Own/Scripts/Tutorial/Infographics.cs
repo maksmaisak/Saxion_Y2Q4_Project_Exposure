@@ -13,7 +13,9 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     [SerializeField] float hideDuration = 0.5f;
     [Space]
     [SerializeField] bool startActive = false;
-    [SerializeField] private List<Navpoint> appearAt;
+    
+    [SerializeField] List<Navpoint> appearAt;
+    [SerializeField] float showDelayAfterTeleport = 2.0f;
 
     private Vector3 originalScale = Vector3.one;
 
@@ -36,7 +38,7 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     public void On(OnTeleportEvent message)
     {
         if (appearAt.Contains(message.navpoint))
-            Show();
+            this.Delay(showDelayAfterTeleport, Show);
     }
 
     public void On(OnRevealEvent message)
