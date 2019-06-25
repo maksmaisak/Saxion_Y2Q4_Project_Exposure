@@ -5556,9 +5556,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBeforeStart: 2
-  rotatingDuration: 4.6
   radarController: {fileID: 5256177348563802413}
   rotateTransform: {fileID: 5662344087870142097}
+  rotatingDuration: 4.6
   overrideWavespherePrefab: {fileID: 6376555769719011767, guid: 8de53bace70574f7aa681f287bfd2245,
     type: 3}
   overridePulseSpeed: 1
@@ -5567,7 +5567,7 @@ MonoBehaviour:
   opening:
     leftCabinet: {fileID: 4633928860258558124}
     rightCabinet: {fileID: 767720759172266831}
-    radarGun: {fileID: 6198496074467598570}
+    radarController: {fileID: 6198496074467598570}
     openCabinetDuration: 1.5
     slideOutDuration: 1.5
     slideOutZOffset: 1
@@ -5582,6 +5582,8 @@ MonoBehaviour:
   delayAfterGunIsGrabbed: 0.5
   machineOffsetY: -2.5
   machineOffsetZ: -1.5
+  infographics: {fileID: 0}
+  infographicsAppearDelay: 0.5
   leftController: {fileID: 8954735879987893313}
   rightController: {fileID: 893418524702273683}
 --- !u!114 &779227063

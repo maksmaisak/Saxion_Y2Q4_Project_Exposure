@@ -108,14 +108,14 @@ public class TutorialDirector : MyBehaviour
         yield return RotateMachine(Vector3.forward, rotatingDuration)
             .WaitForCompletion();
 
-        // Open
-        yield return opening.Open().WaitForCompletion();
-        
         // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
 
+        // Open
+        yield return opening.Open().WaitForCompletion();
+        
         StartCoroutine(HandTutorialCoroutine());
         yield return new WaitUntil(() => radarController.IsGrabbed());
         StartCoroutine(ControllerTutorialCoroutine());
