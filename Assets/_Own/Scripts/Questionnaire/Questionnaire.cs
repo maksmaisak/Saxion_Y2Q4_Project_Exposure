@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
+    [SerializeField] GameObject objectsParent;
     [SerializeField] QuestionnaireButton[] buttons;
 
     [Header("Debug")] 
@@ -21,8 +23,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     {
         base.Awake();
         
+     
+        Assert.IsNotNull(objectsParent);
         if (!showOnStart)
-            gameObject.SetActive(false);
+            objectsParent.SetActive(false);
     }
 
     void Start()
@@ -49,7 +53,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         if (!navpoints.All(n => n.isUsed)) 
             return;
         
-        gameObject.SetActive(true);
+        objectsParent.SetActive(true);
     }
 
     public Coroutine Play()

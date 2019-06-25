@@ -14,7 +14,9 @@ public class QuestionnaireButton : MonoBehaviour
     private bool canBeTouched = true;
     private bool startHidden = true;
 
-    void Start()
+    private Transform lookAtTransform;
+
+    IEnumerator Start()
     {
         if (startHidden)
         {
@@ -23,6 +25,21 @@ public class QuestionnaireButton : MonoBehaviour
         }
 
         GetComponent<VRTK_InteractableObject>().InteractableObjectTouched += OnInteractableObjectTouched;
+
+        yield return new WaitUntil(() =>
+        {
+            var camera = Camera.main;
+            if (camera) 
+                lookAtTransform = camera.transform;
+
+            return lookAtTransform;
+        });
+    }
+
+    void LateUpdate()
+    {
+        if (lookAtTransform)
+            transform.LookAt(lookAtTransform);
     }
 
     void OnInteractableObjectTouched(object sender, InteractableObjectEventArgs e)
