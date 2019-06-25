@@ -17,12 +17,19 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     [SerializeField] List<Navpoint> appearAt;
     [SerializeField] float showDelayAfterTeleport = 2.0f;
 
+    [Space] 
+    [SerializeField] AudioClip showAudioClip;
+
     private Vector3 originalScale = Vector3.one;
+    private AudioSource audioSource;
+
+    private void Start() => audioSource = GetComponent<AudioSource>();
 
     protected override void Awake()
     {
         base.Awake();
-
+        
+        
         originalScale = transform.localScale;
 
         if (!startActive)
@@ -44,6 +51,8 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
 
     public void Show()
     {
+        PlayAudioOnShow();
+        
         Transform tf = transform;
         tf.DOKill();
         tf.localScale = Vector3.zero;
@@ -53,6 +62,7 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
 
         this.DOKill();
         DoFadeSequence().SetLoops(-1);
+        
     }
 
     public void Hide()
@@ -84,5 +94,11 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
         return DOTween.Sequence()
             .Join(fadeOut.DOFade(0.0f, crossFadeDuration))
             .Join(fadeIn .DOFade(1.0f, crossFadeDuration));
+    }
+
+    private void PlayAudioOnShow()
+    {
+        audioSource.clip = showAudioClip;
+        audioSource.Play();
     }
 }
