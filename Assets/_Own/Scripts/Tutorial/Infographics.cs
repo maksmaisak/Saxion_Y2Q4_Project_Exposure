@@ -22,17 +22,13 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     protected override void Awake()
     {
         base.Awake();
-        
-        if (!startActive) 
-            this.DoNextFrame(() => gameObject.SetActive(false));
 
         originalScale = transform.localScale;
-    }
 
-    void OnEnable()
-    {
-        this.DOKill();
-        DoFadeSequence().SetLoops(-1);
+        if (!startActive)
+            transform.localScale = Vector3.zero;
+        else
+            Show();
     }
     
     public void On(OnTeleportEvent message)
@@ -48,14 +44,15 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
 
     public void Show()
     {
-        gameObject.SetActive(true);
-
         Transform tf = transform;
         tf.DOKill();
         tf.localScale = Vector3.zero;
         tf
             .DOScale(originalScale, showDuration)
             .SetEase(Ease.OutBack);
+
+        this.DOKill();
+        DoFadeSequence().SetLoops(-1);
     }
 
     public void Hide()
@@ -65,7 +62,7 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
         tf
             .DOScale(Vector3.zero, hideDuration)
             .SetEase(Ease.InBack)
-            .OnComplete(() => gameObject.SetActive(false));
+            .OnComplete(() => this.DOKill());
     }
 
     private Sequence DoFadeSequence()
