@@ -24,7 +24,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     private QuestionnairePanel[] questionPanels;
     
     private int lastPressedButtonIndex = -1;
-
+    
     protected override void Awake()
     {
         base.Awake();
@@ -44,17 +44,6 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
             objectsParent.SetActive(false);
     }
 
-    IEnumerator Start()
-    {
-        var follow = objectsParent.GetComponent<VRTK_TransformFollow>();
-        if (!follow)
-            yield break;
-
-        Transform cameraTransform = null;
-        yield return new WaitUntil(() => cameraTransform = VRTK_DeviceFinder.HeadsetCamera());
-        follow.gameObjectToFollow = cameraTransform.gameObject;
-    }
-    
     public void On(OnTeleportEvent message)
     {
         if (!navpoints.All(n => n.isUsed)) 
