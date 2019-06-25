@@ -247,8 +247,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeZoom:
-    transitionDuration: 0.1
-    fadedOutScale: 2
+    transitionDuration: 0.5
+    fadedOutScale: 1.2
   canvasGroup: {fileID: 4026591519397919658}
 --- !u!225 &4026591519397919658
 CanvasGroup:

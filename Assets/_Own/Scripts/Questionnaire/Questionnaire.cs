@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,14 +11,16 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
     [SerializeField] GameObject objectsParent;
     [SerializeField] QuestionnaireButton[] buttons;
+    [SerializeField] float showButtonsDelay = 1.0f;
+    [SerializeField] float showButtonsPerButtonDelay = 0.5f;
 
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
-    
+
     private Navpoint[] navpoints;
     private QuestionnairePanel[] questionPanels;
     
-    private int currentAnswer = -1;
+    private int lastPressedButtonIndex = -1;
 
     protected override void Awake()
     {
@@ -28,13 +31,9 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
         for (int i = 0; i < buttons.Length; ++i)
         {
-            int answer = i + 1;
+            int index = i;
             QuestionnaireButton button = buttons[i];
-            button.onActivate.AddListener(() =>
-            {
-                currentAnswer = answer;
-                this.Delay(1.0f, button.Show);
-            });
+            button.onActivate.AddListener(() => lastPressedButtonIndex = index);
         }
 
         Assert.IsNotNull(objectsParent);
@@ -58,10 +57,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
     private IEnumerator PlayCoroutine()
     {
-        int[] answers = new int[questionPanels.Length];
-
-        bool areButtonsShown = false;
+        yield return new WaitForSeconds(2.0f);
         
+        int[] answers = new int[questionPanels.Length];
+        bool areButtonsShown = false;
         for (int i = 0; i < questionPanels.Length; ++i)
         {
             yield return new WaitForSeconds(2.0f);
@@ -70,21 +69,22 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
             if (!areButtonsShown)
             {
-                foreach (QuestionnaireButton button in buttons)
-                {
-                    yield return new WaitForSeconds(0.4f);
-                    button.Show();
-                }
+                yield return ShowButtons().WaitForCompletion();
                 areButtonsShown = true;
             }
 
-            currentAnswer = -1;
-            yield return new WaitUntil(() => currentAnswer != -1);
-            answers[i] = currentAnswer;
+            lastPressedButtonIndex = -1;
+            yield return new WaitUntil(() => lastPressedButtonIndex != -1);
+            answers[i] = lastPressedButtonIndex + 1;
+
+            if (i + 1 < questionPanels.Length)
+                this.Delay(2.0f, buttons[lastPressedButtonIndex].Show);
 
             questionPanels[i].Hide();
         }
 
+        HideButtons();
+        
         AddToFile(answers);
     }
 
@@ -92,6 +92,37 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     private void FindButtons()
     {
         buttons = GetComponentsInChildren<QuestionnaireButton>();
+    }
+
+    private Sequence ShowButtons()
+    {
+        this.DOKill();
+        var sequence = DOTween
+            .Sequence()
+            .SetTarget(this)
+            .AppendInterval(showButtonsDelay);
+
+        for (int i = 0; i < buttons.Length; ++i)
+        {
+            float delay = showButtonsPerButtonDelay * Mathf.Abs(buttons.Length * 0.5f - 0.5f - i);
+            sequence.Join(DOTween.Sequence()
+                .AppendInterval(delay)
+                .AppendCallback(buttons[i].Show)
+            );
+        }
+
+        return sequence;
+    }
+
+    private Sequence HideButtons()
+    {
+        this.DOKill();
+        var sequence = DOTween.Sequence().SetTarget(this);
+
+        foreach (QuestionnaireButton button in buttons)
+            sequence.AppendCallback(button.Hide);
+
+        return sequence;
     }
     
     private void AddToFile(int[] answers)
