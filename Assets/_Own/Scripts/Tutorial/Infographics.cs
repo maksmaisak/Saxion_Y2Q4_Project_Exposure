@@ -9,9 +9,13 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     [SerializeField] Image[] images;
     [SerializeField] float crossFadeDuration = 1.0f;
     [SerializeField] float imageOnScreenDuration = 2.0f;
-    
+    [SerializeField] float showDuration = 0.5f;
+    [SerializeField] float hideDuration = 0.5f;
+    [Space]
     [SerializeField] bool startActive = false;
     [SerializeField] private List<Navpoint> appearAt;
+
+    private Vector3 originalScale = Vector3.one;
 
     protected override void Awake()
     {
@@ -19,6 +23,8 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
         
         if (!startActive) 
             this.DoNextFrame(() => gameObject.SetActive(false));
+
+        originalScale = transform.localScale;
     }
 
     void OnEnable()
@@ -41,19 +47,21 @@ public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEvent
     public void Show()
     {
         gameObject.SetActive(true);
-        
-        transform.DOKill();
-        transform
-            .DOScale(Vector3.zero, 0.5f)
-            .From()
+
+        Transform tf = transform;
+        tf.DOKill();
+        tf.localScale = Vector3.zero;
+        tf
+            .DOScale(originalScale, showDuration)
             .SetEase(Ease.OutBack);
     }
 
     public void Hide()
     {
-        transform.DOKill();
-        transform
-            .DOScale(Vector3.zero, 0.5f)
+        Transform tf = transform;
+        tf.DOKill();
+        tf
+            .DOScale(Vector3.zero, hideDuration)
             .SetEase(Ease.InBack)
             .OnComplete(() => gameObject.SetActive(false));
     }
