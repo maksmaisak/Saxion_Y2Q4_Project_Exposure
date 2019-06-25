@@ -5784,9 +5784,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBeforeStart: 2
-  rotatingDuration: 4.6
   radarController: {fileID: 4140333584319105467}
   rotateTransform: {fileID: 8179902543666377530}
+  rotatingDuration: 4.6
   overrideWavespherePrefab: {fileID: 6376555769719011767, guid: 8de53bace70574f7aa681f287bfd2245,
     type: 3}
   overridePulseSpeed: 1
@@ -5993,10 +5993,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7661617880394370654}
     m_Modifications:
-    - target: {fileID: 100086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
-      propertyPath: m_Name
-      value: VRTK_BasicHand
-      objectReference: {fileID: 0}
     - target: {fileID: 400086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6041,6 +6037,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
+      propertyPath: m_Name
+      value: VRTK_BasicHand
+      objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -6060,11 +6060,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8179902543648490707}
     m_Modifications:
-    - target: {fileID: 128091148868383079, guid: 43012c1a486f66545ad519c4260a33ba,
-        type: 3}
-      propertyPath: m_Name
-      value: PushDownButton
-      objectReference: {fileID: 0}
     - target: {fileID: 128091148435443907, guid: 43012c1a486f66545ad519c4260a33ba,
         type: 3}
       propertyPath: stayPressed
@@ -6124,6 +6119,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 128091148868383079, guid: 43012c1a486f66545ad519c4260a33ba,
+        type: 3}
+      propertyPath: m_Name
+      value: PushDownButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43012c1a486f66545ad519c4260a33ba, type: 3}
