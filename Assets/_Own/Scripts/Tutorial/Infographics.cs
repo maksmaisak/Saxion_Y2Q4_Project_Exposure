@@ -1,44 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class Infographics : MonoBehaviour
+public class Infographics : MyBehaviour, IEventReceiver<OnTeleportEvent>, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] Image[] images;
     [SerializeField] float crossFadeDuration = 1.0f;
     [SerializeField] float imageOnScreenDuration = 2.0f;
+    [SerializeField] float showDuration = 0.5f;
+    [SerializeField] float hideDuration = 0.5f;
+    [Space]
     [SerializeField] bool startActive = false;
+    
+    [SerializeField] List<Navpoint> appearAt;
+    [SerializeField] float showDelayAfterTeleport = 2.0f;
 
-    void Awake()
+    private Vector3 originalScale = Vector3.one;
+
+    protected override void Awake()
     {
-        gameObject.SetActive(startActive);
+        base.Awake();
+
+        originalScale = transform.localScale;
+
+        if (!startActive)
+            transform.localScale = Vector3.zero;
+        else
+            Show();
+    }
+    
+    public void On(OnTeleportEvent message)
+    {
+        if (appearAt.Contains(message.navpoint))
+            this.Delay(showDelayAfterTeleport, Show);
     }
 
-    void OnEnable()
+    public void On(OnRevealEvent message)
     {
-        this.DOKill();
-        DoFadeSequence().SetLoops(-1);
+        Hide();
     }
 
     public void Show()
     {
-        gameObject.SetActive(true);
-        
-        transform.DOKill();
-        transform
-            .DOScale(Vector3.zero, 0.5f)
-            .From()
+        Transform tf = transform;
+        tf.DOKill();
+        tf.localScale = Vector3.zero;
+        tf
+            .DOScale(originalScale, showDuration)
             .SetEase(Ease.OutBack);
+
+        this.DOKill();
+        DoFadeSequence().SetLoops(-1);
     }
 
     public void Hide()
     {
-        transform.DOKill();
-        transform
-            .DOScale(Vector3.zero, 0.5f)
+        Transform tf = transform;
+        tf.DOKill();
+        tf
+            .DOScale(Vector3.zero, hideDuration)
             .SetEase(Ease.InBack)
-            .OnComplete(() => Destroy(gameObject));
+            .OnComplete(() => this.DOKill());
     }
 
     private Sequence DoFadeSequence()

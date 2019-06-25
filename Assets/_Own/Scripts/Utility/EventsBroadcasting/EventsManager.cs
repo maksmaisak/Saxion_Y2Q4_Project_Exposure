@@ -124,7 +124,8 @@ public class EventsManager : PersistentSingleton<EventsManager>
         public bool Add(object obj)
         {
             var receiver = obj as IEventReceiver<TEvent>;
-            if (receiver == null) return false;
+            if (receiver == null)
+                return false;
 
             BroadcastEvent<TEvent>.handlers += receiver.On;
             return true;
@@ -133,8 +134,9 @@ public class EventsManager : PersistentSingleton<EventsManager>
         public bool Remove(object obj)
         {
             var receiver = obj as IEventReceiver<TEvent>;
-            if (receiver == null) return false;
-
+            if (receiver == null)
+                return false;
+            
             BroadcastEvent<TEvent>.handlers -= receiver.On;
             return true;
         }

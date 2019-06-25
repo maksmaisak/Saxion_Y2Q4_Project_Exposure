@@ -2,21 +2,23 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using VRTK;
 
-public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
+public class TutorialDirector : MyBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
-    [SerializeField] float rotatingDuration = 4.235f;
+    
     [Space] 
     [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
-    [Space] 
+    [SerializeField] float rotatingDuration = 4.235f;
+
+    [Header("Wave Pulse Settings")] 
     [SerializeField] Wavesphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
     [SerializeField] int overrideMaxNumWavespheresPerPulse = -1;
+    
     [Space] 
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
@@ -30,12 +32,12 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     
-    [Space]
+    [Header("Machine Move Away Settings")]
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
     [SerializeField] float machineOffsetY = -2.5f;
     [SerializeField] float machineOffsetZ = -1.5f;
     
-    [Space]
+    [Header("Infographics Settings")]
     [SerializeField] Infographics infographics;
     [SerializeField] float infographicsAppearDelay = 0.5f;
 
@@ -61,13 +63,7 @@ public class TutorialDirector : MyBehaviour, IEventReceiver<OnRevealEvent>
         isTutorialRunning = true;
         StartCoroutine(TutorialCoroutine());
     }
-
-    public void On(OnRevealEvent revealEvent)
-    {
-        if (infographics)
-            infographics.Hide();
-    }
-
+    
     private void EnsureIsInitializedCorrectly()
     {
         Assert.IsNotNull(radarController);
