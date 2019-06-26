@@ -881,6 +881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5931039444470304575}
   - component: {fileID: 4378988894204404293}
+  - component: {fileID: 8839851975457622521}
   - component: {fileID: 2330248764544338023}
   m_Layer: 0
   m_Name: WalkyDorky_05
@@ -916,7 +917,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7211407782055869740}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 636741fb0b3677643b59a9f8ca4c7b56, type: 3}
   m_Controller: {fileID: 9100000, guid: 766c1c7b94006b041bc0475ff6e6cda7, type: 2}
   m_CullingMode: 0
@@ -927,6 +928,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8839851975457622521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7211407782055869740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94584770ed5b9b24dad680b89993313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onReveal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8839851975457622521}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  delay: 1
 --- !u!135 &2330248764544338023
 SphereCollider:
   m_ObjectHideFlags: 0
