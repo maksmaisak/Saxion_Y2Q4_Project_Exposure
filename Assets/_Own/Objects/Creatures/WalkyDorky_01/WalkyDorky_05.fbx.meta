@@ -9,7 +9,12 @@ ModelImporter:
   - first:
       74: -3100369314251171874
     second: Idle
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WalkyDorky
+    second: {fileID: 2100000, guid: 5d1fee48beab4334291dfa017e9db6fb, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -107,7 +112,7 @@ ModelImporter:
     importCameras: 1
     importLights: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
