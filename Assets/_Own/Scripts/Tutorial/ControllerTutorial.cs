@@ -2,6 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using VRTK;
 
 public class ControllerTutorial : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class ControllerTutorial : MonoBehaviour
     [SerializeField] Material highlightMaterial;
 
     private Transform cameraTransform;
+    private bool isRemoving = false;
 
     private IEnumerator Start()
     {
@@ -23,10 +25,12 @@ public class ControllerTutorial : MonoBehaviour
         
         trigger.sharedMaterial = highlightMaterial;
 
-        yield return new WaitUntil(() => Camera.main != null);
-
-        cameraTransform = Camera.main.transform;
-
+        yield return new WaitUntil(() => cameraTransform = VRTK_DeviceFinder.HeadsetCamera());
+        if (isRemoving)
+        {
+            Debug.Log("ControllerTutorial was removed before starting the appear tweens.");
+            yield break;
+        }
         transform.rotation = Quaternion.LookRotation(cameraTransform.position - transform.position);
 
         controllerToRotate
@@ -43,6 +47,8 @@ public class ControllerTutorial : MonoBehaviour
 
     public void Remove()
     {
+        isRemoving = true;
+        
         controllerToRotate.DOKill();
         controllerToRotate
             .DOScale(0.0f, 1.0f)

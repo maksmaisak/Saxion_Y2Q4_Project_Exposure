@@ -112,7 +112,7 @@ public class TutorialDirector : MyBehaviour
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-
+        
         // Open
         yield return opening.Open().WaitForCompletion();
         
@@ -147,8 +147,9 @@ public class TutorialDirector : MyBehaviour
         radarTool.onPulse.AddListener(OnPulse);
         void OnPulse()
         {
-            radarTool.onPulse.RemoveListener(OnPulse);
+            Assert.IsFalse(didPulse);
             didPulse = true;
+            radarTool.onPulse.RemoveListener(OnPulse);
         }
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);

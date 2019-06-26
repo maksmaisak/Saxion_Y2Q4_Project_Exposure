@@ -325,7 +325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2771574729084990788}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 1.052, z: 0.69299984}
+  m_LocalPosition: {x: 0, y: 0.9432, z: 0.69299984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7661617880394370654}
@@ -5829,7 +5829,7 @@ MonoBehaviour:
   controllable: {fileID: 8089529526918659933}
   handTransform: {fileID: 2742855060551116006}
   buttonTransform: {fileID: 8089529527362068198}
-  timeToDisapear: 0.5
+  timeToDisappear: 0.5
 --- !u!1 &8179902543666377531
 GameObject:
   m_ObjectHideFlags: 0
@@ -5870,6 +5870,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2854546788239372511}
     m_Modifications:
+    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
+        type: 3}
+      propertyPath: m_Name
+      value: RadarGun_02
+      objectReference: {fileID: 0}
     - target: {fileID: 3364184672998741126, guid: a6190a9bc8421454c9e194018e6faa34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5925,13 +5930,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1798244645049837205, guid: a6190a9bc8421454c9e194018e6faa34,
-        type: 3}
-      propertyPath: m_Name
-      value: RadarGun_02
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6190a9bc8421454c9e194018e6faa34, type: 3}
+--- !u!114 &661568941468835498 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1399732816, guid: a6190a9bc8421454c9e194018e6faa34,
+    type: 3}
+  m_PrefabInstance: {fileID: 661568940111062266}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28794e7c58a4a5841b2129e6ae73f10a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5185378596190332206 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5681421969482236372, guid: a6190a9bc8421454c9e194018e6faa34,
@@ -5974,18 +5986,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 661568940111062266}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &661568941468835498 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1399732816, guid: a6190a9bc8421454c9e194018e6faa34,
-    type: 3}
-  m_PrefabInstance: {fileID: 661568940111062266}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28794e7c58a4a5841b2129e6ae73f10a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2854562016475230705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5993,6 +5993,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7661617880394370654}
     m_Modifications:
+    - target: {fileID: 100086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
+      propertyPath: m_Name
+      value: VRTK_BasicHand
+      objectReference: {fileID: 0}
     - target: {fileID: 400086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6037,10 +6041,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100086, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
-      propertyPath: m_Name
-      value: VRTK_BasicHand
-      objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 9fbd4cfd43766cc4cbcb915ceafe52a9, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -6060,6 +6060,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8179902543648490707}
     m_Modifications:
+    - target: {fileID: 128091148868383079, guid: 43012c1a486f66545ad519c4260a33ba,
+        type: 3}
+      propertyPath: m_Name
+      value: PushDownButton
+      objectReference: {fileID: 0}
     - target: {fileID: 128091148435443907, guid: 43012c1a486f66545ad519c4260a33ba,
         type: 3}
       propertyPath: stayPressed
@@ -6119,11 +6124,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 128091148868383079, guid: 43012c1a486f66545ad519c4260a33ba,
-        type: 3}
-      propertyPath: m_Name
-      value: PushDownButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43012c1a486f66545ad519c4260a33ba, type: 3}
