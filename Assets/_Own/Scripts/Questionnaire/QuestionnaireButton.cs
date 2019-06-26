@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using VRTK;
 
-[RequireComponent(typeof(VRTK_InteractableObject))]
 public class QuestionnaireButton : MonoBehaviour
 {
     public UnityEvent onActivate;
@@ -23,9 +21,7 @@ public class QuestionnaireButton : MonoBehaviour
             transform.localScale = Vector3.zero;
             canBeTouched = false;
         }
-
-        GetComponent<VRTK_InteractableObject>().InteractableObjectTouched += OnInteractableObjectTouched;
-
+        
         yield return new WaitUntil(() =>
         {
             var camera = Camera.main;
@@ -41,12 +37,15 @@ public class QuestionnaireButton : MonoBehaviour
         if (lookAtTransform)
             transform.LookAt(lookAtTransform);
     }
-
-    void OnInteractableObjectTouched(object sender, InteractableObjectEventArgs e)
+    
+    void OnTriggerEnter(Collider other)
     {
         if (!canBeTouched)
             return;
         
+        if (!VRTK_PlayerObject.IsPlayerObject(other.gameObject, VRTK_PlayerObject.ObjectTypes.Controller))
+            return;
+
         canBeTouched = false;
         
         onActivate?.Invoke();
