@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 5383411932572277735}
   - component: {fileID: 5383411932572277728}
   - component: {fileID: 5383411932572277729}
-  - component: {fileID: 5383411932572277734}
   m_Layer: 0
   m_Name: QuestionnaireButton
   m_TagString: Untagged
@@ -176,21 +175,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
---- !u!114 &5383411932572277734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383411932572277732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda201177cd508f49849386d157bdd39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliderRadius: 0.2
-  customColliderContainer: {fileID: 0}
-  interactTouch: {fileID: 0}
 --- !u!1 &8539311548648178707
 GameObject:
   m_ObjectHideFlags: 0
