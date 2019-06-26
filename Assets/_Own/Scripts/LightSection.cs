@@ -31,7 +31,6 @@ public class LightSection : MonoBehaviour
     struct GameObjectSavedData
     {
         public RendererData[] renderers;
-        public ParticleSystem[] particleSystems;
     }
 
     [Header("General")]
@@ -135,7 +134,6 @@ public class LightSection : MonoBehaviour
     private List<GameObject> FindGameObjects()
     {
         IEnumerable<GameObject> withRenderer;
-        IEnumerable<GameObject> withParticleSystem;
         IEnumerable<GameObject> withCollider;
         
         if (isGlobal)
@@ -143,7 +141,6 @@ public class LightSection : MonoBehaviour
             lights = FindObjectsOfType<Light>().ToList();
 
             withRenderer       = FindObjectsOfType<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = FindObjectsOfType<ParticleSystem>().Select(ps => ps.gameObject);
             withCollider       = FindObjectsOfType<Collider>().Select(c => c.gameObject);
         }
         else
@@ -151,12 +148,10 @@ public class LightSection : MonoBehaviour
             lights = GetComponentsInChildren<Light>().ToList();
 
             withRenderer       = GetComponentsInChildren<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = GetComponentsInChildren<ParticleSystem>().Select(ps => ps.gameObject);
             withCollider       = GetComponentsInChildren<Collider>().Select(c => c.gameObject);
         }
 
         return withRenderer
-            .Union(withParticleSystem)
             .Union(withCollider)
             .Distinct()
             .Where(go => go != dotsParticleSystem.gameObject && !exceptionLayer.ContainsLayer(go.layer))
@@ -187,12 +182,6 @@ public class LightSection : MonoBehaviour
                 sharedMaterials = (Material[])rendererSharedMaterials.Clone(),
                 sectionOnlyMaterials = new Material[rendererSharedMaterials.Length]
             };
-        }).ToArray();
-
-        data.particleSystems = go.GetComponents<ParticleSystem>().Select(ps =>
-        {
-            ps.Stop();
-            return ps;
         }).ToArray();
 
         return data;
@@ -234,11 +223,6 @@ public class LightSection : MonoBehaviour
             .Where(d => d.renderer)
             .Each(d => d.renderer.sharedMaterials = d.sectionOnlyMaterials);
 
-        gameObjectData
-            .SelectMany(d => d.particleSystems)
-            .Where(p => p && !p.isPlaying)
-            .Each(p => p.Play());
-        
         // Fade in the section-wide materials
         var sectionSequence = DOTween.Sequence();
         gameObjectData
