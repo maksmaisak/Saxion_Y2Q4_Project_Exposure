@@ -897,9 +897,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7211407782055869740}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.0331194, y: -0.025850335, z: 0.0066340636}
-  m_LocalScale: {x: 0.808986, y: 0.808986, z: 0.808986}
+  m_LocalRotation: {x: 0.046986207, y: -0.8969543, z: -0.02299757, w: 0.4390177}
+  m_LocalPosition: {x: 7.694, y: -1.52, z: 5.775}
+  m_LocalScale: {x: 0.8089913, y: 0.8089899, z: 0.80899143}
   m_Children:
   - {fileID: 5772044769020446859}
   - {fileID: 6696631653207073029}
@@ -943,7 +943,7 @@ MonoBehaviour:
   onReveal:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8839851975457622521}
+      - m_Target: {fileID: 4378988894204404293}
         m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
@@ -956,7 +956,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  delay: 1
+  delay: 2
 --- !u!135 &2330248764544338023
 SphereCollider:
   m_ObjectHideFlags: 0
