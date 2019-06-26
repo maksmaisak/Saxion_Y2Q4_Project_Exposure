@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
-using DG.Tweening.Core.Easing;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Experimental.ParticleSystemJobs;
 
 /// Animates the dots created from one wavesphere
 public class DotsAnimator : MonoBehaviour
@@ -45,11 +42,9 @@ public class DotsAnimator : MonoBehaviour
 
         int numDots = positions.Count;
         Assert.IsTrue(numDots <= DotsManager.MaxNumDotsPerHighlight, $"{numDots} > {DotsManager.MaxNumDotsPerHighlight}");
-        
         Assert.AreEqual(positionsBuffer.Count, 0, "DotsAnimator.positionsBuffer is not empty!");
         positionsBuffer.AddRange(positions);
-        
-        FillDeltas(origin, numDots);
+        GenerateDeltasFromPositions(origin, numDots);
 
         particleSystem.Emit(numDots);
         particleSystem.SetJob(new MoveParticlesJob
@@ -70,7 +65,7 @@ public class DotsAnimator : MonoBehaviour
         });
     }
 
-    private void FillDeltas(Vector3 origin, int numDots)
+    private void GenerateDeltasFromPositions(Vector3 origin, int numDots)
     {
         deltasBuffer.Clear();
         deltasBuffer.AddRange(positionsBuffer.Select(p => p - origin));
