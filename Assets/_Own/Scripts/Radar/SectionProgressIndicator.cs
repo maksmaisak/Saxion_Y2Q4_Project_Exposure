@@ -56,10 +56,8 @@ public class SectionProgressIndicator : MyBehaviour, IEventReceiver<OnTeleportEv
         updateFillTween = null;
 
         var section = message.navpoint.GetComponentInParent<LightSection>();
-        Assert.IsNotNull(section);
-        
         currentSection = section;
-        indicator.fillAmount = section.GetRevealProgress();
+        indicator.fillAmount = section ? section.GetRevealProgress() : 0.0f;
     }
 
     private LightSection GetFirstSection()

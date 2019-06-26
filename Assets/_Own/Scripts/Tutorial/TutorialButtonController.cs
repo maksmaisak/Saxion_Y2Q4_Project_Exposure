@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRTK.Controllables;
 
 [RequireComponent(typeof(TutorialDirector))]
@@ -9,13 +10,13 @@ public class TutorialButtonController : MonoBehaviour
     [SerializeField] Transform handTransform;
     [SerializeField] Transform buttonTransform;
 
-    [SerializeField] float timeToDisapear = 0.5f;
+    [FormerlySerializedAs("timeToDisapear")] [SerializeField] float timeToDisappear = 0.5f;
     
     private TutorialDirector tutorialDirector;
     
     private bool wasPressed;
-    
-    void Start()
+
+    private void Start()
     {
         tutorialDirector = GetComponent<TutorialDirector>();
         handTransform
@@ -45,9 +46,9 @@ public class TutorialButtonController : MonoBehaviour
         wasPressed = true;
         
         handTransform.DOKill(true);
-        handTransform.DOScale(0, timeToDisapear).SetEase(Ease.InBack).OnComplete(() => Destroy(handTransform.gameObject));
+        handTransform.DOScale(0, timeToDisappear).SetEase(Ease.InBack).OnComplete(() => Destroy(handTransform.gameObject));
 
-        this.Delay(1.0f, () => buttonTransform.DOScale(0, timeToDisapear).SetEase(Ease.InBack).OnComplete(() => Destroy(buttonTransform.gameObject)));
+        this.Delay(1.0f, () => buttonTransform.DOScale(0, timeToDisappear).SetEase(Ease.InBack).OnComplete(() => Destroy(buttonTransform.gameObject)));
         
         tutorialDirector.StartTutorial();
         

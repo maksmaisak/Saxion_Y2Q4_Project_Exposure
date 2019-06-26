@@ -2,25 +2,27 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
+using VRTK;
 
-public class TutorialDirector : MonoBehaviour
+public class TutorialDirector : MyBehaviour
 {
     [SerializeField] float delayBeforeStart = 2.0f;
-    [SerializeField] float rotatingDuration = 4.235f;
+    
     [Space] 
     [SerializeField] RadarController radarController;
     [SerializeField] Transform rotateTransform;
-    [Space] 
+    [SerializeField] float rotatingDuration = 4.235f;
+
+    [Header("Wave Pulse Settings")] 
     [SerializeField] Wavesphere overrideWavespherePrefab;
     [SerializeField] float overridePulseSpeed = 1.0f;
     [SerializeField] float overrideWavesphereSpeed = 1.0f;
     [SerializeField] int overrideMaxNumWavespheresPerPulse = -1;
+    
     [Space] 
     [SerializeField] TutorialMachineOpen opening;
     [SerializeField] float handTutorialAppearDelay = 0.01f;
     [SerializeField] float controllerTutorialAppearDelay = 0.7f;
-    [SerializeField] ControllerTutorial controllerTutorial;
     [SerializeField] HandTutorial handTutorial;
 
     [Header("Audio Settings")]
@@ -30,12 +32,19 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] AudioClip engineRunLoopClip;
     [SerializeField] AudioClip engineSlowDownClip;
     
-    [FormerlySerializedAs("timeForMachineToDisappear")]
-    [Space]
+    [Header("Machine Move Away Settings")]
     [SerializeField] float delayAfterGunIsGrabbed = 0.5f;
-    [SerializeField] private float machineOffsetY = -2.5f;
-    [SerializeField] private float machineOffsetZ = -1.5f;
+    [SerializeField] float machineOffsetY = -2.5f;
+    [SerializeField] float machineOffsetZ = -1.5f;
+    
+    [Header("Infographics Settings")]
+    [SerializeField] Infographics infographics;
+    [SerializeField] float infographicsAppearDelay = 0.5f;
 
+    [Header("Controller Settings")] 
+    [SerializeField] ControllerTutorial leftController;
+    [SerializeField] ControllerTutorial rightController;
+    
     private RadarTool radarTool;
     private bool isTutorialRunning;
 
@@ -99,20 +108,22 @@ public class TutorialDirector : MonoBehaviour
         yield return RotateMachine(Vector3.forward, rotatingDuration)
             .WaitForCompletion();
 
-        // Open
-        yield return opening.Open().WaitForCompletion();
-        
         // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
         radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
         
+        // Open
+        yield return opening.Open().WaitForCompletion();
+        
         StartCoroutine(HandTutorialCoroutine());
         yield return new WaitUntil(() => radarController.IsGrabbed());
         StartCoroutine(ControllerTutorialCoroutine());
+        StartCoroutine(InfographicsCoroutine());
         
         yield return StartCoroutine(MachineMoveAwayCoroutine());
-        Destroy(gameObject);
+
+        gameObject.SetActive(false);
     }
     
     private IEnumerator HandTutorialCoroutine()
@@ -136,21 +147,38 @@ public class TutorialDirector : MonoBehaviour
         radarTool.onPulse.AddListener(OnPulse);
         void OnPulse()
         {
-            radarTool.onPulse.RemoveListener(OnPulse);
+            Assert.IsFalse(didPulse);
             didPulse = true;
+            radarTool.onPulse.RemoveListener(OnPulse);
         }
 
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
 
-        if (didPulse || !controllerTutorial)
+        if (didPulse)
+            yield break;
+
+        ControllerTutorial controllerTutorial = radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerLeftHand()) ? leftController : rightController;
+        if (!controllerTutorial)
             yield break;
 
         controllerTutorial.gameObject.SetActive(true);
-        
+
         yield return new WaitUntil(() => didPulse);
 
-        if (controllerTutorial)
-            controllerTutorial.Remove();
+        if (rightController)
+            rightController.Remove();
+        
+        if (leftController)
+            leftController.Remove();
+    }
+
+    private IEnumerator InfographicsCoroutine()
+    {
+        yield return new WaitUntil(() => radarController.IsGrabbed());
+        yield return new WaitForSeconds(infographicsAppearDelay);
+
+        if (infographics)
+            infographics.Show();
     }
 
     private IEnumerator MachineMoveAwayCoroutine()
