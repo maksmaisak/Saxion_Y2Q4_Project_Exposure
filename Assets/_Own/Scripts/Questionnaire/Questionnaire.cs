@@ -77,6 +77,9 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         {
             questionPanels[i].Show();
 
+            audioSource.clip = changePanelSound;
+            audioSource.Play();
+
             yield return new WaitForSeconds(showButtonsDelay);
             yield return ShowButtons().WaitForCompletion();
             
