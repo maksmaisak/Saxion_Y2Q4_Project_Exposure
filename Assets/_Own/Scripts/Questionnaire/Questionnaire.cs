@@ -86,7 +86,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
             lastPressedButtonIndex = -1;
             yield return new WaitUntil(() => lastPressedButtonIndex != -1);
             answers[i] = lastPressedButtonIndex + 1;
-            
+
+            audioSource.clip = buttonUseSound;
+            audioSource.Play();
+
             yield return HideButtons().WaitForCompletion();
 
             questionPanels[i].Hide();
