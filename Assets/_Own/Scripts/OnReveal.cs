@@ -15,17 +15,11 @@ public class OnReveal : MyBehaviour, IEventReceiver<OnRevealEvent>
     private void Start()
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
-
-        if (particleSystems == null || particleSystems.Length == 0)
-            return;
-
-        particleSystems = particleSystems.Select(ps =>
-         {
-             ps.Stop();
-             return ps;
-         }).ToArray();
-
-        particleSystems.Each(p => onReveal.AddListener(p.Play));
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            ps.Stop();
+            onReveal.AddListener(ps.Play);
+        }
     }
 
     public void On(OnRevealEvent reveal)
