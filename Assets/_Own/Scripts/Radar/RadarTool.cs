@@ -49,7 +49,7 @@ public struct PulseSettings
     public float wavesphereSpeedMin;
     public float wavesphereSpeedMax;
     public Wavesphere wavespherePrefab;
-    public Transform    wavesphereTarget;
+    public Transform  wavesphereTarget;
 
     [Header("Dots Settings")]
     [Range(0.0f, 360.0f)] public float baseDotConeAngle;
