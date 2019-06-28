@@ -40,12 +40,15 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [Header("Audio Settings")]
     [SerializeField] [Range(0, 1)] float grabAudioVolume;
     [SerializeField] AudioSource buzzAudioSource;
-
+    
+    [Header("Despawn settings")]
+    [Tooltip("Spheres moving away from the player further than this distance will be despawned.")]
+    [SerializeField] float minDespawnDistance = 2.0f;
+    [SerializeField] float delayBetweenDespawnChecks = 0.1f;
+    
     [Header("Other Settings")] 
     [Tooltip("If set, the sphere will move in a way that makes sure it gets caught no matter what.")]
     [SerializeField] bool mustGetCaught;
-    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
-    [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
     public UnityEvent onCaught = new UnityEvent();
@@ -57,7 +60,14 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private LightSection sourceLightSection;
     private bool didStart;
     private bool isFadingOut;
-    private bool wasCaught;
+
+    public enum ReasonForDestruction
+    {
+        Missed,
+        Caught,
+        SectionRevealed
+    }
+    private ReasonForDestruction reasonForDestruction = ReasonForDestruction.Missed;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
@@ -102,7 +112,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeSpeedAndDirection();
 
         if (!mustGetCaught)
-            Destroy(gameObject, delayToDespawn);
+            StartCoroutine(CheckMissCoroutine());
     }
 
     void Update()
@@ -145,7 +155,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         FadeOutAudio();
 
-        wasCaught = true;
+        reasonForDestruction = ReasonForDestruction.Caught;
         onCaught?.Invoke();
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
@@ -153,11 +163,33 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        new OnWavesphereDestroyed(this, wasCaught)
+        new OnWavesphereDestroyed(this, reasonForDestruction)
             .SetDeliveryType(MessageDeliveryType.Immediate)
             .PostEvent();
     }
 
+    private IEnumerator CheckMissCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayBetweenDespawnChecks);
+            
+            Vector3 position = transform.position;
+            Vector3 direction = transform.forward;
+            float sqrMinDespawnDistance = minDespawnDistance * minDespawnDistance;
+            bool shouldDespawn = targetTransforms.All(t =>
+            {
+                Vector3 delta = t.position - position;
+                return 
+                    Vector3.Dot(direction, delta) < 0.0f && 
+                    delta.sqrMagnitude > sqrMinDespawnDistance;
+            });
+            
+            if (shouldDespawn)
+                Destroy(gameObject);
+        }
+    }
+    
     public void On(OnRevealEvent reveal)
     {
         if (isFadingOut)
@@ -165,6 +197,8 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         //if (!sourceLightSection || reveal.lightSection != sourceLightSection)
         //    return;
+
+        reasonForDestruction = ReasonForDestruction.SectionRevealed;
 
         isFadingOut = true;
         transform.DOKill();

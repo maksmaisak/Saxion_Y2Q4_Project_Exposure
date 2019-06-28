@@ -15,15 +15,16 @@ public class AdaptiveDifficulty : Singleton<AdaptiveDifficulty>, IEventReceiver<
 
     public void On(OnWavesphereDestroyed message)
     {
-        if (message.wasCaught)
+        switch (message.reason)
         {
-            numCaught += 1;
-            _difficulty = Mathf.MoveTowards(_difficulty, 1.0f, difficultyIncreasePerCaughtWavesphere);
-        }
-        else
-        {
-            numMissed += 1;
-            _difficulty = Mathf.MoveTowards(_difficulty, 0.0f, difficultyDecreasePerMissedWavesphere);
+            case Wavesphere.ReasonForDestruction.Caught:
+                numCaught += 1;
+                _difficulty = Mathf.MoveTowards(_difficulty, 1.0f, difficultyIncreasePerCaughtWavesphere);
+                break;
+            case Wavesphere.ReasonForDestruction.Missed:
+                numMissed += 1;
+                _difficulty = Mathf.MoveTowards(_difficulty, 0.0f, difficultyDecreasePerMissedWavesphere);
+                break;
         }
     }
 }

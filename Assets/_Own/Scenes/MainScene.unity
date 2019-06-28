@@ -4233,8 +4233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _difficulty: 0.9
-  difficultyIncreasePerCaughtWavesphere: 0.02
-  difficultyDecreasePerMissedWavesphere: 0.03
+  difficultyIncreasePerCaughtWavesphere: 0.01
+  difficultyDecreasePerMissedWavesphere: 0.05
 --- !u!4 &163925891
 Transform:
   m_ObjectHideFlags: 0
