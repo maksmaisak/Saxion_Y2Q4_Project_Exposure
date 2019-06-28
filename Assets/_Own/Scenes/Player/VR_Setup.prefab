@@ -2245,28 +2245,28 @@ MonoBehaviour:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0
+    thumbOverride: 1
     applyIndexOverride: 0
     indexOverride: 0
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 0.5
+    pinkyOverride: 0.9
   useOverrides:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0.3
+    thumbOverride: 1
     applyIndexOverride: 0
     indexOverride: 0
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 1
+    pinkyOverride: 0.9
   handModel: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactNearTouch: {fileID: 0}
@@ -6678,28 +6678,28 @@ MonoBehaviour:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0
+    thumbOverride: 1
     applyIndexOverride: 0
     indexOverride: 0
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 0.5
+    pinkyOverride: 0.9
   useOverrides:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0.3
+    thumbOverride: 1
     applyIndexOverride: 0
     indexOverride: 0
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 1
+    pinkyOverride: 0.9
   handModel: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactNearTouch: {fileID: 0}
