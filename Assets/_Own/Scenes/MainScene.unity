@@ -41994,15 +41994,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19594667171634197, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 646216938, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
-      propertyPath: m_Lightmapping
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 1062576092592344781, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: appearAt.Array.data[0]

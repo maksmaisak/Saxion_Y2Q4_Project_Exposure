@@ -11283,6 +11283,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1349082579}
     m_Modifications:
+    - target: {fileID: 4026591519397919663, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
+        type: 3}
+      propertyPath: m_Name
+      value: QuestionPanel (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 4026591519397919662, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11387,11 +11392,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4026591519397919663, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
-        type: 3}
-      propertyPath: m_Name
-      value: QuestionPanel (1)
       objectReference: {fileID: 0}
     - target: {fileID: 4026591519139247335, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
         type: 3}
@@ -11812,10 +11812,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Infographics
       objectReference: {fileID: 0}
-    - target: {fileID: 566842065, guid: 46453388953404f419c629aefccbee95, type: 3}
-      propertyPath: appearAt.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11829,27 +11825,27 @@ PrefabInstance:
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.92
+      value: 0.551
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08715578
+      value: 0.076228164
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.48296478
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.04225396
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9961947
+      value: 0.8712916
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
@@ -11864,7 +11860,7 @@ PrefabInstance:
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 58
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
@@ -11874,12 +11870,12 @@ PrefabInstance:
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.02
+      value: 0.722
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.83
+      value: 0.813
       objectReference: {fileID: 0}
     - target: {fileID: 1784896742574142883, guid: 46453388953404f419c629aefccbee95,
         type: 3}
@@ -11921,6 +11917,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 566842065, guid: 46453388953404f419c629aefccbee95, type: 3}
+      propertyPath: appearAt.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796416997680495748, guid: 46453388953404f419c629aefccbee95,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 852c1c14c6689824f81d96f590caef2d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46453388953404f419c629aefccbee95, type: 3}
 --- !u!224 &1619674579551218111 stripped
@@ -11936,6 +11942,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1349082579}
     m_Modifications:
+    - target: {fileID: 4026591519397919663, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
+        type: 3}
+      propertyPath: m_Name
+      value: QuestionPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 4026591519397919662, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12040,11 +12051,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4026591519397919663, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
-        type: 3}
-      propertyPath: m_Name
-      value: QuestionPanel
       objectReference: {fileID: 0}
     - target: {fileID: 4026591519139247335, guid: 64cb287af9b6f4aed96f3a10dc9f5994,
         type: 3}
