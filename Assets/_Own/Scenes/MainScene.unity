@@ -4232,9 +4232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc47e9ba0173461cb22b0154066da2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _difficulty: 0.5
+  _difficulty: 0.9
   difficultyIncreasePerCaughtWavesphere: 0.02
-  difficultyDecreasePerMissedWavesphere: 0.05
+  difficultyDecreasePerMissedWavesphere: 0.03
 --- !u!4 &163925891
 Transform:
   m_ObjectHideFlags: 0

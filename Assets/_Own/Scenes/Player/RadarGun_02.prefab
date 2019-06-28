@@ -1243,7 +1243,9 @@ MonoBehaviour:
     wavePulseSpeed: 10
     wavePulseMaxRange: 20
     sphereCastRadius: 0.05
-    maxNumWavespheresPerSecond: 3
+    maxNumWavespheresPerSecond:
+      min: 2
+      max: 3.111
     maxNumWavespheresPerPulse: -1
     minDistanceBetweenSpawnedWavespheres: 2
     wavesphereSpeedMin: 2.5
@@ -8228,6 +8230,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6537492728337824602}
     m_Modifications:
+    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialRightController
+      objectReference: {fileID: 0}
+    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8282,16 +8294,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialRightController
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7002482318367828729, guid: ec5de0296be555a42a438c09e36e06ea, type: 3}
