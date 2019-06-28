@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
@@ -76,6 +77,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     private (int indexX, int indexY)[] rayIndices;
     private NativeArray<SpherecastCommand> commands;
     private NativeArray<RaycastHit>        hits;
+    private JobHandle? currentJobHandle;
     
     private const int MaxNumRaysPerAxis = 21;
     private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
@@ -85,7 +87,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     {
         base.Awake();
         
-        transform = GetComponent<Transform>();
+        transform = base.transform;
         
         // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
         const int MidIndex = MaxNumRaysPerAxis / 2;
@@ -128,10 +130,33 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     public void Pulse()
     {
         onPulse?.Invoke();
+
+        if (currentJobHandle.HasValue)
+        {
+            currentJobHandle.Value.Complete();
+            Assert.IsTrue(currentJobHandle.Value.IsCompleted);
+            currentJobHandle = null;
+            HandleSpherecastResults();
+        }
+
+        StartCoroutine(PulseCoroutine());
+    }
+
+    private IEnumerator PulseCoroutine()
+    {
+        Assert.IsFalse(currentJobHandle.HasValue);
         
         CreateWavePulse();
         GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
-        SpherecastCommand.ScheduleBatch(commands, hits, 1).Complete();
+        currentJobHandle = SpherecastCommand.ScheduleBatch(commands, hits, 1);
+
+        yield return new WaitUntil(() => !currentJobHandle.HasValue || currentJobHandle.Value.IsCompleted);
+        if (!currentJobHandle.HasValue) 
+            yield break;
+        
+        Assert.IsTrue(currentJobHandle.Value.IsCompleted);
+        currentJobHandle.Value.Complete();
+        currentJobHandle = null;
         HandleSpherecastResults();
     }
 
