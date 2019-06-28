@@ -42,8 +42,6 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] AudioSource buzzAudioSource;
     
     [Header("Despawn settings")]
-    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
-    [SerializeField] float delayToDespawn = 20.0f;
     [Tooltip("Spheres moving away from the player further than this distance will be despawned.")]
     [SerializeField] float minDespawnDistance = 2.0f;
     [SerializeField] float delayBetweenDespawnChecks = 0.1f;
@@ -62,7 +60,14 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private LightSection sourceLightSection;
     private bool didStart;
     private bool isFadingOut;
-    private bool wasCaught;
+
+    public enum ReasonForDestruction
+    {
+        Missed,
+        Caught,
+        SectionRevealed
+    }
+    private ReasonForDestruction reasonForDestruction = ReasonForDestruction.Missed;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
@@ -107,10 +112,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeSpeedAndDirection();
 
         if (!mustGetCaught)
-        {
-            Destroy(gameObject, t: delayToDespawn);
-            StartCoroutine(CheckDestroyCoroutine());
-        }
+            StartCoroutine(CheckMissCoroutine());
     }
 
     void Update()
@@ -153,7 +155,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         FadeOutAudio();
 
-        wasCaught = true;
+        reasonForDestruction = ReasonForDestruction.Caught;
         onCaught?.Invoke();
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
@@ -161,12 +163,12 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        new OnWavesphereDestroyed(this, wasCaught)
+        new OnWavesphereDestroyed(this, reasonForDestruction)
             .SetDeliveryType(MessageDeliveryType.Immediate)
             .PostEvent();
     }
 
-    private IEnumerator CheckDestroyCoroutine()
+    private IEnumerator CheckMissCoroutine()
     {
         while (true)
         {
@@ -195,6 +197,8 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         //if (!sourceLightSection || reveal.lightSection != sourceLightSection)
         //    return;
+
+        reasonForDestruction = ReasonForDestruction.SectionRevealed;
 
         isFadingOut = true;
         transform.DOKill();
