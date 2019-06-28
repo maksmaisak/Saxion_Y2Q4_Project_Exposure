@@ -23,7 +23,7 @@ public struct PulseSettings
         sphereCastRadius = 0.05f,
         
         maxNumWavespheresPerPulse = -1,
-        maxNumWavespheresPerSecond = 2.0f,
+        maxNumWavespheresPerSecond = new RangeFloat(3.0f, 3.0f),
         minDistanceBetweenSpawnedWavespheres = 2.0f,
         wavesphereSpeedMin = 2.5f,
         wavesphereSpeedMax = 4.5f,
@@ -43,7 +43,7 @@ public struct PulseSettings
     public float sphereCastRadius ;
 
     [Header("Wavesphere Settings")] 
-    public float maxNumWavespheresPerSecond;
+    public RangeFloat maxNumWavespheresPerSecond;
     public int maxNumWavespheresPerPulse;
     public float minDistanceBetweenSpawnedWavespheres;
     public float wavesphereSpeedMin;
@@ -216,7 +216,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         var usedCandidateIndices = new List<int>();
         
-        float minTimeDistanceBetweenWavespheres = 1.0f / pulseSettings.maxNumWavespheresPerSecond;
+        float minTimeDistanceBetweenWavespheres = 1.0f / pulseSettings.maxNumWavespheresPerSecond.Lerp(AdaptiveDifficulty.instance.difficulty);
         float sqrMinDistance = pulseSettings.minDistanceBetweenSpawnedWavespheres * pulseSettings.minDistanceBetweenSpawnedWavespheres;
         bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
         {
