@@ -241,8 +241,10 @@ MonoBehaviour:
   strength: 100
   grabAudioVolume: 0.01
   buzzAudioSource: {fileID: 2681657970494475077}
-  mustGetCaught: 0
   delayToDespawn: 25
+  minDespawnDistance: 2
+  delayBetweenDespawnChecks: 0.1
+  mustGetCaught: 0
   handsCollisionLayer:
     serializedVersion: 2
     m_Bits: 16384

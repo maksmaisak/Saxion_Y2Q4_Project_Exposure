@@ -40,12 +40,17 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [Header("Audio Settings")]
     [SerializeField] [Range(0, 1)] float grabAudioVolume;
     [SerializeField] AudioSource buzzAudioSource;
-
+    
+    [Header("Despawn settings")]
+    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
+    [SerializeField] float delayToDespawn = 20.0f;
+    [Tooltip("Spheres moving away from the player further than this distance will be despawned.")]
+    [SerializeField] float minDespawnDistance = 2.0f;
+    [SerializeField] float delayBetweenDespawnChecks = 0.1f;
+    
     [Header("Other Settings")] 
     [Tooltip("If set, the sphere will move in a way that makes sure it gets caught no matter what.")]
     [SerializeField] bool mustGetCaught;
-    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
-    [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
     public UnityEvent onCaught = new UnityEvent();
@@ -102,7 +107,10 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeSpeedAndDirection();
 
         if (!mustGetCaught)
-            Destroy(gameObject, delayToDespawn);
+        {
+            Destroy(gameObject, t: delayToDespawn);
+            StartCoroutine(CheckDestroyCoroutine());
+        }
     }
 
     void Update()
@@ -158,6 +166,28 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             .PostEvent();
     }
 
+    private IEnumerator CheckDestroyCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayBetweenDespawnChecks);
+            
+            Vector3 position = transform.position;
+            Vector3 direction = transform.forward;
+            float sqrMinDespawnDistance = minDespawnDistance * minDespawnDistance;
+            bool shouldDespawn = targetTransforms.All(t =>
+            {
+                Vector3 delta = t.position - position;
+                return 
+                    Vector3.Dot(direction, delta) < 0.0f && 
+                    delta.sqrMagnitude > sqrMinDespawnDistance;
+            });
+            
+            if (shouldDespawn)
+                Destroy(gameObject);
+        }
+    }
+    
     public void On(OnRevealEvent reveal)
     {
         if (isFadingOut)
