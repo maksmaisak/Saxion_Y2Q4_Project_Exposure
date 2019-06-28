@@ -16,7 +16,9 @@ public class ControllerTutorial : MonoBehaviour
     private Transform cameraTransform;
     private bool isRemoving = false;
 
-    private IEnumerator Start()
+    private RadarTool radarTool;
+
+    IEnumerator Start()
     {
         Assert.IsNotNull(controllerToRotate);
         Assert.IsNotNull(baseMaterial);
@@ -34,7 +36,7 @@ public class ControllerTutorial : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(cameraTransform.position - transform.position);
 
         controllerToRotate
-            .DOScale(0.0f, 1.0f)
+            .DOScale(0.0f, duration: 1.0f)
             .From()
             .SetEase(Ease.OutCirc);
 
@@ -43,6 +45,40 @@ public class ControllerTutorial : MonoBehaviour
             .DOLocalRotate(new Vector3(0, -degreesToRotate, 0), rotationDuration, RotateMode.LocalAxisAdd)
             .SetEase(Ease.InOutQuad)
             .SetLoops(-1, LoopType.Yoyo);
+    }
+
+    private void RemoveWhenRadarPulses()
+    {
+        radarTool = GetRadarTool();
+        if (!radarTool)
+            return;
+        
+        radarTool.onPulse.AddListener(OnPulse);
+
+        void OnPulse()
+        {
+            radarTool.onPulse.RemoveListener(OnPulse);
+            Remove();
+        }
+    }
+
+    private RadarTool GetRadarTool()
+    {
+        RadarTool tool = radarTool;
+        
+        if (tool)
+            return tool;
+
+        if (tool = GetComponentInParent<RadarTool>())
+            return tool;
+        
+        if (tool = GetComponentInChildren<RadarTool>())
+            return tool;
+        
+        if (tool = FindObjectOfType<RadarTool>())
+            return tool;
+
+        return null;
     }
 
     public void Remove()
