@@ -57,6 +57,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private LightSection sourceLightSection;
     private bool didStart;
     private bool isFadingOut;
+    private bool wasCaught;
 
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
@@ -65,7 +66,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     public bool isVisibleToCamera { get; set; } = true;
     
-    /** Wanted direction to rotate the wavesphere */
+    // The direction to rotate the wavesphere to
     public Vector3 targetDirection { get; set; }
     
     private static float lastTimeWasCaught;
@@ -114,7 +115,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         AttractToHands();
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
@@ -143,10 +144,18 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             .SetEase(Ease.OutQuart);
 
         FadeOutAudio();
-        
-        onCaught?.Invoke();
 
+        wasCaught = true;
+        onCaught?.Invoke();
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        new OnWavesphereDestroyed(this, wasCaught)
+            .SetDeliveryType(MessageDeliveryType.Immediate)
+            .PostEvent();
     }
 
     public void On(OnRevealEvent reveal)
