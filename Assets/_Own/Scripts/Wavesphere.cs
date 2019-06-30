@@ -61,21 +61,11 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     private bool didStart;
     private bool isFadingOut;
 
-    public enum ReasonForDestruction
-    {
-        Missed,
-        Caught,
-        SectionRevealed
-    }
-    private ReasonForDestruction reasonForDestruction = ReasonForDestruction.Missed;
-
     private readonly List<Transform> targetTransforms = new List<Transform>();
 
     public RadarHighlightLocation highlightLocation { get; set; }
     public float speedMultiplier { get; set; } = 1.0f;
-
     public bool isVisibleToCamera { get; set; } = true;
-    
     // The direction to rotate the wavesphere to
     public Vector3 targetDirection { get; set; }
     
@@ -126,9 +116,8 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (isFadingOut)
             return;
 
-        transform.position += speed * speedMultiplier * Time.deltaTime * transform.forward;
-
         AttractToHands();
+        transform.position += speed * speedMultiplier * Time.deltaTime * transform.forward;
     }
 
     void OnTriggerEnter(Collider other)
@@ -161,19 +150,11 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         FadeOutAudio();
 
-        reasonForDestruction = ReasonForDestruction.Caught;
         onCaught?.Invoke();
+        new OnWavesphereCaught(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
         Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
     }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        new OnWavesphereDestroyed(this, reasonForDestruction)
-            .SetDeliveryType(MessageDeliveryType.Immediate)
-            .PostEvent();
-    }
-
+    
     private IEnumerator CheckMissCoroutine()
     {
         while (true)
@@ -183,16 +164,19 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             Vector3 position = transform.position;
             Vector3 direction = transform.forward;
             float sqrMinDespawnDistance = minDespawnDistance * minDespawnDistance;
-            bool shouldDespawn = targetTransforms.Count > 0 && targetTransforms.All(t =>
+            bool didMiss = targetTransforms.Count > 0 && targetTransforms.All(t =>
             {
                 Vector3 delta = t.position - position;
                 return 
                     Vector3.Dot(direction, delta) < 0.0f && 
                     delta.sqrMagnitude > sqrMinDespawnDistance;
             });
+
+            if (!didMiss) 
+                continue;
             
-            if (shouldDespawn)
-                Destroy(gameObject);
+            new OnWavesphereMissed(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+            Destroy(gameObject);
         }
     }
     
@@ -203,9 +187,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         //if (!sourceLightSection || reveal.lightSection != sourceLightSection)
         //    return;
-
-        reasonForDestruction = ReasonForDestruction.SectionRevealed;
-
+        
         isFadingOut = true;
         transform.DOKill();
         transform
