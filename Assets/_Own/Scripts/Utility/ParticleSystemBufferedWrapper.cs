@@ -13,7 +13,7 @@ public class ParticleSystemBufferedWrapper
         this.buffer = new ParticleSystem.Particle[bufferSize];
     }
     
-    public void AddParticles(IList<Vector3> positions)
+    public void AddParticles(IReadOnlyList<Vector3> positions)
     {
         int numParticlesAdded = positions.Count;
         int oldNumParticles   = system.particleCount;

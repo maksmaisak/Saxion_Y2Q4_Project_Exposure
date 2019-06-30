@@ -35,17 +35,20 @@ public class DotsAnimator : MonoBehaviour
             deltas.Dispose();
     }
 
-    public void AnimateDots(IReadOnlyList<Vector3> positions, Vector3 origin, float duration = 1.0f, Action<DotsAnimator, IList<Vector3>> onDoneCallback = null)
+    // Animates dots from `origin` to `positions` during duration. If lightSection != null then dots are added to it afterwards. 
+    public void AnimateDots(IReadOnlyList<Vector3> positions, Vector3 origin, float duration = 1.0f, LightSection lightSection = null, Action<DotsAnimator, IList<Vector3>> onDoneCallback = null)
     {
         Assert.IsFalse(isBusy);
         isBusy = true;
 
         int numDots = positions.Count;
-        Assert.IsTrue(numDots <= DotsManager.MaxNumDotsPerHighlight, $"{numDots} > {DotsManager.MaxNumDotsPerHighlight}");
+        Assert.IsTrue(numDots <= DotsManager.MaxNumDotsPerHighlight, $"AnimateDots: too many dots: {numDots} > {DotsManager.MaxNumDotsPerHighlight}");
         Assert.AreEqual(positionsBuffer.Count, 0, "DotsAnimator.positionsBuffer is not empty!");
         positionsBuffer.AddRange(positions);
+        if (lightSection)
+            lightSection.AddDots(positionsBuffer, duration);
+        
         GenerateDeltasFromPositions(origin, numDots);
-
         particleSystem.Emit(numDots);
         particleSystem.SetJob(new MoveParticlesJob
         {

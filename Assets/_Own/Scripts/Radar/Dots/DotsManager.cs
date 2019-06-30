@@ -95,9 +95,12 @@ public class DotsManager : Singleton<DotsManager>
             if (positionsBuffer.Count == 0)
                 continue;
             
-            GetFreeDotsAnimator().AnimateDots(positionsBuffer, dotsOrigin, dotsAnimationDuration, onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator));
-            lightSections[i].AddDots(positionsBuffer, dotsAnimationDuration);
             positionsBuffer.ForEach(registry.RegisterDot);
+            GetFreeDotsAnimator().AnimateDots(
+                positionsBuffer, dotsOrigin, dotsAnimationDuration, 
+                lightSections[i], 
+                onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator)
+            );
             
             new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
             positionsBuffer.Clear();

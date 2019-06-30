@@ -97,7 +97,10 @@ public class LightSection : MonoBehaviour
 
     public float GetRevealProgress() => Mathf.Clamp01((float)numDots / numDotsToReveal);
     
-    public void AddDots(IList<Vector3> positions, float particleAppearDelay = 0.0f)
+    // Registers the dots immediately and adds the dots to the particle system after a delay.
+    // Warning: it will use the values present in `positions` at the moment of particle creation, not at the moment of calling this method.
+    // Do not modify `positions` until the delay is up, or make a copy of it beforehand.
+    public void AddDots(IReadOnlyList<Vector3> positions, float particleAppearDelay = 0.0f)
     {
         if (isRevealed)
             return;
@@ -110,9 +113,7 @@ public class LightSection : MonoBehaviour
         }
         else
         {
-            // TODO preallocate the buffer
-            var buffer = new List<Vector3>(positions);
-            this.Delay(particleAppearDelay, () => dotsParticles.AddParticles(buffer));
+            this.Delay(particleAppearDelay, () => dotsParticles.AddParticles(positions));
         }
     }
 
