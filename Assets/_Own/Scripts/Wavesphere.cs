@@ -96,11 +96,17 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform   = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
 
-        if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
-            return;
-        
-        targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
-        targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
+        if (VRTK_SDKManager.GetLoadedSDKSetup() != null)
+        {
+            targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
+            targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
+        }
+        else
+        {
+            var camera = Camera.main;
+            if (camera)
+                targetTransforms.Add(camera.transform);
+        }
     }
 
     void Start()
@@ -177,7 +183,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             Vector3 position = transform.position;
             Vector3 direction = transform.forward;
             float sqrMinDespawnDistance = minDespawnDistance * minDespawnDistance;
-            bool shouldDespawn = targetTransforms.All(t =>
+            bool shouldDespawn = targetTransforms.Count > 0 && targetTransforms.All(t =>
             {
                 Vector3 delta = t.position - position;
                 return 

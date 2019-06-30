@@ -38,6 +38,9 @@ public class RadarMachineScreen : MyBehaviour, IEventReceiver<OnHighlightEvent>
     
     public void On(OnHighlightEvent message)
     {
+        if (!enabled)
+            return;
+        
         Vector3[] positions = message.dotPositions
             .Select(WorldToRadarScreenPosition)
             .Where(IsWithinRadarScreen)
