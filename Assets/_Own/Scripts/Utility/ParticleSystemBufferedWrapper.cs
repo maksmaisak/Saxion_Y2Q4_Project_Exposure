@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
+/// A wrapper around a particle system and a buffer through which particles may be efficiently added without extra allocations.
 public class ParticleSystemBufferedWrapper
 {
     public readonly ParticleSystem system;
@@ -17,6 +19,7 @@ public class ParticleSystemBufferedWrapper
     {
         int numParticlesAdded = positions.Count;
         int oldNumParticles   = system.particleCount;
+        Assert.IsTrue(numParticlesAdded <= buffer.Length, $"AddParticles too many particles: {numParticlesAdded} > {buffer.Length}");
         
         // Emit the particles
         system.Emit(numParticlesAdded);

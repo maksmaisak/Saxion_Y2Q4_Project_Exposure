@@ -151,11 +151,9 @@ public class DotsManager : Singleton<DotsManager>
             if (!dotHit.collider) // This only works as long as maxHits is one.
                 continue;
 
+            // Filter out ones that are much further away from ray origin than the sphere origin.
             Vector3 delta = dotHit.point - location.pointOnSurface;
-            
-            // The one below is actually correct, but this worked better, keeping it for now until (TODO) an angle-based solution is made.
             float distanceAlongRay = Vector3.Dot(delta, location.originalRay.direction);
-            //float distanceAlongRay = Mathf.Abs(Vector3.Dot(delta, location.originalRay.direction));
             if (distanceAlongRay > location.maxDotDistanceFromSurfacePointAlongOriginalRay)
                 continue;
             
