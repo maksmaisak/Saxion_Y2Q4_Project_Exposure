@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
-using VRTK;
 
 public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 {
     [SerializeField] GameObject objectsParent;
-    [SerializeField] QuestionnaireButton[] buttons;
+    [SerializeField] RestartGame restartGame;
+    [SerializeField] VRButton[] buttons;
     [SerializeField] float startDelay = 4.0f;
     [SerializeField] float delayBetweenQuestionPanels = 2.0f;
     [SerializeField] float showButtonsDelay = 1.0f;
@@ -21,7 +20,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     [SerializeField] bool showOnStart;
 
     private Navpoint[] navpoints;
-    private QuestionnairePanel[] questionPanels;
+    private MyPanel[] questionPanels;
     
     private int lastPressedButtonIndex = -1;
     
@@ -30,12 +29,12 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         base.Awake();
 
         navpoints = FindObjectsOfType<Navpoint>();
-        questionPanels = GetComponentsInChildren<QuestionnairePanel>();
+        questionPanels = GetComponentsInChildren<MyPanel>();
 
         for (int i = 0; i < buttons.Length; ++i)
         {
             int index = i;
-            QuestionnaireButton button = buttons[i];
+            VRButton button = buttons[i];
             button.onActivate.AddListener(() => lastPressedButtonIndex = index);
         }
 
@@ -81,7 +80,10 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
             yield return new WaitForSeconds(delayBetweenQuestionPanels);
         }
 
-        HideButtons();
+        HideButtons().WaitForCompletion();
+        
+        restartGame.Activate();
+        
         
         AddToFile(answers);
     }
@@ -89,7 +91,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     [ContextMenu("Find buttons")]
     private void FindButtons()
     {
-        buttons = GetComponentsInChildren<QuestionnaireButton>();
+        buttons = GetComponentsInChildren<VRButton>();
     }
 
     private Sequence ShowButtons()
@@ -116,7 +118,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         this.DOKill();
         var sequence = DOTween.Sequence().SetTarget(this);
 
-        foreach (QuestionnaireButton button in buttons)
+        foreach (VRButton button in buttons)
             sequence.AppendCallback(button.Hide);
 
         return sequence;
