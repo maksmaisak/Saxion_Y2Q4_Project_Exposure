@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
-public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
+public class RestartGame : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
     [SerializeField] GameObject objectsParent;
     [SerializeField] VRButton restartButton;
     [SerializeField] float startDelay = 4.0f;
-    [SerializeField] float showButtonsDelay = 1.0f;
+    [SerializeField] float showButtonDelay = 1.0f;
     [SerializeField] float timeToRestartScene = 1.5f;
     
     [Header("Debug")] 
@@ -17,9 +17,10 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
 
     private MyPanel creditsPanel;
 
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         creditsPanel = GetComponentInChildren<MyPanel>();
         
         objectsParent.SetActive(true);
@@ -30,7 +31,19 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
         if(!showOnStart)
             objectsParent.SetActive(false);
     }
-    
+
+    public void On(OnRevealEvent message)
+    {
+        if (showOnReveal)
+            Activate();
+    }
+
+    public void Activate()
+    {
+        objectsParent.SetActive(true);
+        Play();
+    }
+
     private void Play() => StartCoroutine(PlayCoroutine());
 
     private IEnumerator PlayCoroutine()
@@ -39,9 +52,8 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
         
         creditsPanel.Show();
         
-        yield return new WaitForSeconds(showButtonsDelay);
-        ShowButton();
-
+        yield return new WaitForSeconds(showButtonDelay);
+        restartButton.Show();
     }
 
     private void RestartScene()
@@ -49,19 +61,5 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
         restartButton.Hide();
 
         this.Delay(timeToRestartScene, () => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
-    }
-
-    public void Activate()
-    {
-        objectsParent.SetActive(true);
-        Play();
-    }
-    
-    private void ShowButton() => restartButton.Show();
-    
-    public void On(OnRevealEvent message)
-    {
-        if (showOnReveal)
-            Activate();
     }
 }
