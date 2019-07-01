@@ -11,15 +11,23 @@ public class RestartGame : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] float showButtonDelay = 1.0f;
     [SerializeField] float timeToRestartScene = 1.5f;
     
+    [Header("Audio")]
+    [SerializeField] AudioClip panelAppearSound;
+    [SerializeField] AudioClip buttonAppearSound;
+    
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
     [SerializeField] bool showOnReveal;
 
     private MyPanel creditsPanel;
+    private AudioSource audioSource;
 
     protected override void Awake()
     {
         base.Awake();
+        
+        audioSource = GetComponent<AudioSource>();
+        Assert.IsNotNull(audioSource);
 
         creditsPanel = GetComponentInChildren<MyPanel>();
         
@@ -51,9 +59,14 @@ public class RestartGame : MyBehaviour, IEventReceiver<OnRevealEvent>
         yield return new WaitForSeconds(startDelay);
         
         creditsPanel.Show();
+        audioSource.clip = panelAppearSound;
+        audioSource.Play();
         
         yield return new WaitForSeconds(showButtonDelay);
+        
         restartButton.Show();
+        audioSource.clip = buttonAppearSound;
+        audioSource.Play();
     }
 
     private void RestartScene()

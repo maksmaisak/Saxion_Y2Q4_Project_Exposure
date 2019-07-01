@@ -17191,6 +17191,10 @@ PrefabInstance:
       propertyPath: showOnReveal
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1499884173, guid: 62da69b2964aa3e4cbb449c55ac31d9c, type: 3}
+      propertyPath: startDelay
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6753342978753588703, guid: 62da69b2964aa3e4cbb449c55ac31d9c,
         type: 3}
       propertyPath: m_Mesh
