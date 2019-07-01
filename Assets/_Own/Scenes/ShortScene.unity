@@ -15128,7 +15128,7 @@ PrefabInstance:
     - target: {fileID: 8088134726909832705, guid: b885f5f4a95fb4c4ca6cf347f1a95b83,
         type: 3}
       propertyPath: numDotsToReveal
-      value: 20000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 8088134726909832704, guid: b885f5f4a95fb4c4ca6cf347f1a95b83,
         type: 3}
