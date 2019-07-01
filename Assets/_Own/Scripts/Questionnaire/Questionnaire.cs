@@ -16,6 +16,11 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     [SerializeField] float showButtonsDelay = 1.0f;
     [SerializeField] float showButtonsPerButtonDelay = 0.5f;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip changePanelSound;
+    [SerializeField] AudioClip buttonUseSound;
+    [SerializeField] AudioClip buttonAppearSound;
+
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
 
@@ -23,10 +28,15 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
     private MyPanel[] questionPanels;
     
     private int lastPressedButtonIndex = -1;
+
+    private AudioSource audioSource;
     
     protected override void Awake()
     {
         base.Awake();
+
+        audioSource = GetComponent<AudioSource>();
+        Assert.IsNotNull(audioSource);
 
         navpoints = FindObjectsOfType<Navpoint>();
         questionPanels = GetComponentsInChildren<MyPanel>();
@@ -65,14 +75,20 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
         for (int i = 0; i < questionPanels.Length; ++i)
         {
             questionPanels[i].Show();
-            
+
+            audioSource.clip = changePanelSound;
+            audioSource.Play();
+
             yield return new WaitForSeconds(showButtonsDelay);
             yield return ShowButtons().WaitForCompletion();
             
             lastPressedButtonIndex = -1;
             yield return new WaitUntil(() => lastPressedButtonIndex != -1);
             answers[i] = lastPressedButtonIndex + 1;
-            
+
+            audioSource.clip = buttonUseSound;
+            audioSource.Play();
+
             yield return HideButtons().WaitForCompletion();
 
             questionPanels[i].Hide();
@@ -107,6 +123,7 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
             sequence.Join(DOTween.Sequence()
                 .AppendInterval(delay)
                 .AppendCallback(buttons[i].Show)
+                .AppendCallback(() => { audioSource.clip = buttonAppearSound; audioSource.Play(); })
             );
         }
 
