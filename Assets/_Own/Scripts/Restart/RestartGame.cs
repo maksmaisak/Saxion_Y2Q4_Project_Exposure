@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
-public class RestartGame : MonoBehaviour
+public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
 {
     [SerializeField] GameObject objectsParent;
     [SerializeField] VRButton restartButton;
@@ -12,6 +12,7 @@ public class RestartGame : MonoBehaviour
     
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
+    [SerializeField] bool showOnReveal;
 
     private MyPanel creditsPanel;
 
@@ -49,4 +50,10 @@ public class RestartGame : MonoBehaviour
     }
     
     private void ShowButton() => restartButton.Show();
+    
+    public void On(OnRevealEvent message)
+    {
+        if (showOnReveal)
+            Activate();
+    }
 }
