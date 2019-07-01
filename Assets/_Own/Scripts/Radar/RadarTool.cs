@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -73,44 +74,22 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] bool drawSpherecastRays          = false;
     
     private new Transform transform;
-    
-    private (int indexX, int indexY)[] rayIndices;
-    private NativeArray<SpherecastCommand> commands;
-    private NativeArray<RaycastHit>        hits;
-    private JobHandle? currentJobHandle;
-    
-    private const int MaxNumRaysPerAxis = 21;
+    private RadarPulse pulse;
+
     private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
     private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
 
     protected override void Awake()
     {
         base.Awake();
-        
         transform = base.transform;
-        
-        // A list of (indexX, indexY) pairs, ordered so that the ones in the middle are first.
-        const int MidIndex = MaxNumRaysPerAxis / 2;
-        rayIndices = Enumerable
-            .Range(0, MaxNumRaysPerAxis)
-            .SelectMany(x => Enumerable.Range(0, MaxNumRaysPerAxis).Select(y => (x, y)))
-            .OrderBy(tuple => Mathf.Abs(tuple.x - MidIndex) + Mathf.Abs(tuple.y - MidIndex))
-            .ToArray();
-        
-        const int MaxNumSpherecasts = MaxNumRaysPerAxis * MaxNumRaysPerAxis;
-        commands = new NativeArray<SpherecastCommand>(MaxNumSpherecasts, Allocator.Persistent);
-        hits     = new NativeArray<RaycastHit>       (MaxNumSpherecasts, Allocator.Persistent);
+        pulse = new RadarPulse();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        
-        if (commands.IsCreated)
-            commands.Dispose();
-        
-        if (hits.IsCreated)
-            hits.Dispose();
+        pulse.Dispose();
     }
 
     void Update()
@@ -130,164 +109,43 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     public void Pulse()
     {
         onPulse?.Invoke();
-
-        if (currentJobHandle.HasValue)
+        
+        if (pulse.isWorkingJob)
         {
-            currentJobHandle.Value.Complete();
-            Assert.IsTrue(currentJobHandle.Value.IsCompleted);
-            currentJobHandle = null;
-            HandleSpherecastResults();
+            pulse.Complete().Each(SpawnWavesphere);
+            Assert.IsFalse(pulse.isWorkingJob);
         }
-
+        
         StartCoroutine(PulseCoroutine());
     }
 
     private IEnumerator PulseCoroutine()
     {
-        Assert.IsFalse(currentJobHandle.HasValue);
+        Assert.IsFalse(pulse.isWorkingJob);
         
-        CreateWavePulse();
-        GenerateSpherecastCommands(DotsManager.instance.GetDotsSurfaceLayerMask());
-        currentJobHandle = SpherecastCommand.ScheduleBatch(commands, hits, 1);
+        CreatePulseWaveVisual();
 
-        yield return new WaitUntil(() => !currentJobHandle.HasValue || currentJobHandle.Value.IsCompleted);
-        if (!currentJobHandle.HasValue) 
+        pulse.drawSpherecastRays = drawSpherecastRays;
+        pulse.pulseSettings = pulseSettings;
+        pulse.DoPulse(
+            transform.position,
+            transform.rotation,
+            DotsManager.instance.GetDotsSurfaceLayerMask()
+        );
+        
+        yield return new WaitUntil(() => !pulse.isWorkingJob || pulse.isJobCompleted);
+        if (!pulse.isWorkingJob) 
             yield break;
         
-        Assert.IsTrue(currentJobHandle.Value.IsCompleted);
-        currentJobHandle.Value.Complete();
-        currentJobHandle = null;
-        HandleSpherecastResults();
+        Assert.IsTrue(pulse.isJobCompleted);
+        pulse.Complete().Each(SpawnWavesphere);
     }
 
     public PulseSettings GetPulseSettings() => pulseSettings;
 
     public void SetPulseSettings(PulseSettings newPulseSettings) => pulseSettings = newPulseSettings;
-
-    private void GenerateSpherecastCommands(LayerMask layerMask)
-    {
-        Vector3    origin   = transform.position;
-        Quaternion rotation = transform.rotation;
-        
-        const float Step = MaxNumRaysPerAxis <= 1 ? 1.0f : 1.0f / (MaxNumRaysPerAxis - 1.0f);
-        const float HalfStep = Step * 0.5f;
-        
-        for (int i = 0; i < rayIndices.Length; ++i)
-        {
-            (int indexX, int indexY) = rayIndices[i];
-            
-            var normalizedPos = MaxNumRaysPerAxis > 1
-                ? new Vector3(indexX * Step, indexY * Step)
-                : new Vector3(0.5f, 0.5f);
-
-            // Randomize the ray direction a bit
-            normalizedPos.x = Mathf.Clamp01(normalizedPos.x + Random.Range(-HalfStep, HalfStep));
-            normalizedPos.y = Mathf.Clamp01(normalizedPos.y + Random.Range(-HalfStep, HalfStep));
-
-            Ray ray = new Ray(origin, rotation * GetRayDirection(normalizedPos));
-            commands[i] = new SpherecastCommand(
-                ray.origin,
-                pulseSettings.sphereCastRadius,
-                ray.direction,
-                pulseSettings.wavePulseMaxRange,
-                layerMask
-            );
-
-            if (drawSpherecastRays)
-                Debug.DrawRay(ray.origin, ray.direction * pulseSettings.wavePulseMaxRange, Color.white * 0.1f, 10.0f, true);
-        }
-    }
-
-    private struct CandidateLocation
-    {
-        public int hitIndex;
-        public LightSection lightSection;
-        public Vector3 point;
-        public float speed;
-        public float timeToArrive;
-        public ulong numDots;
-    }
-
-    private void HandleSpherecastResults()
-    {
-        CandidateLocation[] candidateLocations = GetCandidateLocationsFromSpherecastResults();
-        if (candidateLocations.Length <= 0) 
-            return;
-
-        var usedCandidateIndices = new List<int>();
-        
-        float minTimeDistanceBetweenWavespheres = 1.0f / pulseSettings.maxNumWavespheresPerSecond.Lerp(AdaptiveDifficulty.instance.difficulty);
-        float sqrMinDistance = pulseSettings.minDistanceBetweenSpawnedWavespheres * pulseSettings.minDistanceBetweenSpawnedWavespheres;
-        bool IsTooCloseToAlreadyUsedLocations(int candidateIndex)
-        {
-            Vector3 point = candidateLocations[candidateIndex].point;
-            float timeOfArrival = candidateLocations[candidateIndex].timeToArrive;
-            return 
-                usedCandidateIndices.Any(i => Vector3.SqrMagnitude(candidateLocations[i].point - point) < sqrMinDistance) || 
-                usedCandidateIndices.Any(i => Mathf.Abs(candidateLocations[i].timeToArrive - timeOfArrival) < minTimeDistanceBetweenWavespheres);
-        }
-        
-        while (usedCandidateIndices.Count < candidateLocations.Length)
-        {
-            if (pulseSettings.maxNumWavespheresPerPulse >= 0 && usedCandidateIndices.Count >= pulseSettings.maxNumWavespheresPerPulse)
-                break;
-
-            int candidateIndex = candidateLocations
-                .Select((l, i) => i)
-                .Where(i => !usedCandidateIndices.Contains(i) && !IsTooCloseToAlreadyUsedLocations(i))
-                .DefaultIfEmpty(-1)
-                .ArgMin(i => i == -1 ? ulong.MaxValue : candidateLocations[i].numDots);
-
-            if (candidateIndex == -1)
-                break;
-
-            usedCandidateIndices.Add(candidateIndex);
-        }
-
-        foreach (int candidateIndex in usedCandidateIndices)
-        {
-            ref var location = ref candidateLocations[candidateIndex];
-            int i = location.hitIndex;
-            SpawnWavesphere(hits[i], new Ray(commands[i].origin, commands[i].direction), location.speed, location.lightSection);
-        }
-    }
-
-    private CandidateLocation[] GetCandidateLocationsFromSpherecastResults()
-    {
-        // The candidates are sorted into bands with similar distance.
-        // Candidates in the same band preserve the initial order.
-        const float DistanceBandWidth = 2.0f;
-        const ulong NumDotsBandWidth = 80;
-
-        var dotsManager = DotsManager.instance;
-        DotsRegistry dotsRegistry = dotsManager.registry;
-        
-        ulong GetRoundedNumDotsAround(Vector3 point) => dotsRegistry.GetNumDotsAround(point) / NumDotsBandWidth;
-        int GetRoundedHitDistance(int hitIndex) => Mathf.RoundToInt(hits[hitIndex].distance / DistanceBandWidth);
-
-        return hits
-            .Select((hit, i) => (hit, i))
-            .Where(tuple => tuple.hit.collider)
-            .Select(tuple => (tuple.hit, tuple.i, lightSection: dotsManager.GetSection(tuple.hit.collider)))
-            .Where(tuple => tuple.lightSection && !tuple.lightSection.isRevealed)
-            .Select(tuple =>
-            {
-                float speed = Random.Range(pulseSettings.wavesphereSpeedMin, pulseSettings.wavesphereSpeedMax);
-                return new CandidateLocation
-                {
-                    hitIndex = tuple.i,
-                    lightSection = tuple.lightSection,
-                    point = tuple.hit.point,
-                    speed = speed,
-                    timeToArrive = tuple.hit.distance / pulseSettings.wavePulseSpeed + tuple.hit.distance / speed,
-                    numDots = GetRoundedNumDotsAround(tuple.hit.point),
-                };
-            })
-            .OrderBy(l => GetRoundedHitDistance(l.hitIndex))
-            .ToArray();
-    }
-
-    private void CreateWavePulse()
+    
+    private void CreatePulseWaveVisual()
     {
         Assert.IsNotNull(pulseSettings.wavePulsePrefab);
         
@@ -304,51 +162,29 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         material.SetFloat(CosHalfVerticalAngle  , Mathf.Cos(Mathf.Deg2Rad * pulseSettings.wavePulseAngleVertical   * 0.5f));
     }
 
-    private void SpawnWavesphere(RaycastHit hit, Ray originalRay, float speed, LightSection lightSection)
+    private void SpawnWavesphere(RadarHighlightLocation highlightLocation)
     {
-        float dotConeAngle = pulseSettings.baseDotConeAngle / Mathf.Pow(pulseSettings.dotConeAngleFalloff * hit.distance + 1.0f, pulseSettings.dotConeAngleFalloffPower);
-        RadarHighlightLocation highlightLocation = new RadarHighlightLocation
-        {
-            originalRay = originalRay,
-            pointOnSurface = hit.point,
-            dotEmissionConeAngle = dotConeAngle,
-            maxDotDistanceFromSurfacePointAlongOriginalRay = pulseSettings.maxDotDistanceFromSurfacePointAlongOriginalRay
-        };
-        
         Wavesphere prefab = pulseSettings.wavespherePrefab;
         Assert.IsNotNull(prefab);
+        
         Vector3 targetPosition = (pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform).position;
         
-        this.Delay(hit.distance / pulseSettings.wavePulseSpeed, () =>
+        this.Delay(highlightLocation.distanceFromOrigin / pulseSettings.wavePulseSpeed, () =>
         {
-            if (lightSection && lightSection.isRevealed)
+            if (highlightLocation.lightSection && highlightLocation.lightSection.isRevealed)
                 return;
             
             if (highlightWithoutWavespheres)
             {
-                DotsManager.instance.Highlight(highlightLocation, originalRay.origin);
+                DotsManager.instance.Highlight(highlightLocation, highlightLocation.originalRay.origin);
                 return;
             }
             
-            Wavesphere wavesphere = Instantiate(prefab, hit.point, Quaternion.identity);
-            wavesphere.Initialize(targetPosition, speed, lightSection);
+            Wavesphere wavesphere = Instantiate(prefab, highlightLocation.pointOnSurface, Quaternion.identity);
+            wavesphere.Initialize(targetPosition, highlightLocation.wavesphereSpeed, highlightLocation.lightSection);
             wavesphere.highlightLocation = highlightLocation;
             
             onSpawnedWavesphere?.Invoke(this, wavesphere);
         });
-    }
-    
-    private Vector3 GetRayDirection(Vector2 normalizedPos)
-    {
-        float angleX = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-pulseSettings.wavePulseAngleHorizontal, pulseSettings.wavePulseAngleHorizontal, normalizedPos.x);
-        float angleY = Mathf.Deg2Rad * 0.5f * Mathf.Lerp(-pulseSettings.wavePulseAngleVertical  , pulseSettings.wavePulseAngleVertical  , normalizedPos.y);
-
-        float cos = Mathf.Cos(angleX);
-        Vector3 direction = new Vector3(
-            Mathf.Sin(angleX),
-            Mathf.Sin(angleY) * cos,
-            cos
-        );
-        return direction;
     }
 }
