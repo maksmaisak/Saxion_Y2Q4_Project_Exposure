@@ -28,8 +28,7 @@ public class DotsManager : Singleton<DotsManager>
 
     private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
     private readonly Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
-
-
+    
     protected override void Awake()
     {
         base.Awake();
@@ -78,26 +77,14 @@ public class DotsManager : Singleton<DotsManager>
 
     public void Highlight(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
-        dotsGenerator.Generate(ref location, layerMask);
-        NativeArray<RaycastHit> hits = dotsGenerator.Complete();
-        FillPositionBuffersFromRaycastResults(hits, ref location);
-
-        for (int i = 0; i < lightSections.Length; ++i)
+        if (dotsGenerator.isWorkingJob)
         {
-            List<Vector3> positionsBuffer = positionsBuffers[i];
-            if (positionsBuffer.Count == 0)
-                continue;
-            
-            positionsBuffer.ForEach(registry.RegisterDot);
-            GetFreeDotsAnimator().AnimateDots(
-                positionsBuffer, dotsOrigin, dotsAnimationDuration, 
-                lightSections[i], 
-                onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator)
-            );
-            
-            new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
-            positionsBuffer.Clear();
+            DotsGenerator.Results results = dotsGenerator.Complete();
+            ProcessHighlightJobResult(results);
+            Assert.IsFalse(dotsGenerator.isWorkingJob);
         }
+
+        StartCoroutine(HighlightCoroutine(location, dotsOrigin, layerMask));
     }
     
     public LightSection GetSection(Collider collider)
@@ -121,6 +108,42 @@ public class DotsManager : Singleton<DotsManager>
     public void DrawDebugInfoInEditor()
     {
         registry?.DrawDebugInfoInEditor();
+    }
+
+    private IEnumerator HighlightCoroutine(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
+    {
+        Assert.IsFalse(dotsGenerator.isWorkingJob);
+        
+        dotsGenerator.Generate(ref location, dotsOrigin, layerMask);
+
+        yield return new WaitUntil(() => !dotsGenerator.isWorkingJob || dotsGenerator.isJobCompleted);
+        if (!dotsGenerator.isWorkingJob) 
+            yield break;
+
+        Assert.IsTrue(dotsGenerator.isJobCompleted);
+        ProcessHighlightJobResult(dotsGenerator.Complete());
+    }
+
+    private void ProcessHighlightJobResult(DotsGenerator.Results results)
+    {
+        FillPositionBuffersFromRaycastResults(results.hits, ref results.highlightLocation);
+
+        for (int i = 0; i < lightSections.Length; ++i)
+        {
+            List<Vector3> positionsBuffer = positionsBuffers[i];
+            if (positionsBuffer.Count == 0)
+                continue;
+            
+            positionsBuffer.ForEach(registry.RegisterDot);
+            GetFreeDotsAnimator().AnimateDots(
+                positionsBuffer, results.dotsOrigin, dotsAnimationDuration, 
+                lightSections[i], 
+                onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator)
+            );
+            
+            new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+            positionsBuffer.Clear();
+        }
     }
     
     private void FillPositionBuffersFromRaycastResults(NativeArray<RaycastHit> hits, ref RadarHighlightLocation location)

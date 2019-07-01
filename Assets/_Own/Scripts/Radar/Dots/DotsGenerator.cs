@@ -9,15 +9,24 @@ using Random = UnityEngine.Random;
 
 public class DotsGenerator : IDisposable
 {
+    public struct Results
+    {
+        public NativeArray<RaycastHit> hits;
+        public RadarHighlightLocation highlightLocation;
+        public Vector3 dotsOrigin;
+    }
+
     private NativeArray<RaycastCommand> commands;
     private NativeArray<RaycastHit>     hits;
     private JobHandle? currentJobHandle;
 
     private readonly float maxDotSpawnDistance = 100.0f;
+    private RadarHighlightLocation currentHighlightLocation;
+    private Vector3 currentDotsOrigin;
     
     public bool isWorkingJob   => currentJobHandle.HasValue;
     public bool isJobCompleted => currentJobHandle.HasValue && currentJobHandle.Value.IsCompleted;
-    
+
     public DotsGenerator(float maxDotSpawnDistance)
     {
         commands = new NativeArray<RaycastCommand>(DotsManager.MaxNumDotsPerHighlight, Allocator.Persistent);
@@ -35,22 +44,29 @@ public class DotsGenerator : IDisposable
             hits.Dispose();
     }
 
-    public void Generate(ref RadarHighlightLocation location, LayerMask layerMask)
+    public void Generate(ref RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
         Assert.IsFalse(currentJobHandle.HasValue);
+
+        currentHighlightLocation = location;
+        currentDotsOrigin = dotsOrigin;
         
         GenerateRaycastCommands(ref location, layerMask);
         currentJobHandle = RaycastCommand.ScheduleBatch(commands, hits, 1);
     }
 
-    public NativeArray<RaycastHit> Complete()
+    public Results Complete()
     {
         Assert.IsTrue(currentJobHandle.HasValue);
 
         currentJobHandle.Value.Complete();
         currentJobHandle = null;
 
-        return hits;
+        return new Results {
+            hits = hits,
+            highlightLocation = currentHighlightLocation,
+            dotsOrigin = currentDotsOrigin
+        };
     }
     
     private void GenerateRaycastCommands(ref RadarHighlightLocation location, LayerMask layerMask)
