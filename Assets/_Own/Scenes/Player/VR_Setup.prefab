@@ -2194,7 +2194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerType: 0
-  setFingersForControllerType: 1
+  setFingersForControllerType: 0
   mirrorModel: 0
   animationSnapSpeed: 0.1
   thumbButton: 9
@@ -2246,8 +2246,8 @@ MonoBehaviour:
     stateValue: -1
     applyThumbOverride: 1
     thumbOverride: 1
-    applyIndexOverride: 0
-    indexOverride: 0
+    applyIndexOverride: 1
+    indexOverride: 0.35
     applyMiddleOverride: 1
     middleOverride: 0.8
     applyRingOverride: 1
@@ -2259,8 +2259,8 @@ MonoBehaviour:
     stateValue: -1
     applyThumbOverride: 1
     thumbOverride: 1
-    applyIndexOverride: 0
-    indexOverride: 0
+    applyIndexOverride: 1
+    indexOverride: 0.55
     applyMiddleOverride: 1
     middleOverride: 0.8
     applyRingOverride: 1
@@ -6627,7 +6627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerType: 0
-  setFingersForControllerType: 1
+  setFingersForControllerType: 0
   mirrorModel: 1
   animationSnapSpeed: 0.1
   thumbButton: 9
@@ -6679,8 +6679,8 @@ MonoBehaviour:
     stateValue: -1
     applyThumbOverride: 1
     thumbOverride: 1
-    applyIndexOverride: 0
-    indexOverride: 0
+    applyIndexOverride: 1
+    indexOverride: 0.35
     applyMiddleOverride: 1
     middleOverride: 0.8
     applyRingOverride: 1
@@ -6692,8 +6692,8 @@ MonoBehaviour:
     stateValue: -1
     applyThumbOverride: 1
     thumbOverride: 1
-    applyIndexOverride: 0
-    indexOverride: 0
+    applyIndexOverride: 1
+    indexOverride: 0.55
     applyMiddleOverride: 1
     middleOverride: 0.8
     applyRingOverride: 1
