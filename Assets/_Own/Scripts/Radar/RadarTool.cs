@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
+using VRTK;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -61,12 +61,11 @@ public struct PulseSettings
 
 public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 {
-    [SerializeField] PulseSettings pulseSettings = PulseSettings.Default;
-    
     [Serializable]
     public class OnSpawnedWavesphereHandler : UnityEvent<RadarTool, Wavesphere> {}
+    
+    [SerializeField] PulseSettings pulseSettings = PulseSettings.Default;
     public OnSpawnedWavesphereHandler onSpawnedWavesphere;
-
     public UnityEvent onPulse;
 
     [Header("Debug settings")] 
@@ -75,9 +74,6 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     
     private new Transform transform;
     private RadarPulse pulse;
-
-    private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
-    private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
 
     protected override void Awake()
     {
@@ -101,11 +97,6 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             Pulse();
     }
 
-    public void On(OnRevealEvent message)
-    {
-        StopAllCoroutines();
-    }
-    
     public void Pulse()
     {
         onPulse?.Invoke();
@@ -118,7 +109,12 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         
         StartCoroutine(PulseCoroutine());
     }
+    
+    public PulseSettings GetPulseSettings() => pulseSettings;
+    public void SetPulseSettings(PulseSettings newPulseSettings) => pulseSettings = newPulseSettings;
 
+    public void On(OnRevealEvent message) => StopAllCoroutines();
+    
     private IEnumerator PulseCoroutine()
     {
         Assert.IsFalse(pulse.isWorkingJob);
@@ -140,11 +136,10 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         Assert.IsTrue(pulse.isJobCompleted);
         pulse.Complete().Each(SpawnWavesphere);
     }
-
-    public PulseSettings GetPulseSettings() => pulseSettings;
-
-    public void SetPulseSettings(PulseSettings newPulseSettings) => pulseSettings = newPulseSettings;
     
+    private static readonly int CosHalfVerticalAngle   = Shader.PropertyToID("_CosHalfVerticalAngle");
+    private static readonly int CosHalfHorizontalAngle = Shader.PropertyToID("_CosHalfHorizontalAngle");
+
     private void CreatePulseWaveVisual()
     {
         Assert.IsNotNull(pulseSettings.wavePulsePrefab);
@@ -167,7 +162,7 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
         Wavesphere prefab = pulseSettings.wavespherePrefab;
         Assert.IsNotNull(prefab);
         
-        Vector3 targetPosition = (pulseSettings.wavesphereTarget ? pulseSettings.wavesphereTarget : Camera.main.transform).position;
+        Vector3 targetPosition = GetWavesphereTargetTransform().position;
         
         this.Delay(highlightLocation.distanceFromOrigin / pulseSettings.wavePulseSpeed, () =>
         {
@@ -186,5 +181,12 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
             
             onSpawnedWavesphere?.Invoke(this, wavesphere);
         });
+    }
+
+    private Transform GetWavesphereTargetTransform()
+    {
+        return pulseSettings.wavesphereTarget ? 
+            pulseSettings.wavesphereTarget : 
+            VRTK_DeviceFinder.HeadsetCamera();
     }
 }
