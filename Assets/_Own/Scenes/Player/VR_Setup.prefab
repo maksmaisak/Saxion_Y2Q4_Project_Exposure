@@ -178,9 +178,9 @@ MonoBehaviour:
   delayBetweenQuestionPanels: 2
   showButtonsDelay: 2
   showButtonsPerButtonDelay: 0.5
-  changePanelSound: {fileID: 8300000, guid: 0c44f90d51d69df439aef30e606bf51f, type: 3}
-  buttonUseSound: {fileID: 8300000, guid: c50a14f6e317774468c48c5db23d6818, type: 3}
-  buttonAppearSound: {fileID: 8300000, guid: 8ce963102ce271c48b4406966da47710, type: 3}
+  changePanelSound: {fileID: 8300000, guid: f2b0b09d96b195b46bede0fdd2b0811d, type: 3}
+  buttonUseSound: {fileID: 8300000, guid: 713e801da093d2141af088ce424ce41e, type: 3}
+  buttonAppearSound: {fileID: 8300000, guid: 1ca83c4ee88241b4d8c87a9f1784f39e, type: 3}
   showOnStart: 0
 --- !u!82 &1142669010713897319
 AudioSource:
