@@ -2194,7 +2194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerType: 0
-  setFingersForControllerType: 1
+  setFingersForControllerType: 0
   mirrorModel: 0
   animationSnapSpeed: 0.1
   thumbButton: 9
@@ -2245,28 +2245,28 @@ MonoBehaviour:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0
-    applyIndexOverride: 0
-    indexOverride: 0
+    thumbOverride: 1
+    applyIndexOverride: 1
+    indexOverride: 0.35
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 0.5
+    pinkyOverride: 0.9
   useOverrides:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0.3
-    applyIndexOverride: 0
-    indexOverride: 0
+    thumbOverride: 1
+    applyIndexOverride: 1
+    indexOverride: 0.55
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 1
+    pinkyOverride: 0.9
   handModel: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactNearTouch: {fileID: 0}
@@ -6627,7 +6627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerType: 0
-  setFingersForControllerType: 1
+  setFingersForControllerType: 0
   mirrorModel: 1
   animationSnapSpeed: 0.1
   thumbButton: 9
@@ -6678,28 +6678,28 @@ MonoBehaviour:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0
-    applyIndexOverride: 0
-    indexOverride: 0
+    thumbOverride: 1
+    applyIndexOverride: 1
+    indexOverride: 0.35
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 0.5
+    pinkyOverride: 0.9
   useOverrides:
     ignoreAllOverrides: 0
     stateValue: -1
     applyThumbOverride: 1
-    thumbOverride: 0.3
-    applyIndexOverride: 0
-    indexOverride: 0
+    thumbOverride: 1
+    applyIndexOverride: 1
+    indexOverride: 0.55
     applyMiddleOverride: 1
-    middleOverride: 1
+    middleOverride: 0.8
     applyRingOverride: 1
-    ringOverride: 1
+    ringOverride: 0.9
     applyPinkyOverride: 1
-    pinkyOverride: 1
+    pinkyOverride: 0.9
   handModel: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactNearTouch: {fileID: 0}
