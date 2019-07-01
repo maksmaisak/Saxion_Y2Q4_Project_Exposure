@@ -296,7 +296,7 @@ MonoBehaviour:
   startActive: 0
   appearAt: []
   showDelayAfterTeleport: 2
-  showAudioClip: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
+  showAudioClip: {fileID: 8300000, guid: f2b0b09d96b195b46bede0fdd2b0811d, type: 3}
 --- !u!1 &1784896742663629155
 GameObject:
   m_ObjectHideFlags: 0

@@ -180,7 +180,7 @@ MonoBehaviour:
   showButtonsPerButtonDelay: 0.5
   changePanelSound: {fileID: 8300000, guid: f2b0b09d96b195b46bede0fdd2b0811d, type: 3}
   buttonUseSound: {fileID: 8300000, guid: 713e801da093d2141af088ce424ce41e, type: 3}
-  buttonAppearSound: {fileID: 8300000, guid: 1ca83c4ee88241b4d8c87a9f1784f39e, type: 3}
+  buttonAppearSound: {fileID: 8300000, guid: f2b0b09d96b195b46bede0fdd2b0811d, type: 3}
   showOnStart: 0
 --- !u!82 &1142669010713897319
 AudioSource:
@@ -194,7 +194,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.446
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0

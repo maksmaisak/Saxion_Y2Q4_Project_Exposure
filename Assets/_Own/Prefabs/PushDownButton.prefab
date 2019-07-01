@@ -129,7 +129,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c50a14f6e317774468c48c5db23d6818, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 713e801da093d2141af088ce424ce41e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.369
   m_Pitch: 1
@@ -345,6 +345,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 128091148435443905}
     m_Modifications:
+    - target: {fileID: 1000011401907096, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
+      propertyPath: m_Name
+      value: ControllerRigidbodyActivator
+      objectReference: {fileID: 0}
     - target: {fileID: 4000014230070706, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -388,10 +392,6 @@ PrefabInstance:
     - target: {fileID: 4000014230070706, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1000011401907096, guid: 33a096ef14a38e543af97bd67de0db31, type: 3}
-      propertyPath: m_Name
-      value: ControllerRigidbodyActivator
       objectReference: {fileID: 0}
     - target: {fileID: 54000011260950592, guid: 33a096ef14a38e543af97bd67de0db31,
         type: 3}
