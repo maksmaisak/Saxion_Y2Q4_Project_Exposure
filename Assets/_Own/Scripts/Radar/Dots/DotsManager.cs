@@ -15,33 +15,22 @@ public class DotsManager : Singleton<DotsManager>
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] float maxDotSpawnDistance = 200.0f;
-    [Space] 
+    [SerializeField] int numDotsGeneratorsToPreCreate = 4;
+    [Space]
     [SerializeField] DotsAnimator dotsAnimatorPrefab;
     [SerializeField] int numAnimatorsToPreCreate = 8;
     [SerializeField] float dotsAnimationDuration = 1.0f;
 
     public DotsRegistry registry { get; private set; }
 
-    private DotsGenerator dotsGenerator;
     private LightSection [] lightSections;
     private List<Vector3>[] positionsBuffers;
 
     private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
-    private readonly Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
+    private readonly List<DotsGenerator> allDotsGenerators = new List<DotsGenerator>();
+    private readonly Stack<DotsGenerator> freeDotsGenerators = new Stack<DotsGenerator>();
+    private readonly Stack<DotsAnimator>  freeDotsAnimators = new Stack<DotsAnimator>();
     
-    protected override void Awake()
-    {
-        base.Awake();
-        dotsGenerator = new DotsGenerator(maxDotSpawnDistance);
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        if (dotsGenerator != null)
-            dotsGenerator.Dispose();
-    }
-
     void Start()
     {
         Physics.queriesHitTriggers = false;
@@ -49,26 +38,25 @@ public class DotsManager : Singleton<DotsManager>
         Assert.IsNotNull(dotsAnimatorPrefab);
       
         registry = new DotsRegistry();
+        PreCreateDotsGenerators();
         PreCreateDotsAnimators();
 
         lightSections = FindObjectsOfType<LightSection>().ToArray();
+        PopulateColliderToLightSectionIndex(colliderToLightSectionIndex);
         positionsBuffers = Enumerable
             .Range(0, lightSections.Length)
             .Select(i => new List<Vector3>(MaxNumDotsPerHighlight))
             .ToArray();
 
-        for (int i = 0; i < lightSections.Length; ++i)
-        {
-            var colliders = lightSections[i]
-                .GetGameObjects()
-                .SelectMany(go => go.GetComponentsInChildren<Collider>())
-                .Distinct();
-         
-            foreach (Collider col in colliders) 
-                colliderToLightSectionIndex.Add(col, i);
-        }
-
         Assert.IsTrue(lightSections.Length > 0, "There must be at least one LightSection in the scene!");
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        foreach (var dotsGenerator in allDotsGenerators)
+            dotsGenerator?.Dispose();
     }
 
     public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
@@ -77,14 +65,7 @@ public class DotsManager : Singleton<DotsManager>
 
     public void Highlight(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
-        if (dotsGenerator.isWorkingJob)
-        {
-            DotsGenerator.Results results = dotsGenerator.Complete();
-            ProcessHighlightJobResult(results);
-            Assert.IsFalse(dotsGenerator.isWorkingJob);
-        }
-
-        StartCoroutine(HighlightCoroutine(location, dotsOrigin, layerMask));
+        StartCoroutine(HighlightCoroutine(GetFreeDotsGenerator(), location, dotsOrigin, layerMask));
     }
     
     public LightSection GetSection(Collider collider)
@@ -110,18 +91,16 @@ public class DotsManager : Singleton<DotsManager>
         registry?.DrawDebugInfoInEditor();
     }
 
-    private IEnumerator HighlightCoroutine(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
+    private IEnumerator HighlightCoroutine(DotsGenerator dotsGenerator, RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
         Assert.IsFalse(dotsGenerator.isWorkingJob);
         
         dotsGenerator.Generate(ref location, dotsOrigin, layerMask);
-
-        yield return new WaitUntil(() => !dotsGenerator.isWorkingJob || dotsGenerator.isJobCompleted);
-        if (!dotsGenerator.isWorkingJob) 
-            yield break;
-
+        yield return new WaitUntil(() => dotsGenerator.isJobCompleted);
+        
         Assert.IsTrue(dotsGenerator.isJobCompleted);
         ProcessHighlightJobResult(dotsGenerator.Complete());
+        freeDotsGenerators.Push(dotsGenerator);
     }
 
     private void ProcessHighlightJobResult(DotsGenerator.Results results)
@@ -169,13 +148,11 @@ public class DotsManager : Singleton<DotsManager>
             positionsBuffers[sectionIndex].Add(dotHit.point);
         }
     }
-
-    private DotsAnimator GetFreeDotsAnimator()
+    
+    private void PreCreateDotsGenerators()
     {
-        if (freeDotsAnimators.Count > 0)
-            return freeDotsAnimators.Pop();
-
-        return CreateDotsAnimator();
+        while (freeDotsGenerators.Count < numDotsGeneratorsToPreCreate)
+            freeDotsGenerators.Push(CreateDotsGenerator());
     }
     
     private void PreCreateDotsAnimators()
@@ -184,8 +161,43 @@ public class DotsManager : Singleton<DotsManager>
             freeDotsAnimators.Push(CreateDotsAnimator());
     }
 
+    private DotsGenerator GetFreeDotsGenerator()
+    {
+        if (freeDotsGenerators.Count > 0)
+            return freeDotsGenerators.Pop();
+
+        return CreateDotsGenerator();
+    }
+    
+    private DotsAnimator GetFreeDotsAnimator()
+    {
+        if (freeDotsAnimators.Count > 0)
+            return freeDotsAnimators.Pop();
+
+        return CreateDotsAnimator();
+    }
+
+    private DotsGenerator CreateDotsGenerator()
+    {
+        var generator = new DotsGenerator(maxDotSpawnDistance);
+        allDotsGenerators.Add(generator);
+        return generator;
+    }
+
     private DotsAnimator CreateDotsAnimator()
     {
         return Instantiate(dotsAnimatorPrefab, parent: transform);
+    }
+
+    private void PopulateColliderToLightSectionIndex(Dictionary<Collider, int> dictionary)
+    {
+        for (int i = 0; i < lightSections.Length; ++i)
+        {
+            lightSections[i]
+                .GetGameObjects()
+                .SelectMany(go => go.GetComponentsInChildren<Collider>())
+                .Distinct()
+                .Each(c => dictionary.Add(c, i));
+        }
     }
 }
