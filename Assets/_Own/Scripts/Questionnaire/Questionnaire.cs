@@ -18,8 +18,8 @@ public class Questionnaire : MyBehaviour, IEventReceiver<OnTeleportEvent>
 
     [Header("Audio")]
     [SerializeField] AudioClip changePanelSound;
-    [SerializeField] AudioClip buttonUseSound;
     [SerializeField] AudioClip buttonAppearSound;
+    [SerializeField] AudioClip buttonUseSound;
 
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
