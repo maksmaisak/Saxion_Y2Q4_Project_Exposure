@@ -9,6 +9,7 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
     [SerializeField] VRButton restartButton;
     [SerializeField] float startDelay = 4.0f;
     [SerializeField] float showButtonsDelay = 1.0f;
+    [SerializeField] float timeToRestartScene = 1.5f;
     
     [Header("Debug")] 
     [SerializeField] bool showOnStart;
@@ -22,7 +23,7 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
         creditsPanel = GetComponentInChildren<MyPanel>();
         
         objectsParent.SetActive(true);
-        restartButton.onActivate.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
+        restartButton.onActivate.AddListener(RestartScene);
         
         Assert.IsNotNull(objectsParent);
         
@@ -41,6 +42,13 @@ public class RestartGame : MyBehaviour,IEventReceiver<OnRevealEvent>
         yield return new WaitForSeconds(showButtonsDelay);
         ShowButton();
 
+    }
+
+    private void RestartScene()
+    {
+        restartButton.Hide();
+
+        this.Delay(timeToRestartScene, () => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
     }
 
     public void Activate()
