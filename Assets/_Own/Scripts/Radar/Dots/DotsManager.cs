@@ -15,7 +15,8 @@ public class DotsManager : Singleton<DotsManager>
     [Tooltip("Dots can only appear on surfaces with these layers.")] 
     [SerializeField] LayerMask dotsSurfaceLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] float maxDotSpawnDistance = 200.0f;
-    [Space] 
+    [SerializeField] int numDotsGeneratorsToPreCreate = 4;
+    [Space]
     [SerializeField] DotsAnimator dotsAnimatorPrefab;
     [SerializeField] int numAnimatorsToPreCreate = 8;
     [SerializeField] float dotsAnimationDuration = 1.0f;
@@ -26,30 +27,10 @@ public class DotsManager : Singleton<DotsManager>
     private List<Vector3>[] positionsBuffers;
 
     private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
-    private readonly Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
+    private readonly List<DotsGenerator> allDotsGenerators = new List<DotsGenerator>();
+    private readonly Stack<DotsGenerator> freeDotsGenerators = new Stack<DotsGenerator>();
+    private readonly Stack<DotsAnimator>  freeDotsAnimators = new Stack<DotsAnimator>();
     
-    private NativeArray<RaycastCommand> commands;
-    private NativeArray<RaycastHit>     hits;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        commands = new NativeArray<RaycastCommand>(MaxNumDotsPerHighlight, Allocator.Persistent);
-        hits     = new NativeArray<RaycastHit>    (MaxNumDotsPerHighlight, Allocator.Persistent);
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        
-        if (commands.IsCreated)
-            commands.Dispose();
-        
-        if (hits.IsCreated)
-            hits.Dispose();
-    }
-
     void Start()
     {
         Physics.queriesHitTriggers = false;
@@ -57,26 +38,25 @@ public class DotsManager : Singleton<DotsManager>
         Assert.IsNotNull(dotsAnimatorPrefab);
       
         registry = new DotsRegistry();
+        PreCreateDotsGenerators();
         PreCreateDotsAnimators();
 
         lightSections = FindObjectsOfType<LightSection>().ToArray();
+        PopulateColliderToLightSectionIndex(colliderToLightSectionIndex);
         positionsBuffers = Enumerable
             .Range(0, lightSections.Length)
             .Select(i => new List<Vector3>(MaxNumDotsPerHighlight))
             .ToArray();
 
-        for (int i = 0; i < lightSections.Length; ++i)
-        {
-            var colliders = lightSections[i]
-                .GetGameObjects()
-                .SelectMany(go => go.GetComponentsInChildren<Collider>())
-                .Distinct();
-         
-            foreach (Collider col in colliders) 
-                colliderToLightSectionIndex.Add(col, i);
-        }
-
         Assert.IsTrue(lightSections.Length > 0, "There must be at least one LightSection in the scene!");
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        foreach (var dotsGenerator in allDotsGenerators)
+            dotsGenerator?.Dispose();
     }
 
     public LayerMask GetDotsSurfaceLayerMask() => dotsSurfaceLayerMask;
@@ -85,26 +65,7 @@ public class DotsManager : Singleton<DotsManager>
 
     public void Highlight(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
-        GenerateRaycastCommands(ref location, layerMask);
-        RaycastCommand.ScheduleBatch(commands, hits, 1).Complete();
-        FillPositionBuffersFromRaycastResults(ref location);
-
-        for (int i = 0; i < lightSections.Length; ++i)
-        {
-            List<Vector3> positionsBuffer = positionsBuffers[i];
-            if (positionsBuffer.Count == 0)
-                continue;
-            
-            positionsBuffer.ForEach(registry.RegisterDot);
-            GetFreeDotsAnimator().AnimateDots(
-                positionsBuffer, dotsOrigin, dotsAnimationDuration, 
-                lightSections[i], 
-                onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator)
-            );
-            
-            new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
-            positionsBuffer.Clear();
-        }
+        StartCoroutine(HighlightCoroutine(GetFreeDotsGenerator(), location, dotsOrigin, layerMask));
     }
     
     public LightSection GetSection(Collider collider)
@@ -129,21 +90,42 @@ public class DotsManager : Singleton<DotsManager>
     {
         registry?.DrawDebugInfoInEditor();
     }
-    
-    private void GenerateRaycastCommands(ref RadarHighlightLocation location, LayerMask layerMask)
+
+    private IEnumerator HighlightCoroutine(DotsGenerator dotsGenerator, RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
-        float distanceFromOrigin = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
-        float displacementRadius = distanceFromOrigin * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
+        Assert.IsFalse(dotsGenerator.isWorkingJob);
         
-        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
+        dotsGenerator.Generate(ref location, dotsOrigin, layerMask);
+        yield return new WaitUntil(() => dotsGenerator.isJobCompleted);
+        
+        Assert.IsTrue(dotsGenerator.isJobCompleted);
+        ProcessHighlightJobResult(dotsGenerator.Complete());
+        freeDotsGenerators.Push(dotsGenerator);
+    }
+
+    private void ProcessHighlightJobResult(DotsGenerator.Results results)
+    {
+        FillPositionBuffersFromRaycastResults(results.hits, ref results.highlightLocation);
+
+        for (int i = 0; i < lightSections.Length; ++i)
         {
-            Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
-            commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
+            List<Vector3> positionsBuffer = positionsBuffers[i];
+            if (positionsBuffer.Count == 0)
+                continue;
+            
+            positionsBuffer.ForEach(registry.RegisterDot);
+            GetFreeDotsAnimator().AnimateDots(
+                positionsBuffer, results.dotsOrigin, dotsAnimationDuration, 
+                lightSections[i], 
+                onDoneCallback: (animator, positions) => freeDotsAnimators.Push(animator)
+            );
+            
+            new OnHighlightEvent(positionsBuffer.AsReadOnly()).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+            positionsBuffer.Clear();
         }
     }
     
-    private void FillPositionBuffersFromRaycastResults(ref RadarHighlightLocation location)
+    private void FillPositionBuffersFromRaycastResults(NativeArray<RaycastHit> hits, ref RadarHighlightLocation location)
     {
         for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
         {
@@ -166,13 +148,11 @@ public class DotsManager : Singleton<DotsManager>
             positionsBuffers[sectionIndex].Add(dotHit.point);
         }
     }
-
-    private DotsAnimator GetFreeDotsAnimator()
+    
+    private void PreCreateDotsGenerators()
     {
-        if (freeDotsAnimators.Count > 0)
-            return freeDotsAnimators.Pop();
-
-        return CreateDotsAnimator();
+        while (freeDotsGenerators.Count < numDotsGeneratorsToPreCreate)
+            freeDotsGenerators.Push(CreateDotsGenerator());
     }
     
     private void PreCreateDotsAnimators()
@@ -181,8 +161,43 @@ public class DotsManager : Singleton<DotsManager>
             freeDotsAnimators.Push(CreateDotsAnimator());
     }
 
+    private DotsGenerator GetFreeDotsGenerator()
+    {
+        if (freeDotsGenerators.Count > 0)
+            return freeDotsGenerators.Pop();
+
+        return CreateDotsGenerator();
+    }
+    
+    private DotsAnimator GetFreeDotsAnimator()
+    {
+        if (freeDotsAnimators.Count > 0)
+            return freeDotsAnimators.Pop();
+
+        return CreateDotsAnimator();
+    }
+
+    private DotsGenerator CreateDotsGenerator()
+    {
+        var generator = new DotsGenerator(maxDotSpawnDistance);
+        allDotsGenerators.Add(generator);
+        return generator;
+    }
+
     private DotsAnimator CreateDotsAnimator()
     {
         return Instantiate(dotsAnimatorPrefab, parent: transform);
+    }
+
+    private void PopulateColliderToLightSectionIndex(Dictionary<Collider, int> dictionary)
+    {
+        for (int i = 0; i < lightSections.Length; ++i)
+        {
+            lightSections[i]
+                .GetGameObjects()
+                .SelectMany(go => go.GetComponentsInChildren<Collider>())
+                .Distinct()
+                .Each(c => dictionary.Add(c, i));
+        }
     }
 }
