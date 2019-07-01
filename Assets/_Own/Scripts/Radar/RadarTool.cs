@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
-using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 using VRTK;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public struct PulseSettings
@@ -85,7 +81,8 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        pulse.Dispose();
+        if (pulse != null)
+            pulse.Dispose();
     }
 
     void Update()
@@ -185,8 +182,16 @@ public class RadarTool : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     private Transform GetWavesphereTargetTransform()
     {
-        return pulseSettings.wavesphereTarget ? 
-            pulseSettings.wavesphereTarget : 
-            VRTK_DeviceFinder.HeadsetCamera();
+        Transform tf = pulseSettings.wavesphereTarget;
+        if (tf)
+            return tf;
+
+        if (tf = VRTK_DeviceFinder.HeadsetCamera())
+            return tf;
+
+        if (tf = Camera.main.transform)
+            return tf;
+
+        return transform;
     }
 }

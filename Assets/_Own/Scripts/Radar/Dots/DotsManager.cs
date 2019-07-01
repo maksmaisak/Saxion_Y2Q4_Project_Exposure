@@ -22,32 +22,25 @@ public class DotsManager : Singleton<DotsManager>
 
     public DotsRegistry registry { get; private set; }
 
+    private DotsGenerator dotsGenerator;
     private LightSection [] lightSections;
     private List<Vector3>[] positionsBuffers;
 
     private readonly Dictionary<Collider, int> colliderToLightSectionIndex = new Dictionary<Collider, int>();
     private readonly Stack<DotsAnimator> freeDotsAnimators = new Stack<DotsAnimator>();
-    
-    private NativeArray<RaycastCommand> commands;
-    private NativeArray<RaycastHit>     hits;
+
 
     protected override void Awake()
     {
         base.Awake();
-        
-        commands = new NativeArray<RaycastCommand>(MaxNumDotsPerHighlight, Allocator.Persistent);
-        hits     = new NativeArray<RaycastHit>    (MaxNumDotsPerHighlight, Allocator.Persistent);
+        dotsGenerator = new DotsGenerator(maxDotSpawnDistance);
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        
-        if (commands.IsCreated)
-            commands.Dispose();
-        
-        if (hits.IsCreated)
-            hits.Dispose();
+        if (dotsGenerator != null)
+            dotsGenerator.Dispose();
     }
 
     void Start()
@@ -85,9 +78,9 @@ public class DotsManager : Singleton<DotsManager>
 
     public void Highlight(RadarHighlightLocation location, Vector3 dotsOrigin, LayerMask layerMask)
     {
-        GenerateRaycastCommands(ref location, layerMask);
-        RaycastCommand.ScheduleBatch(commands, hits, 1).Complete();
-        FillPositionBuffersFromRaycastResults(ref location);
+        dotsGenerator.Generate(ref location, layerMask);
+        NativeArray<RaycastHit> hits = dotsGenerator.Complete();
+        FillPositionBuffersFromRaycastResults(hits, ref location);
 
         for (int i = 0; i < lightSections.Length; ++i)
         {
@@ -130,20 +123,7 @@ public class DotsManager : Singleton<DotsManager>
         registry?.DrawDebugInfoInEditor();
     }
     
-    private void GenerateRaycastCommands(ref RadarHighlightLocation location, LayerMask layerMask)
-    {
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, location.originalRay.direction);
-        float distanceFromOrigin = Vector3.Distance(location.originalRay.origin, location.pointOnSurface);
-        float displacementRadius = distanceFromOrigin * Mathf.Tan(Mathf.Deg2Rad * location.dotEmissionConeAngle);
-        
-        for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
-        {
-            Vector3 target = location.pointOnSurface + rotation * (Random.insideUnitCircle * displacementRadius);
-            commands[i] = new RaycastCommand(location.originalRay.origin, target - location.originalRay.origin, maxDotSpawnDistance, layerMask);
-        }
-    }
-    
-    private void FillPositionBuffersFromRaycastResults(ref RadarHighlightLocation location)
+    private void FillPositionBuffersFromRaycastResults(NativeArray<RaycastHit> hits, ref RadarHighlightLocation location)
     {
         for (int i = 0; i < MaxNumDotsPerHighlight; ++i)
         {
