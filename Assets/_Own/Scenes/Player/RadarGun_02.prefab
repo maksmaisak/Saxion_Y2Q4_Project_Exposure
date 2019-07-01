@@ -713,6 +713,7 @@ GameObject:
   - component: {fileID: 2318607947601388816}
   - component: {fileID: 7777793302259159975}
   - component: {fileID: 2637540079176614605}
+  - component: {fileID: 8469632257456193798}
   m_Layer: 14
   m_Name: RadarGun_02
   m_TagString: Untagged
@@ -1243,7 +1244,9 @@ MonoBehaviour:
     wavePulseSpeed: 10
     wavePulseMaxRange: 20
     sphereCastRadius: 0.05
-    maxNumWavespheresPerSecond: 3
+    maxNumWavespheresPerSecond:
+      min: 2
+      max: 3.111
     maxNumWavespheresPerPulse: -1
     minDistanceBetweenSpawnedWavespheres: 2
     wavesphereSpeedMin: 2.5
@@ -1267,6 +1270,23 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   highlightWithoutWavespheres: 0
   drawSpherecastRays: 0
+--- !u!114 &8469632257456193798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798244645049837205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b66de7c35c1f4715a746751bcbb9ab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableObject: {fileID: 3484438141555027265}
+  radarTool: {fileID: 2637540079176614605}
+  vibrationStrength: 1
+  vibrationDuration: 0.2
+  vibrationPulseInterval: 0.01
 --- !u!1 &1806261326887280155
 GameObject:
   m_ObjectHideFlags: 0
@@ -8228,6 +8248,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6537492728337824602}
     m_Modifications:
+    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialRightController
+      objectReference: {fileID: 0}
+    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8282,16 +8312,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_Name
-      value: TutorialRightController
-      objectReference: {fileID: 0}
-    - target: {fileID: 4178366871512741264, guid: ec5de0296be555a42a438c09e36e06ea,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7002482318367828729, guid: ec5de0296be555a42a438c09e36e06ea, type: 3}

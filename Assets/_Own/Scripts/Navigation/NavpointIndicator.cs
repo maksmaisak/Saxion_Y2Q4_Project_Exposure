@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Assert = UnityEngine.Assertions.Assert;
 
 public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEventReceiver<OnTeleportEvent>
@@ -47,7 +46,7 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
     
     public void On(OnRevealEvent onReveal)
     {
-        if (!navpointTransform || !transform.IsChildOf(onReveal.lightSection.transform)) 
+        if (!navpointTransform || lightSection != onReveal.lightSection) 
             return;
         
         canDisplay = true;
@@ -68,8 +67,7 @@ public class NavpointIndicator : MyBehaviour, IEventReceiver<OnRevealEvent>, IEv
 
     public void On(OnTeleportEvent message)
     {
-        // If the next navpoint is not in the current lightsection stop displaying the arrow
-        if (!canDisplay || message.navpoint.transform.IsChildOf(lightSection.transform)) 
+        if (!canDisplay) 
             return;
         
         canDisplay = false;

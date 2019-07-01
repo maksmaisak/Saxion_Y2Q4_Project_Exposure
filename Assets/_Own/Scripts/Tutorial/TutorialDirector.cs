@@ -47,12 +47,29 @@ public class TutorialDirector : MyBehaviour
     
     private RadarTool radarTool;
     private bool isTutorialRunning;
+    private bool didPlayerPulse;
 
     void Start()
     {
         EnsureIsInitializedCorrectly();
-        
+
         radarController.isGrabbable = false;
+
+        SetUpPlayerPulseDetection();
+    }
+
+    private void SetUpPlayerPulseDetection()
+    {
+        radarTool.onPulse.AddListener(OnPulse);
+        void OnPulse()
+        {
+            if (!radarController.IsGrabbed())
+                return;
+            
+            Assert.IsFalse(didPlayerPulse);
+            didPlayerPulse = true;
+            radarTool.onPulse.RemoveListener(OnPulse);
+        }
     }
 
     public void StartTutorial()
@@ -110,9 +127,9 @@ public class TutorialDirector : MyBehaviour
 
         // Unlock the gun
         radarTool.SetPulseSettings(oldPulseSettings);
-        radarController.isGrabbable = true;
         radarController.transform.SetParent(null, true);
-        
+        radarController.isGrabbable = true;
+
         // Open
         yield return opening.Open().WaitForCompletion();
         
@@ -143,27 +160,17 @@ public class TutorialDirector : MyBehaviour
 
     private IEnumerator ControllerTutorialCoroutine()
     {
-        bool didPulse = false;
-        radarTool.onPulse.AddListener(OnPulse);
-        void OnPulse()
-        {
-            Assert.IsFalse(didPulse);
-            didPulse = true;
-            radarTool.onPulse.RemoveListener(OnPulse);
-        }
-
         yield return new WaitForSeconds(controllerTutorialAppearDelay);
-
-        if (didPulse)
+        if (didPlayerPulse)
             yield break;
 
         ControllerTutorial controllerTutorial = radarController.IsGrabbed(VRTK_DeviceFinder.GetControllerLeftHand()) ? leftController : rightController;
         if (!controllerTutorial)
             yield break;
-
+        
         controllerTutorial.gameObject.SetActive(true);
 
-        yield return new WaitUntil(() => didPulse);
+        yield return new WaitUntil(() => didPlayerPulse);
 
         if (rightController)
             rightController.Remove();

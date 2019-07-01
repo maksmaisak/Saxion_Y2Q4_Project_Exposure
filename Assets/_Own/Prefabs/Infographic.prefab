@@ -102,7 +102,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784896742574142879}
-  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
+  m_LocalRotation: {x: 0.076228164, y: 0.48296478, z: -0.04225396, w: 0.8712916}
   m_LocalPosition: {x: 0, y: 0, z: 4.15}
   m_LocalScale: {x: 0.00052083336, y: 0.00052083336, z: 1}
   m_Children:
@@ -296,7 +296,7 @@ MonoBehaviour:
   startActive: 0
   appearAt: []
   showDelayAfterTeleport: 2
-  showAudioClip: {fileID: 8300000, guid: 5f374c8f0dfa6fd4ba308ad103783074, type: 3}
+  showAudioClip: {fileID: 8300000, guid: f2b0b09d96b195b46bede0fdd2b0811d, type: 3}
 --- !u!1 &1784896742663629155
 GameObject:
   m_ObjectHideFlags: 0

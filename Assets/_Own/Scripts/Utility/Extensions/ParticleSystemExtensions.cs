@@ -12,7 +12,6 @@ public static class ParticleSystemExtensions
         particleSystem.Emit(numParticlesAdded);
 
         // Read out into a buffer, set positions, write back in
-        // TODO have a wrapper around a ParticleSystem that preallocates the buffer.
         var particleBuffer = new ParticleSystem.Particle[positions.Count];
         particleSystem.GetParticles(particleBuffer, numParticlesAdded, oldNumParticles);
         for (int i = 0; i < numParticlesAdded; ++i)

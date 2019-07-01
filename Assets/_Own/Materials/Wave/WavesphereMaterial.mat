@@ -34,7 +34,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_AB0A4D1A: 5
+    - Vector1_AB0A4D1A: 10
     - Vector1_AE4CA238: 10
     - _MaxFadeoutDistance: 0.4
     - _MinFadeoutDistance: 0.1

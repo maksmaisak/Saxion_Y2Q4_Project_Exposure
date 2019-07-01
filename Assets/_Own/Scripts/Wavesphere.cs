@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using VRTK;
 using Random = UnityEngine.Random;
 
-public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
+public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent> 
 {
     [Header("Movement Settings")] 
     [SerializeField] float targetSphereRadius = 0.25f;
@@ -33,19 +33,22 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
     [Header("Vibration Settings")] 
-    [SerializeField] int vibrationDuration = 40;
-    [SerializeField] int frequency = 2;
-    [SerializeField] int strength = 100;
+    [SerializeField] float vibrationStrength = 0.5f;
+    [SerializeField] float vibrationDuration = 0.1f;
+    [SerializeField] float vibrationPulseInterval = 0.02f;
 
     [Header("Audio Settings")]
     [SerializeField] [Range(0, 1)] float grabAudioVolume;
     [SerializeField] AudioSource buzzAudioSource;
-
+    
+    [Header("Despawn settings")]
+    [Tooltip("Spheres moving away from the player further than this distance will be despawned.")]
+    [SerializeField] float minDespawnDistance = 2.0f;
+    [SerializeField] float delayBetweenDespawnChecks = 0.1f;
+    
     [Header("Other Settings")] 
     [Tooltip("If set, the sphere will move in a way that makes sure it gets caught no matter what.")]
     [SerializeField] bool mustGetCaught;
-    [Tooltip("If not caught within this many seconds, the sphere despawns. If `mustGetCaught` is set, it never despawns.")]
-    [SerializeField] float delayToDespawn = 20.0f;
     [SerializeField] LayerMask handsCollisionLayer;
 
     public UnityEvent onCaught = new UnityEvent();
@@ -62,10 +65,8 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
     public RadarHighlightLocation highlightLocation { get; set; }
     public float speedMultiplier { get; set; } = 1.0f;
-
     public bool isVisibleToCamera { get; set; } = true;
-    
-    /** Wanted direction to rotate the wavesphere */
+    // The direction to rotate the wavesphere to
     public Vector3 targetDirection { get; set; }
     
     private static float lastTimeWasCaught;
@@ -85,11 +86,17 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         transform   = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
 
-        if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
-            return;
-        
-        targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
-        targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
+        if (VRTK_SDKManager.GetLoadedSDKSetup() != null)
+        {
+            targetTransforms.Add(VRTK_DeviceFinder.GetControllerLeftHand().transform);
+            targetTransforms.Add(VRTK_DeviceFinder.GetControllerRightHand().transform);
+        }
+        else
+        {
+            var camera = Camera.main;
+            if (camera)
+                targetTransforms.Add(camera.transform);
+        }
     }
 
     void Start()
@@ -101,7 +108,7 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         RandomizeSpeedAndDirection();
 
         if (!mustGetCaught)
-            Destroy(gameObject, delayToDespawn);
+            StartCoroutine(CheckMissCoroutine());
     }
 
     void Update()
@@ -109,12 +116,11 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         if (isFadingOut)
             return;
 
-        transform.position += speed * speedMultiplier * Time.deltaTime * transform.forward;
-
         AttractToHands();
+        transform.position += speed * speedMultiplier * Time.deltaTime * transform.forward;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (isFadingOut || !handsCollisionLayer.ContainsLayer(other.gameObject.layer))
             return;
@@ -124,31 +130,43 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
         lastTimeWasCaught = Time.time;
         isFadingOut = true;
 
-        AudioClip grabAudioClip = WavesphereAudio.instance.GetGrabAudioClip();
-        Assert.IsNotNull(grabAudioClip);
-        audioSource.clip = grabAudioClip;
-        audioSource.volume = grabAudioVolume;
-        audioSource.Play();
-
         VibrateController(other);
-        
-        const float Duration = 0.2f;
-        transform.DOKill();
-        transform.parent = other.transform;
-        transform
-            .DOScale(0.0f, Duration)
-            .SetEase(Ease.OutQuart);
-        transform
-            .DOLookAt(other.transform.position, Duration)
-            .SetEase(Ease.OutQuart);
-
+        float grabAudioDuration = PlayGrabSound();
+        float attachAndFadeOutDuration = AttachAndDisappear(other.transform);
         FadeOutAudio();
-        
+
         onCaught?.Invoke();
-
-        Destroy(gameObject, Mathf.Max(grabAudioClip.length / audioSource.pitch, Duration));
+        new OnWavesphereCaught(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+        Destroy(gameObject, Mathf.Max(grabAudioDuration, attachAndFadeOutDuration));
     }
+    
+    private IEnumerator CheckMissCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayBetweenDespawnChecks);
+            
+            Vector3 position = transform.position;
+            Vector3 direction = transform.forward;
+            float sqrMinDespawnDistance = minDespawnDistance * minDespawnDistance;
+            bool didMiss = targetTransforms.Count > 0 && targetTransforms.All(t =>
+            {
+                Vector3 delta = t.position - position;
+                return 
+                    Vector3.Dot(direction, delta) < 0.0f && 
+                    delta.sqrMagnitude > sqrMinDespawnDistance;
+            });
 
+            if (!didMiss) 
+                continue;
+            
+            new OnWavesphereMissed(this).SetDeliveryType(MessageDeliveryType.Immediate).PostEvent();
+            isFadingOut = false;
+            Disappear().OnComplete(() => Destroy(gameObject));
+            yield break;
+        }
+    }
+    
     public void On(OnRevealEvent reveal)
     {
         if (isFadingOut)
@@ -156,14 +174,9 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         //if (!sourceLightSection || reveal.lightSection != sourceLightSection)
         //    return;
-
+        
         isFadingOut = true;
-        transform.DOKill();
-        transform
-            .DOScale(0.0f, 0.5f)
-            .SetEase(Ease.InBack)
-            .OnComplete(() => Destroy(gameObject));
-
+        Disappear().OnComplete(() => Destroy(gameObject));
         FadeOutAudio();
     }
 
@@ -186,11 +199,9 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
 
         // Rotate the along movement direction
         targetDirection = (targetPosition - transform.position).normalized;
-        
         transform.rotation = Quaternion.LookRotation(targetDirection);
     }
 
-    // Randomize scale over time
     private void RandomizeScale()
     {
         float scale = Random.Range(scaleMin, scaleMax);
@@ -228,30 +239,70 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
             (mustGetCaught && !isVisibleToCamera && distanceToTargetSqr <= forcedAttractionRadius * forcedAttractionRadius))
             targetDirection = sphereToTargetDelta;
 
-        if (!mustGetCaught)
-            if (distanceToTargetSqr > attractionRadius * attractionRadius)
+        if (!mustGetCaught && distanceToTargetSqr > attractionRadius * attractionRadius)
                 return;
 
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDirection.normalized,
-            attractionAngularSpeed * Time.deltaTime, 0.0f);
-
+        Vector3 newDir = Vector3.RotateTowards(
+            transform.forward, 
+            targetDirection.normalized,
+            attractionAngularSpeed * Time.deltaTime, 0.0f
+        );
         transform.rotation = Quaternion.LookRotation(newDir);
     }
 
+    private float PlayGrabSound()
+    {
+        AudioClip grabAudioClip = WavesphereAudio.instance.GetGrabAudioClip();
+        Assert.IsNotNull(grabAudioClip);
+        audioSource.clip = grabAudioClip;
+        audioSource.volume = grabAudioVolume;
+        audioSource.Play();
+
+        return grabAudioClip.length / audioSource.pitch;
+    }
+    
     private void VibrateController(Collider other)
     {
-        GameObject otherController = other.gameObject.GetComponentInParent<VRTK_Pointer>()?.gameObject;
-        if (!otherController)
+        VRTK_PlayerObject controller = other.gameObject.GetComponentsInParent<VRTK_PlayerObject>()
+            .FirstOrDefault(po => po.objectType == VRTK_PlayerObject.ObjectTypes.Controller);
+        if (!controller)
             return;
-
-        bool isLeftHand = VRTK_DeviceFinder.IsControllerLeftHand(otherController);
-        VRTK_ControllerReference controllerReference = isLeftHand
+        
+        VRTK_ControllerReference controllerReference = VRTK_DeviceFinder.IsControllerLeftHand(controller.gameObject)
             ? VRTK_DeviceFinder.GetControllerReferenceLeftHand()
             : VRTK_DeviceFinder.GetControllerReferenceRightHand();
-
-        VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, 1, 0.5f, pulseInterval: 0.02f);
+        if (controllerReference == null)
+            return;
+        
+        VRTK_ControllerHaptics.TriggerHapticPulse(
+            controllerReference, 
+            vibrationStrength, vibrationDuration, vibrationPulseInterval
+        );
     }
 
+    private float AttachAndDisappear(Transform attach)
+    {
+        const float Duration = 0.2f;
+        
+        Transform scaleEffectParent = new GameObject("ScaleEffectParent").transform;
+        scaleEffectParent.SetParent(attach, worldPositionStays: false);
+        scaleEffectParent.DOScale(0.0f, Duration).SetEase(Ease.InQuad);
+
+        transform.DOKill();
+        transform.parent = scaleEffectParent;
+        transform.DOLookAt(attach.position, Duration).SetEase(Ease.InQuad);
+
+        return Duration;
+    }
+
+    private Tweener Disappear()
+    {
+        transform.DOKill();
+        return transform
+            .DOScale(0.0f, 0.5f)
+            .SetEase(Ease.InBack);
+    }
+    
     private void FadeOutAudio()
     {
         if (buzzAudioSource)

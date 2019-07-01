@@ -236,13 +236,14 @@ MonoBehaviour:
   - {r: 0.20392157, g: 0.92156863, b: 0, a: 0}
   - {r: 0.49091545, g: 1, b: 0.33490568, a: 0}
   - {r: 0.36124954, g: 0.7735849, b: 0.42068532, a: 0}
-  vibrationDuration: 40
-  frequency: 2
-  strength: 100
+  vibrationStrength: 0.5
+  vibrationDuration: 0.1
+  vibrationPulseInterval: 0.02
   grabAudioVolume: 0.01
   buzzAudioSource: {fileID: 2681657970494475077}
+  minDespawnDistance: 2
+  delayBetweenDespawnChecks: 0.1
   mustGetCaught: 0
-  delayToDespawn: 25
   handsCollisionLayer:
     serializedVersion: 2
     m_Bits: 16384

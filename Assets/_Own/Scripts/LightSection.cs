@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using VRTK;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -16,9 +17,9 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class LightSection : MonoBehaviour
 {
-    private static readonly int ColorId    = Shader.PropertyToID("_BaseColor");
-    private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
-    private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
+    private static readonly int ColorId         = Shader.PropertyToID("_BaseColor");
+    private static readonly int SrcBlendId      = Shader.PropertyToID("_SrcBlend");
+    private static readonly int DstBlendId      = Shader.PropertyToID("_DstBlend");
     private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
 
     struct RendererData
@@ -31,7 +32,6 @@ public class LightSection : MonoBehaviour
     struct GameObjectSavedData
     {
         public RendererData[] renderers;
-        public ParticleSystem[] particleSystems;
     }
 
     [Header("General")]
@@ -57,16 +57,18 @@ public class LightSection : MonoBehaviour
 
     public bool isRevealed { get; private set; } = false;
     
-    private ParticleSystem dotsParticleSystem;
+    private ParticleSystemBufferedWrapper dotsParticles;
     private NativeArray<float> multipliersBuffer;
     private int numDots = 0;
     
     void Awake()
     {
         Assert.IsNotNull(dotsParticleSystemPrefab);
-        dotsParticleSystem = Instantiate(dotsParticleSystemPrefab, transform, worldPositionStays: true);
-        Assert.IsNotNull(dotsParticleSystem);
-        multipliersBuffer = new NativeArray<float>(Mathf.Max(dotsParticleSystem.main.maxParticles, 1_000_000), Allocator.Persistent);
+        
+        ParticleSystem dotsParticleSystem = Instantiate(dotsParticleSystemPrefab, transform, worldPositionStays: true);
+        dotsParticles = new ParticleSystemBufferedWrapper(dotsParticleSystem);
+        Assert.IsNotNull(dotsParticles);
+        multipliersBuffer = new NativeArray<float>(Mathf.Max(dotsParticles.system.main.maxParticles, 1_000_000), Allocator.Persistent);
         for (int i = 0; i < multipliersBuffer.Length; ++i)
             multipliersBuffer[i] = 1.0f / Random.Range(1.0f, 1.01f);
 
@@ -95,7 +97,10 @@ public class LightSection : MonoBehaviour
 
     public float GetRevealProgress() => Mathf.Clamp01((float)numDots / numDotsToReveal);
     
-    public void AddDots(IList<Vector3> positions, float particleAppearDelay = 0.0f)
+    // Registers the dots immediately and adds the dots to the particle system after a delay.
+    // Warning: it will use the values present in `positions` at the moment of particle creation, not at the moment of calling this method.
+    // Do not modify `positions` until the delay is up, or make a copy of it beforehand.
+    public void AddDots(IReadOnlyList<Vector3> positions, float particleAppearDelay = 0.0f)
     {
         if (isRevealed)
             return;
@@ -104,13 +109,11 @@ public class LightSection : MonoBehaviour
 
         if (particleAppearDelay <= 0.0f)
         {
-            dotsParticleSystem.AddParticles(positions);
+            dotsParticles.AddParticles(positions);
         }
         else
         {
-            // TODO preallocate the buffer
-            var buffer = new List<Vector3>(positions);
-            this.Delay(particleAppearDelay, () => dotsParticleSystem.AddParticles(buffer));
+            this.Delay(particleAppearDelay, () => dotsParticles.AddParticles(positions));
         }
     }
 
@@ -135,31 +138,26 @@ public class LightSection : MonoBehaviour
     private List<GameObject> FindGameObjects()
     {
         IEnumerable<GameObject> withRenderer;
-        IEnumerable<GameObject> withParticleSystem;
         IEnumerable<GameObject> withCollider;
         
         if (isGlobal)
         {
             lights = FindObjectsOfType<Light>().ToList();
 
-            withRenderer       = FindObjectsOfType<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = FindObjectsOfType<ParticleSystem>().Select(ps => ps.gameObject);
-            withCollider       = FindObjectsOfType<Collider>().Select(c => c.gameObject);
+            withRenderer = FindObjectsOfType<Renderer>().Select(r => r.gameObject);
+            withCollider = FindObjectsOfType<Collider>().Select(c => c.gameObject);
         }
         else
         {
             lights = GetComponentsInChildren<Light>().ToList();
 
-            withRenderer       = GetComponentsInChildren<Renderer>().Select(r => r.gameObject);
-            withParticleSystem = GetComponentsInChildren<ParticleSystem>().Select(ps => ps.gameObject);
-            withCollider       = GetComponentsInChildren<Collider>().Select(c => c.gameObject);
+            withRenderer = GetComponentsInChildren<Renderer>().Select(r => r.gameObject);
+            withCollider = GetComponentsInChildren<Collider>().Select(c => c.gameObject);
         }
 
-        return withRenderer
-            .Union(withParticleSystem)
-            .Union(withCollider)
+        return Enumerable.Union(withRenderer, withCollider)
             .Distinct()
-            .Where(go => go != dotsParticleSystem.gameObject && !exceptionLayer.ContainsLayer(go.layer))
+            .Where(go => go != dotsParticles.system.gameObject && !exceptionLayer.ContainsLayer(go.layer))
             .ToList();
     }
     
@@ -187,12 +185,6 @@ public class LightSection : MonoBehaviour
                 sharedMaterials = (Material[])rendererSharedMaterials.Clone(),
                 sectionOnlyMaterials = new Material[rendererSharedMaterials.Length]
             };
-        }).ToArray();
-
-        data.particleSystems = go.GetComponents<ParticleSystem>().Select(ps =>
-        {
-            ps.Stop();
-            return ps;
         }).ToArray();
 
         return data;
@@ -234,11 +226,6 @@ public class LightSection : MonoBehaviour
             .Where(d => d.renderer)
             .Each(d => d.renderer.sharedMaterials = d.sectionOnlyMaterials);
 
-        gameObjectData
-            .SelectMany(d => d.particleSystems)
-            .Where(p => p && !p.isPlaying)
-            .Each(p => p.Play());
-        
         // Fade in the section-wide materials
         var sectionSequence = DOTween.Sequence();
         gameObjectData
@@ -262,20 +249,20 @@ public class LightSection : MonoBehaviour
 
     private void HideDots()
     {
-        Assert.IsTrue(dotsParticleSystem.particleCount <= multipliersBuffer.Length, $"The dots particle system has more than {multipliersBuffer.Length} particles, which is not supported.");
+        Assert.IsTrue(dotsParticles.system.particleCount <= multipliersBuffer.Length, $"The dots particle system has more than {multipliersBuffer.Length} particles, which is not supported.");
 
-        var camera = Camera.main;
-        dotsParticleSystem.SetJob(new FadeOutParticlesJob
+        Transform cameraTransform = VRTK_DeviceFinder.HeadsetCamera();
+        dotsParticles.system.SetJob(new FadeOutParticlesJob
         {
             multipliers = multipliersBuffer, 
             dt = Time.fixedDeltaTime / revealDuration,
-            origin = camera ? camera.transform.position : transform.position
-        });
+            origin = cameraTransform ? cameraTransform.position : transform.position
+        }); 
         
         this.Delay(revealDuration, () =>
         {
-            dotsParticleSystem.ClearJob();
-            dotsParticleSystem.Clear();
+            dotsParticles.system.ClearJob();
+            dotsParticles.system.Clear();
         });
     }
     
@@ -284,7 +271,10 @@ public class LightSection : MonoBehaviour
         foreach (Light light in lights)
         {
             light.enabled = true;
-            light.DOIntensity(0.0f, revealDuration).From().SetEase(Ease.OutQuad);
+            light
+                .DOIntensity(0.0f, revealDuration)
+                .From()
+                .SetEase(Ease.OutQuad);
         }
     }
     
