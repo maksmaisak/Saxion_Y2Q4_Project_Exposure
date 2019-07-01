@@ -8,8 +8,8 @@ public class RadarPulseControllerVibration : MonoBehaviour
     [SerializeField] RadarTool radarTool;
     [Space] 
     [SerializeField] float vibrationStrength = 1.0f;
-    [SerializeField] float vibrationDuration = 0.5f;
-    [SerializeField] float vibrationPulseInterval = 0.05f;
+    [SerializeField] float vibrationDuration = 0.2f;
+    [SerializeField] float vibrationPulseInterval = 0.01f;
     
     void Start()
     {

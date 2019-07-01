@@ -1285,8 +1285,8 @@ MonoBehaviour:
   interactableObject: {fileID: 3484438141555027265}
   radarTool: {fileID: 2637540079176614605}
   vibrationStrength: 1
-  vibrationDuration: 0.5
-  vibrationPulseInterval: 0.05
+  vibrationDuration: 0.2
+  vibrationPulseInterval: 0.01
 --- !u!1 &1806261326887280155
 GameObject:
   m_ObjectHideFlags: 0
@@ -8317,15 +8317,15 @@ PrefabInstance:
     - {fileID: 7002482318367828729, guid: ec5de0296be555a42a438c09e36e06ea, type: 3}
     - {fileID: 893418525891413973, guid: ec5de0296be555a42a438c09e36e06ea, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ec5de0296be555a42a438c09e36e06ea, type: 3}
---- !u!4 &8578605382193054889 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
-    type: 3}
-  m_PrefabInstance: {fileID: 8694910963877348138}
-  m_PrefabAsset: {fileID: 0}
 --- !u!137 &70931332924123382 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8669843660561198044, guid: ec5de0296be555a42a438c09e36e06ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 8694910963877348138}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8578605382193054889 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1128102576295774083, guid: ec5de0296be555a42a438c09e36e06ea,
     type: 3}
   m_PrefabInstance: {fileID: 8694910963877348138}
   m_PrefabAsset: {fileID: 0}
