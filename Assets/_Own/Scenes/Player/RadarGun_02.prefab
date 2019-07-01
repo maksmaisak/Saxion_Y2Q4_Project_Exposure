@@ -713,6 +713,7 @@ GameObject:
   - component: {fileID: 2318607947601388816}
   - component: {fileID: 7777793302259159975}
   - component: {fileID: 2637540079176614605}
+  - component: {fileID: 8469632257456193798}
   m_Layer: 14
   m_Name: RadarGun_02
   m_TagString: Untagged
@@ -1269,6 +1270,23 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   highlightWithoutWavespheres: 0
   drawSpherecastRays: 0
+--- !u!114 &8469632257456193798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798244645049837205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b66de7c35c1f4715a746751bcbb9ab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableObject: {fileID: 3484438141555027265}
+  radarTool: {fileID: 2637540079176614605}
+  vibrationStrength: 1
+  vibrationDuration: 0.2
+  vibrationPulseInterval: 0.01
 --- !u!1 &1806261326887280155
 GameObject:
   m_ObjectHideFlags: 0
