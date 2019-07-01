@@ -33,8 +33,8 @@ public class Wavesphere : MyBehaviour, IEventReceiver<OnRevealEvent>
     [SerializeField] List<Color> emissionColors = new List<Color>();
 
     [Header("Vibration Settings")] 
-    [SerializeField] float vibrationStrength = 1.0f;
-    [SerializeField] float vibrationDuration = 0.5f;
+    [SerializeField] float vibrationStrength = 0.5f;
+    [SerializeField] float vibrationDuration = 0.1f;
     [SerializeField] float vibrationPulseInterval = 0.02f;
 
     [Header("Audio Settings")]
